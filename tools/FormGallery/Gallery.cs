@@ -45,6 +45,7 @@ namespace FormGallery
             if (string.Equals(o.Only, ControlsBoard.Name, StringComparison.OrdinalIgnoreCase)) return RunControlsBoard(o);
             if (string.Equals(o.Only, CoverGridSample.Name, StringComparison.OrdinalIgnoreCase)) return CoverGridSample.Run(o);
             if (string.Equals(o.Only, ShellSample.Name, StringComparison.OrdinalIgnoreCase)) return ShellSample.Run(o);
+            if (string.Equals(o.Only, MainFormSample.Name, StringComparison.OrdinalIgnoreCase)) return MainFormSample.Run(o);
 
             var entries = new List<Entry>();
             var types = Host.UiTypes().Where(t => o.Only == null || string.Equals(t.Name, o.Only, StringComparison.OrdinalIgnoreCase)).ToList();
@@ -172,7 +173,7 @@ namespace FormGallery
             "EVENT_CLOSING", "EVENT_CLOSED", "EVENT_FORMCLOSING", "EVENT_FORMCLOSED",
         };
 
-        private static void StripHandlers(Form f)
+        internal static void StripHandlers(Form f)
         {
             var events = (EventHandlerList)typeof(Component).GetProperty("Events", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(f, null);
             foreach (var name in StrippedFormEvents)
@@ -229,7 +230,7 @@ namespace FormGallery
         }
 
         /// <summary>Un Form jamais affiche n'a pas de handle pour ses enfants : sans eux DrawToBitmap ne dessine que le cadre.</summary>
-        private static void CreateHandles(Control c)
+        internal static void CreateHandles(Control c)
         {
             var h = c.Handle;
             foreach (Control child in c.Controls) CreateHandles(child);
@@ -239,7 +240,7 @@ namespace FormGallery
         /// Emulation du DPI : le processus n'est pas "per monitor", donc on met a l'echelle les polices
         /// (AutoScaleMode.Font remet alors toute la mise en page a l'echelle) ou, a defaut, les tailles.
         /// </summary>
-        private static void ApplyDpi(Control c, int dpi)
+        internal static void ApplyDpi(Control c, int dpi)
         {
             if (dpi == 96) return;
             float k = dpi / 96f;

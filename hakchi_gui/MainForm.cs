@@ -25,7 +25,7 @@ using static com.clusterrr.hakchi_gui.Tasks.Tasker;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class MainForm : Form
+    public partial class MainForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         /// <summary>
         /// The URL for the update metadata XML file
@@ -109,6 +109,7 @@ namespace com.clusterrr.hakchi_gui
         {
             StaticRef = this;
             InitializeComponent();
+            BuildShell();
             FormInitialize();
         }
 
@@ -578,6 +579,7 @@ namespace com.clusterrr.hakchi_gui
                 return;
             }
 
+            UpdateConsoleBadge();
             if (lastConnected == hakchi.Connected && !force)
             {
                 return;
@@ -628,6 +630,7 @@ namespace com.clusterrr.hakchi_gui
                 return;
             }
 
+            UpdateConsoleBadge();
             if (lastConsoleType == ConfigIni.Instance.ConsoleType && !force)
             {
                 return;
@@ -1170,6 +1173,7 @@ namespace com.clusterrr.hakchi_gui
             panel1.Size = textBoxDescription.Size = new Size(1, 1);
             showingSelected = false;
             timerShowSelected.Enabled = false;
+            ShowSheet();
         }
 
         private int lastListViewGamesSelectionCount = 0;
@@ -1346,7 +1350,8 @@ namespace com.clusterrr.hakchi_gui
 
         private void listViewGames_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            // la grille montre deja listViewGames.ContextMenuStrip : jamais deux fois
+            if (e.Button == MouseButtons.Right && listViewGames.ContextMenuStrip == null)
                 contextMenuStrip.Show(sender as Control, e.X + 5, e.Y);
         }
 
@@ -1365,6 +1370,7 @@ namespace com.clusterrr.hakchi_gui
             {
                 app.SetImageFile(imagePath, ConfigIni.Instance.CompressCover);
                 ShowSelected();
+                CoverChanged(app);
                 timerCalculateGames.Enabled = true;
             }
         }
@@ -1377,6 +1383,7 @@ namespace com.clusterrr.hakchi_gui
                 app.ClearMdMini();
                 app.Image = null;
                 ShowSelected();
+                CoverChanged(app);
                 timerCalculateGames.Enabled = true;
             }
         }
@@ -1414,6 +1421,7 @@ namespace com.clusterrr.hakchi_gui
                     }
 
                     ShowSelected();
+                    CoverChanged(app);
                     timerCalculateGames.Enabled = true;
                 };
 
@@ -1425,6 +1433,7 @@ namespace com.clusterrr.hakchi_gui
                     }
 
                     ShowSelected();
+                    CoverChanged(app);
                     timerCalculateGames.Enabled = true;
                 };
 
@@ -1432,6 +1441,7 @@ namespace com.clusterrr.hakchi_gui
                 {
                     SetGameImageFile(type);
                     ShowSelected();
+                    CoverChanged(app);
                     timerCalculateGames.Enabled = true;
                 };
 
@@ -1449,6 +1459,7 @@ namespace com.clusterrr.hakchi_gui
 
             SetGameImageFile(type);
             ShowSelected();
+            CoverChanged(app);
         }
 
         private void pictureBoxArt_DragEnter(object sender, DragEventArgs e)
@@ -1485,6 +1496,7 @@ namespace com.clusterrr.hakchi_gui
                     {
                         SetGameImage(img, type);
                         ShowSelected();
+                        CoverChanged(GetSelectedGame());
                         timerCalculateGames.Enabled = true;
                     }
                     return;
@@ -1561,6 +1573,7 @@ namespace com.clusterrr.hakchi_gui
                 {
                     app.Image = googler.Result;
                     ShowSelected();
+                    CoverChanged(app);
                     timerCalculateGames.Enabled = true;
                 }
             }
@@ -1820,6 +1833,9 @@ namespace com.clusterrr.hakchi_gui
                     (toolStripProgressBar.Value < toolStripProgressBar.Maximum) ?
                     SystemColors.ControlText :
                     Color.Red;
+                if (storageBar != null)
+                    storageBar.SetUsage(stats.Size, MemoryStats.StorageTotal > 0 ? maxGamesSize : 0);
+                UpdateShellCounts();
             }
             catch (Exception ex)
             {
@@ -2860,6 +2876,7 @@ internal static
         private int timerConnectionAnim = 0;
         private void timerConnectionCheck_Tick(object sender, EventArgs e)
         {
+            UpdateConsoleBadge();
             if (hakchi.Connected)
             {
                 toolStripStatusConnectionIcon.Image = Resources.green;
@@ -3096,31 +3113,37 @@ internal static
         {
             NesApplication.CachedCoverFiles = null;
             var task = new Tasks.GameTask();
+            var coverApps = SelectedApps();
             if (groupTaskWithSelected(task, task.ScanCovers))
                 if (!ConfigIni.Instance.DisablePopups)
                     Tasks.MessageForm.Show(Resources.Wow, Resources.Done, Resources.sign_check);
             if (ConfigIni.Instance.ShowGamesWithoutCoverArt)
                 LoadGames(false);
+            CoversChanged(coverApps);
         }
 
         private void downloadBoxArtForSelectedGamesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var task = new Tasks.GameTask();
+            var coverApps = SelectedApps();
             if (groupTaskWithSelected(task, task.DownloadCovers))
                 if (!ConfigIni.Instance.DisablePopups)
                     Tasks.MessageForm.Show(Resources.Wow, Resources.Done, Resources.sign_check);
             if (ConfigIni.Instance.ShowGamesWithoutCoverArt)
                 LoadGames(false);
+            CoversChanged(coverApps);
         }
 
         private void deleteSelectedGamesBoxArtToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var task = new Tasks.GameTask();
+            var coverApps = SelectedApps();
             if (groupTaskWithSelected(task, task.DeleteCovers))
                 if (!ConfigIni.Instance.DisablePopups)
                     Tasks.MessageForm.Show(Resources.Wow, Resources.Done, Resources.sign_check);
             if (ConfigIni.Instance.ShowGamesWithoutCoverArt)
                 LoadGames(false);
+            CoversChanged(coverApps);
         }
 
         private void archiveSelectedGamesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -4025,6 +4048,7 @@ internal static
                     }
 
                     listViewGames.EndUpdate();
+                    CoversChanged(scraperForm.Games);
                 }
             }
         }
@@ -4042,6 +4066,7 @@ internal static
                 applied = form.AppliedCount;
             }
             if (applied == 0) return;
+            CoversChanged(games);
 
             var selected = listViewGames.SelectedItems.Cast<ListViewItem>().Select(i => i.Tag).ToList();
             listViewGames.BeginUpdate();

@@ -65,12 +65,20 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         /// <summary>Ajoute un menu de premier niveau (le « &amp; » donne Alt+lettre) et rend l'item reel : on y range ses DropDownItems.</summary>
         public ToolStripMenuItem AddMenu(string title)
         {
-            var item = new ToolStripMenuItem(title ?? string.Empty)
-            {
-                ForeColor = B1Palette.TextDim,
-                Padding = new Padding(B1Draw.Px(10, S), 0, B1Draw.Px(10, S), 0),
-                AutoSize = true,
-            };
+            return AddMenu(new ToolStripMenuItem(), title ?? string.Empty);
+        }
+
+        /// <summary>
+        /// Range un item EXISTANT (avec ses sous-menus et ses gestionnaires) en premier niveau, avec le style de la barre.
+        /// <paramref name="title"/> null garde son texte. L'item quitte son ancien proprietaire.
+        /// </summary>
+        public ToolStripMenuItem AddMenu(ToolStripMenuItem item, string title)
+        {
+            if (item == null) throw new ArgumentNullException("item");
+            if (title != null) item.Text = title;
+            item.ForeColor = B1Palette.TextDim;
+            item.Padding = new Padding(B1Draw.Px(10, S), 0, B1Draw.Px(10, S), 0);
+            item.AutoSize = true;
             menu.Items.Add(item);
             PerformLayout();
             return item;

@@ -1354,4 +1354,40 @@ Il y a une faible chance de pertes de données, donc s.v.p. assurez-vous d'avoir
   <data name="StorageUnitGB" xml:space="preserve">
     <value>Go</value>
   </data>
+  <data name="ShellMenuGames" xml:space="preserve">
+    <value>&amp;Jeux</value>
+  </data>
+  <data name="ShellMenuMods" xml:space="preserve">
+    <value>&amp;Mods</value>
+  </data>
+  <data name="ShellMenuCovers" xml:space="preserve">
+    <value>&amp;Pochettes</value>
+  </data>
+  <data name="ShellChipOnConsole" xml:space="preserve">
+    <value>Sur la console</value>
+  </data>
+  <data name="ShellChipLibrary" xml:space="preserve">
+    <value>Dans la bibliothèque</value>
+  </data>
+  <data name="ShellChipAz" xml:space="preserve">
+    <value>A–Z</value>
+  </data>
+  <data name="ShellFindCovers" xml:space="preserve">
+    <value>Chercher {0} jaquettes</value>
+  </data>
+  <data name="ShellSync" xml:space="preserve">
+    <value>Synchroniser</value>
+  </data>
+  <data name="ShellCoverChange" xml:space="preserve">
+    <value>&amp;Changer la jaquette…</value>
+  </data>
+  <data name="ShellCoverGoogle" xml:space="preserve">
+    <value>Chercher la jaquette sur &amp;Google…</value>
+  </data>
+  <data name="ShellCoverDefault" xml:space="preserve">
+    <value>Jaquette par &amp;défaut</value>
+  </data>
+  <data name="ShellCoverSpine" xml:space="preserve">
+    <value>Étiquette &amp;latérale…</value>
+  </data>
 </root>

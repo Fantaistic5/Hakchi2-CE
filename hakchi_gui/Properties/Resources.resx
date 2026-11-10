@@ -1767,4 +1767,40 @@ Are you sure?</value>
   <data name="StorageUnitGB" xml:space="preserve">
     <value>GB</value>
   </data>
+  <data name="ShellMenuGames" xml:space="preserve">
+    <value>&amp;Games</value>
+  </data>
+  <data name="ShellMenuMods" xml:space="preserve">
+    <value>&amp;Mods</value>
+  </data>
+  <data name="ShellMenuCovers" xml:space="preserve">
+    <value>&amp;Covers</value>
+  </data>
+  <data name="ShellChipOnConsole" xml:space="preserve">
+    <value>On the console</value>
+  </data>
+  <data name="ShellChipLibrary" xml:space="preserve">
+    <value>In the library</value>
+  </data>
+  <data name="ShellChipAz" xml:space="preserve">
+    <value>A–Z</value>
+  </data>
+  <data name="ShellFindCovers" xml:space="preserve">
+    <value>Find {0} covers</value>
+  </data>
+  <data name="ShellSync" xml:space="preserve">
+    <value>Synchronize</value>
+  </data>
+  <data name="ShellCoverChange" xml:space="preserve">
+    <value>&amp;Change cover…</value>
+  </data>
+  <data name="ShellCoverGoogle" xml:space="preserve">
+    <value>Search cover on &amp;Google…</value>
+  </data>
+  <data name="ShellCoverDefault" xml:space="preserve">
+    <value>&amp;Default cover</value>
+  </data>
+  <data name="ShellCoverSpine" xml:space="preserve">
+    <value>&amp;Spine label…</value>
+  </data>
 </root>

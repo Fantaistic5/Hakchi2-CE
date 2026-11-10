@@ -5136,5 +5136,114 @@ namespace com.clusterrr.hakchi_gui.Properties {
                 return ResourceManager.GetString("YesToAll", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Games.
+        /// </summary>
+        internal static string ShellMenuGames {
+            get {
+                return ResourceManager.GetString("ShellMenuGames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Mods.
+        /// </summary>
+        internal static string ShellMenuMods {
+            get {
+                return ResourceManager.GetString("ShellMenuMods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Covers.
+        /// </summary>
+        internal static string ShellMenuCovers {
+            get {
+                return ResourceManager.GetString("ShellMenuCovers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On the console.
+        /// </summary>
+        internal static string ShellChipOnConsole {
+            get {
+                return ResourceManager.GetString("ShellChipOnConsole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In the library.
+        /// </summary>
+        internal static string ShellChipLibrary {
+            get {
+                return ResourceManager.GetString("ShellChipLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A–Z.
+        /// </summary>
+        internal static string ShellChipAz {
+            get {
+                return ResourceManager.GetString("ShellChipAz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find {0} covers.
+        /// </summary>
+        internal static string ShellFindCovers {
+            get {
+                return ResourceManager.GetString("ShellFindCovers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronize.
+        /// </summary>
+        internal static string ShellSync {
+            get {
+                return ResourceManager.GetString("ShellSync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Change cover….
+        /// </summary>
+        internal static string ShellCoverChange {
+            get {
+                return ResourceManager.GetString("ShellCoverChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search cover on &amp;Google….
+        /// </summary>
+        internal static string ShellCoverGoogle {
+            get {
+                return ResourceManager.GetString("ShellCoverGoogle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Default cover.
+        /// </summary>
+        internal static string ShellCoverDefault {
+            get {
+                return ResourceManager.GetString("ShellCoverDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Spine label….
+        /// </summary>
+        internal static string ShellCoverSpine {
+            get {
+                return ResourceManager.GetString("ShellCoverSpine", resourceCulture);
+            }
+        }
+        
     }
 }
