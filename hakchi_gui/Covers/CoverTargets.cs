@@ -23,10 +23,11 @@ namespace com.clusterrr.hakchi_gui.Covers
         /// <summary>
         /// Vrai si le jeu n'a pas de jaquette personnalisee. On se base sur CustomCoverArt seul
         /// (pas de comparaison d'image avec la jaquette par defaut du systeme : couteux et fragile).
+        /// Les jeux d'origine de la console ont deja leur jaquette officielle : jamais proposes d'office.
         /// </summary>
         public static bool NeedsCover(NesApplication app)
         {
-            return app != null && (app.Metadata == null || !app.Metadata.CustomCoverArt);
+            return app != null && !app.IsOriginalGame && (app.Metadata == null || !app.Metadata.CustomCoverArt);
         }
 
         public static IEnumerable<NesApplication> DefaultSelection(IEnumerable<NesApplication> apps)

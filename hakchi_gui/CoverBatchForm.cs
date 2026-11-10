@@ -109,7 +109,9 @@ namespace com.clusterrr.hakchi_gui
 
         private IEnumerable<Row> VisibleRows()
         {
-            return listViewResults.Items.Cast<ListViewItem>().Select(i => (Row)i.Tag);
+            // Pendant la creation du handle, ListView rejoue l'etat des cases (ItemChecked)
+            // alors que sa liste interne contient encore des entrees nulles.
+            return listViewResults.Items.Cast<ListViewItem>().Where(i => i != null).Select(i => i.Tag as Row).Where(r => r != null);
         }
 
         private State StateOf(Row r)
@@ -525,7 +527,7 @@ namespace com.clusterrr.hakchi_gui
 
         private void listViewResults_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            if (_updating || _busy) return;
+            if (_updating || _busy || !listViewResults.Created || e.Item == null) return;
             var row = e.Item.Tag as Row;
             if (row != null) RefreshItem(row);
             UpdateSummary(false);
