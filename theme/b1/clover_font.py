@@ -142,6 +142,12 @@ def _block(t: int, body: bytes) -> bytes:
 
 
 def build(font: CloverFont) -> bytes:
+    if font.common.pages != len(font.pages):
+        raise ValueError(
+            f"common.pages ({font.common.pages}) != len(pages) ({len(font.pages)})")
+    for key, g in font.chars.items():
+        if key != g.id:
+            raise ValueError(f"cle {key} != id du glyphe {g.id}")
     i = font.info
     info = _INFO.pack(i.size, i.bit_field, i.charset, i.stretch_h, i.aa,
                       *i.padding, *i.spacing, i.outline) + i.face.encode("utf-8") + b"\x00"

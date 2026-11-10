@@ -75,3 +75,30 @@ def test_reference_counts():
     assert len(cf.parse((REF_DIR / "s.font").read_bytes()).chars) == 117
     assert len(cf.parse((REF_DIR / "m.font").read_bytes()).chars) == 132
     assert len(cf.parse((REF_DIR / "l.font").read_bytes()).chars) == 99
+
+
+def test_build_rejects_pages_mismatch():
+    font = make_font()
+    font.pages = ["a.png", "b.png"]
+    with pytest.raises(ValueError):
+        cf.build(font)
+
+
+def test_build_rejects_key_id_mismatch():
+    font = make_font()
+    font.chars[66] = font.chars.pop(65)
+    with pytest.raises(ValueError):
+        cf.build(font)
+
+
+def test_build_from_scratch_other_page_and_count():
+    chars = {i: cf.Glyph(i, (i % 8) * 4, (i // 8) * 5, 4, 5, 0, i % 3, 6, 0, 15)
+             for i in range(0x20, 0x20 + 40)}
+    font = cf.CloverFont(
+        info=cf.Info(size=9, bit_field=3, charset=0, stretch_h=100, aa=1,
+                     padding=(0, 0, 0, 0), spacing=(1, 1), outline=0, face="x"),
+        common=cf.Common(line_height=12, base=9, scale_w=32, scale_h=64, pages=1,
+                         bit_field=0, alpha_chnl=0, red_chnl=0, green_chnl=0, blue_chnl=0),
+        pages=["p.png"], chars=chars, png=_png(32, 64), kernings=None)
+    data = cf.build(font)
+    assert cf.parse(data) == font
