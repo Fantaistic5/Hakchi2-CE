@@ -1716,4 +1716,7 @@ Are you sure?</value>
   <data name="ExtractingToTemporaryFolder" xml:space="preserve">
     <value>Extracting to temporary folder</value>
   </data>
+  <data name="CoverGridNoCover" xml:space="preserve">
+    <value>no cover</value>
+  </data>
 </root>

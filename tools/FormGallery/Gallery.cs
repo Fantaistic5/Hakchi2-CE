@@ -43,6 +43,7 @@ namespace FormGallery
 
             if (string.Equals(o.Only, ThemeSample.Name, StringComparison.OrdinalIgnoreCase)) return RunThemeSample(o);
             if (string.Equals(o.Only, ControlsBoard.Name, StringComparison.OrdinalIgnoreCase)) return RunControlsBoard(o);
+            if (string.Equals(o.Only, CoverGridSample.Name, StringComparison.OrdinalIgnoreCase)) return CoverGridSample.Run(o);
 
             var entries = new List<Entry>();
             var types = Host.UiTypes().Where(t => o.Only == null || string.Equals(t.Name, o.Only, StringComparison.OrdinalIgnoreCase)).ToList();

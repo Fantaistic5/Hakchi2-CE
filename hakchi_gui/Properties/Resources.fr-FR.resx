@@ -1303,4 +1303,7 @@ Il y a une faible chance de pertes de données, donc s.v.p. assurez-vous d'avoir
   <data name="ExtractingToTemporaryFolder" xml:space="preserve">
     <value>Extraction dans le répertoire temporaire</value>
   </data>
+  <data name="CoverGridNoCover" xml:space="preserve">
+    <value>sans jaquette</value>
+  </data>
 </root>

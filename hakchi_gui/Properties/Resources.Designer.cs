@@ -2750,6 +2750,15 @@ namespace com.clusterrr.hakchi_gui.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to no cover.
+        /// </summary>
+        internal static string CoverGridNoCover {
+            get {
+                return ResourceManager.GetString("CoverGridNoCover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No custom box art.
         /// </summary>
         internal static string ListCategoryNoCoverArt {
