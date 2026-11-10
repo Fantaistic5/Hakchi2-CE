@@ -86,6 +86,13 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         }
 
         /// <summary>Somme des jeux de tous les systemes (la ligne « Tous »).</summary>
+        /// <summary>Libelle affiche d'un systeme (cle), null si absent.</summary>
+        public string DisplayOf(string system)
+        {
+            var r = rows.FirstOrDefault(x => x.Kind == RowKind.System && x.System == system);
+            return r == null ? null : r.Text;
+        }
+
         public int TotalCount { get { return systems.Sum(x => x.Value); } }
 
         /// <summary>Systeme choisi ; null = tous.</summary>
@@ -134,8 +141,9 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             rows.Clear();
             rows.Add(new Row { Kind = RowKind.Header, Text = Resources.NavSystemsHeader });
             rows.Add(new Row { Kind = RowKind.All, Text = Resources.NavAll, Count = TotalCount });
+            var labels = ShellText.SystemDisplayNames(systems.Select(x => x.Key));
             foreach (var kv in systems)
-                rows.Add(new Row { Kind = RowKind.System, Text = ShellText.SystemDisplay(kv.Key), System = kv.Key, Count = kv.Value });
+                rows.Add(new Row { Kind = RowKind.System, Text = labels[kv.Key], System = kv.Key, Count = kv.Value });
             rows.Add(new Row { Kind = RowKind.Header, Text = Resources.NavCollectionsHeader });
             rows.Add(new Row { Kind = RowKind.Collection, Collection = GameCollection.NoCover, Text = Resources.NavNoCover, Count = CountOf(GameCollection.NoCover) });
             if (GameFilter.FavoritesAvailable)

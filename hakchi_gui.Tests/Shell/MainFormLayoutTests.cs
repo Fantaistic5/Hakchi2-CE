@@ -506,6 +506,152 @@ namespace hakchi_gui.Tests.Shell
         }
 
         [StaFact]
+        public void AddGamesButtonInFooterWithOriginalTextAndHandler()
+        {
+            var f = MainFormEnv.Create(MainFormEnv.Games(2), 96, new Size(1440, 900));
+            try
+            {
+                var add = (Button)Field(f, "buttonAddGames");
+                Assert.True(MainFormEnv.Shown(add));
+                Assert.Same(f.shellFooterRow, add.Parent);
+                Assert.True(add.Right <= f.buttonFindCovers.Left, "Ajouter doit etre a gauche de Chercher");
+                Assert.True(f.buttonFindCovers.Right <= ((Button)Field(f, "buttonStart")).Left);
+                Assert.True(f.storageBar.Right <= add.Left);
+                Assert.Equal(new[] { "MainForm.buttonAddGames_Click" }, MainFormEnv.HandlerNames(MainFormEnv.Handlers(add, typeof(Control), "EventClick")).ToArray());
+                var res = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+                Assert.Equal(res.GetString("buttonAddGames.Text"), add.Text);
+                Assert.Equal(com.clusterrr.hakchi_gui.Theme.Controls.B1ButtonKind.Secondary, com.clusterrr.hakchi_gui.Theme.B1Skin.KindOf(add));
+                Assert.True(add.Width >= TextRenderer.MeasureText(add.Text, add.Font).Width, "texte tronque");
+            }
+            finally { MainFormEnv.Close(f); }
+        }
+
+        [StaFact]
+        public void ScopeChipsMatchScopeAndIgnoreFocus()
+        {
+            var f = MainFormEnv.Create(MainFormEnv.Games(4));
+            try
+            {
+                Assert.Equal(GameScope.Library, f.grid.Filter.Scope);
+                Assert.True(f.chipLibrary.Checked);
+                Assert.False(f.chipOnConsole.Checked);
+                Assert.Same(f.grid, f.ActiveControl);
+                // un RadioButton qui recoit le focus clavier se cochait : la puce « Sur la console » s'allumait au demarrage
+                var onEnter = typeof(Control).GetMethod("OnEnter", BindingFlags.Instance | BindingFlags.NonPublic);
+                onEnter.Invoke(f.chipOnConsole, new object[] { EventArgs.Empty });
+                f.chipOnConsole.Focus();
+                Application.DoEvents();
+                Assert.False(f.chipOnConsole.Checked);
+                Assert.True(f.chipLibrary.Checked);
+                Assert.Equal(GameScope.Library, f.grid.Filter.Scope);
+                // le clic (souris ou Espace) choisit, et une seule puce de portee reste allumee
+                f.chipOnConsole.PerformClick();
+                Assert.True(f.chipOnConsole.Checked);
+                Assert.False(f.chipLibrary.Checked);
+                Assert.Equal(GameScope.OnConsole, f.grid.Filter.Scope);
+                f.chipLibrary.PerformClick();
+                Assert.True(f.chipLibrary.Checked);
+                Assert.False(f.chipOnConsole.Checked);
+                Assert.Equal(GameScope.Library, f.grid.Filter.Scope);
+            }
+            finally { MainFormEnv.Close(f); }
+        }
+
+        [StaFact]
+        public void SheetCoverIsTheOnlyCoverTarget()
+        {
+            var apps = MainFormEnv.Games(4);
+            var f = MainFormEnv.Create(apps, 96, new Size(1440, 900));
+            try
+            {
+                f.listViewGames.Items[0].Selected = true;
+                f.ShowSelected();
+                f.PerformLayout();
+                Application.DoEvents();
+                var art = (PictureBox)Field(f, "pictureBoxArt");
+                var thumb = (PictureBox)Field(f, "pictureBoxThumbnail");
+                // l'ancienne grande image n'est plus montree (doublon de l'en-tete) mais garde ses gestionnaires
+                Assert.False(MainFormEnv.Shown(art));
+                Assert.Contains(art, All(f));
+                Assert.Contains("MainForm.pictureBoxArt_MouseClick", MainFormEnv.HandlerNames(MainFormEnv.Handlers(art, typeof(Control), "EventMouseClick")));
+                Assert.Contains("MainForm.pictureBoxArt_DragDrop", MainFormEnv.HandlerNames(MainFormEnv.Handlers(art, typeof(Control), "EventDragDrop")));
+                Assert.Contains("MainForm.pictureBoxArt_DragEnter", MainFormEnv.HandlerNames(MainFormEnv.Handlers(art, typeof(Control), "EventDragEnter")));
+                // la miniature (image distincte) et les illustrations Mega Drive restent
+                Assert.True(MainFormEnv.Shown(thumb));
+                Assert.True(MainFormEnv.Shown((Control)Field(f, "pictureBoxM2Front")));
+                var groupN = (Control)Field(f, "groupBoxArtNintendo");
+                Assert.True(groupN.Height < 150, "cadre Nintendo resserre sur la miniature : " + groupN.Height);
+                Assert.True(thumb.Bottom <= ((Control)Field(f, "panel2")).ClientSize.Height, "miniature " + thumb.Bounds + " panneau " + ((Control)Field(f, "panel2")).Bounds + " cadre " + groupN.Bounds);
+                // les boutons d'illustration restent
+                foreach (var b in new[] { "buttonDefaultCover", "buttonBrowseImage", "buttonGoogle", "buttonSpine" })
+                    Assert.True(MainFormEnv.Shown((Control)Field(f, b)), b);
+
+                // la jaquette de l'en-tete est la cible : clic, glisser-deposer
+                var cover = f.sheet.CoverBounds;
+                Assert.False(cover.IsEmpty);
+                Assert.True(f.SheetCoverHit(ShellFixture.Center(cover)));
+                Assert.False(f.SheetCoverHit(new Point(cover.Right + 4, cover.Bottom + 4)));
+                Assert.True(f.sheet.AllowDrop);
+                Assert.NotEmpty(MainFormEnv.HandlerNames(MainFormEnv.Handlers(f.sheet, typeof(Control), "EventMouseClick")));
+
+                var png = Path.Combine(HakchiEnv.NewDir(), "cover.png");
+                using (var bmp = new Bitmap(120, 160)) { using (var g = Graphics.FromImage(bmp)) g.Clear(Color.OrangeRed); bmp.Save(png, System.Drawing.Imaging.ImageFormat.Png); }
+                var data = new DataObject(DataFormats.FileDrop, new[] { png });
+                var inside = f.sheet.PointToScreen(ShellFixture.Center(cover));
+                var outside = f.sheet.PointToScreen(new Point(cover.Right + 4, cover.Bottom + 4));
+                var raise = typeof(Control).GetMethod("OnDragEnter", BindingFlags.Instance | BindingFlags.NonPublic);
+                var over = new DragEventArgs(data, 0, outside.X, outside.Y, DragDropEffects.All, DragDropEffects.All);
+                raise.Invoke(f.sheet, new object[] { over });
+                Assert.Equal(DragDropEffects.None, over.Effect);
+                var enter = new DragEventArgs(data, 0, inside.X, inside.Y, DragDropEffects.All, DragDropEffects.All);
+                raise.Invoke(f.sheet, new object[] { enter });
+                Assert.Equal(DragDropEffects.All, enter.Effect);
+
+                var dir = ((NesApplication)f.listViewGames.Items[0].Tag).BasePath;
+                var stamps = Directory.GetFiles(dir, "*.png").ToDictionary(x => x, x => File.ReadAllBytes(x));
+                var drop = new DragEventArgs(data, 0, inside.X, inside.Y, DragDropEffects.All, DragDropEffects.All);
+                DialogGuard.Closed.Clear();
+                using (DialogGuard.Start())
+                    typeof(Control).GetMethod("OnDragDrop", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(f.sheet, new object[] { drop });
+                Assert.Empty(DialogGuard.Closed);
+                var changed = Directory.GetFiles(dir, "*.png").Where(x => !stamps.ContainsKey(x) || !stamps[x].SequenceEqual(File.ReadAllBytes(x))).ToList();
+                Assert.NotEmpty(changed);
+            }
+            finally { MainFormEnv.Close(f); }
+        }
+
+        [StaTheory]
+        [InlineData(96)]
+        [InlineData(144)]
+        public void SheetFieldsHaveNoHiddenRowGap(int dpi)
+        {
+            var f = MainFormEnv.Create(MainFormEnv.Games(4), dpi, new Size(1440, 900));
+            try
+            {
+                f.listViewGames.Items[0].Selected = true;
+                f.ShowSelected();
+                f.PerformLayout();
+                Application.DoEvents();
+                var t = (TableLayoutPanel)Field(f, "tableLayoutPanelGameInfo");
+                var rows = t.Controls.Cast<Control>().Where(MainFormEnv.OwnVisible)
+                    .GroupBy(c => t.GetRow(c)).OrderBy(g => g.Key)
+                    .Select(g => new { Row = g.Key, Top = g.Min(c => c.Top), Bottom = g.Max(c => c.Bottom), Names = string.Join(",", g.Select(c => c.Name + c.Bounds + c.Margin)) }).ToList();
+                float s = dpi / 96f;
+                var gaps = new List<string>();
+                for (int i = 1; i < rows.Count; i++)
+                {
+                    int gap = rows[i].Top - rows[i - 1].Bottom;
+                    if (gap > 24 * s) gaps.Add("lignes " + rows[i - 1].Row + " -> " + rows[i].Row + " : " + gap + " px (" + rows[i - 1].Names + " / " + rows[i].Names + ")");
+                }
+                // les marges posees sous les listes deroulantes ne s'accumulent pas (ancien trou sous Genre)
+                foreach (var c in t.Controls.OfType<ComboBox>())
+                    if (c.Margin.Bottom > 8 * s) gaps.Add(c.Name + " marge basse " + c.Margin.Bottom);
+                Assert.True(gaps.Count == 0, string.Join("\n", gaps));
+            }
+            finally { MainFormEnv.Close(f); }
+        }
+
+        [StaFact]
         public void NavHeaderLabelsCollectionComboAndSheetScrollsDark()
         {
             var f = MainFormEnv.Create(MainFormEnv.Games(2));
@@ -535,6 +681,14 @@ namespace hakchi_gui.Tests.Shell
                 Assert.True((bool)hooked.GetType().GetMethod("TryGetValue").Invoke(hooked, args));
                 var keys = ((System.Collections.IDictionary)args[1]).Keys.Cast<string>().ToList();
                 Assert.Contains("darkscroll", keys);
+                // et sur chaque zone de texte multiligne de la fiche (description, ligne de commande...)
+                foreach (var tb in All(f.sheetEditPanel).OfType<TextBoxBase>().Where(x => x.Multiline))
+                {
+                    var targs = new object[] { tb, null };
+                    Assert.True((bool)hooked.GetType().GetMethod("TryGetValue").Invoke(hooked, targs), tb.Name);
+                    var tkeys = ((System.Collections.IDictionary)targs[1]).Keys.Cast<string>().ToList();
+                    Assert.True(tkeys.Contains("darkscroll") || tkeys.Contains("b1scroll"), tb.Name);
+                }
             }
             finally { MainFormEnv.Close(f); }
         }

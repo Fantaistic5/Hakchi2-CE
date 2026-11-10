@@ -32,7 +32,7 @@ namespace com.clusterrr.hakchi_gui
         internal B1Chip chipOnConsole, chipLibrary, chipAz;
         internal B1Button buttonFindCovers;
         internal Panel shellLeft, shellLeftHeader, shellLeftGap, shellCenter, shellChips, shellChipAzHost;
-        internal Panel shellFooter, shellFooterRule, shellFooterPad, shellFooterRow, shellFooterGap1, shellFooterGap2;
+        internal Panel shellFooter, shellFooterRule, shellFooterPad, shellFooterRow, shellFooterGap1, shellFooterGap2, shellFooterGap3;
         internal Panel sheetEditPanel;
         internal ShellCaption shellCollectionCaption;
         internal ContextMenuStrip coverChooserMenu;
@@ -76,8 +76,10 @@ namespace com.clusterrr.hakchi_gui
             shellCenter.Controls.Add(grid);
             shellCenter.Controls.Add(shellChips);
 
-            chipOnConsole.CheckedChanged += (s, e) => { if (chipOnConsole.Checked) grid.Filter.Scope = GameScope.OnConsole; };
-            chipLibrary.CheckedChanged += (s, e) => { if (chipLibrary.Checked) grid.Filter.Scope = GameScope.Library; };
+            // B1Chip ne se coche plus en recevant le focus (la puce « Sur la console » s'allumait au demarrage) ; le groupe reste
+            // tenu ici aussi, pour que Checked pose par le code ne laisse jamais deux puces de portee allumees.
+            chipOnConsole.CheckedChanged += (s, e) => { if (chipOnConsole.Checked) { chipLibrary.Checked = false; grid.Filter.Scope = GameScope.OnConsole; } };
+            chipLibrary.CheckedChanged += (s, e) => { if (chipLibrary.Checked) { chipOnConsole.Checked = false; grid.Filter.Scope = GameScope.Library; } };
             chipAz.Click += (s, e) => { chipAz.Checked = !chipAz.Checked; grid.Filter.SortAz = chipAz.Checked; };
             grid.Filter.Scope = GameScope.Library;      // decision du controleur : « Dans la bibliotheque », pour la session
 
@@ -118,7 +120,16 @@ namespace com.clusterrr.hakchi_gui
             tableLayoutPanelGameInfo.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             groupBoxArtNintendo.Dock = DockStyle.Top;
             groupBoxArtSega.Dock = DockStyle.Top;
+            // une seule jaquette dans la fiche : celle de l'en-tete devient la cible (clic, depot de fichier, clic droit) ;
+            // l'ancienne grande image (pictureBoxArt) reste dans la fenetre, cachee, et prete son Tag et ses gestionnaires
+            pictureBoxArt.Visible = false;
             panel2.Layout += (s, e) => LayoutArtPanel();
+            sheet.AllowDrop = true;
+            sheet.MouseClick += (s, e) => { if (SheetCoverHit(e.Location)) pictureBoxArt_MouseClick(pictureBoxArt, e); };
+            sheet.MouseMove += (s, e) => { if (SheetCoverHit(e.Location)) sheet.Cursor = Cursors.Hand; else if (sheet.Cursor == Cursors.Hand && !sheet.ChangeLinkBounds.Contains(e.Location)) sheet.Cursor = Cursors.Default; };
+            sheet.DragEnter += (s, e) => SheetCoverDrag(e);
+            sheet.DragOver += (s, e) => SheetCoverDrag(e);
+            sheet.DragDrop += (s, e) => { if (SheetCoverHit(sheet.PointToClient(new Point(e.X, e.Y)))) pictureBoxArt_DragDrop(pictureBoxArt, e); };
             panel3.Layout += (s, e) => LayoutSegaArtPanel();
             foreach (Control c in tableLayoutPanelGameInfo.Controls)
                 if (c is ComboBox) c.SizeChanged += (s, e) => FitGameInfoCombos();
@@ -142,9 +153,16 @@ namespace com.clusterrr.hakchi_gui
             B1Skin.SetKind(buttonStart, B1ButtonKind.Primary);
             shellFooterGap1 = new Panel { Name = "shellFooterGap1", Dock = DockStyle.Right, BackColor = B1Palette.Slate };
             shellFooterGap2 = new Panel { Name = "shellFooterGap2", Dock = DockStyle.Right, BackColor = B1Palette.Slate };
+            shellFooterGap3 = new Panel { Name = "shellFooterGap3", Dock = DockStyle.Right, BackColor = B1Palette.Slate };
+            // « Ajouter des jeux » : le bouton d'origine (texte et gestionnaire d'origine), en secondaire a gauche de « Chercher »
+            buttonAddGames.Dock = DockStyle.Right;
+            buttonAddGames.AutoSize = false;
+            B1Skin.SetKind(buttonAddGames, B1ButtonKind.Secondary);
             shellFooterRow = new Panel { Name = "shellFooterRow", Dock = DockStyle.Fill, BackColor = B1Palette.Slate };
             shellFooterRow.Controls.Add(storageBar);
             shellFooterRow.Controls.Add(shellFooterGap1);
+            shellFooterRow.Controls.Add(buttonAddGames);       // Dock Right : le dernier ajoute est le plus a droite
+            shellFooterRow.Controls.Add(shellFooterGap3);
             shellFooterRow.Controls.Add(buttonFindCovers);
             shellFooterRow.Controls.Add(shellFooterGap2);
             shellFooterRow.Controls.Add(buttonStart);
@@ -169,6 +187,7 @@ namespace com.clusterrr.hakchi_gui
 
             grid.Bind(listViewGames);   // force le handle de la liste cachee : ses evenements partent normalement
 
+            ActiveControl = grid;       // focus initial sur la grille, pas sur la premiere puce
             MinimumSize = ShellMinimumSize;
             if (Width < 1280 || Height < 800) Size = new Size(1280, 800);
             shellBuilt = true;
@@ -297,6 +316,8 @@ namespace com.clusterrr.hakchi_gui
             shellFooterPad.Padding = new Padding(B1Draw.Px(18, s), B1Draw.Px(11, s), B1Draw.Px(18, s), B1Draw.Px(12, s));
             SetWidth(shellFooterGap1, B1Draw.Px(18, s));
             SetWidth(shellFooterGap2, B1Draw.Px(10, s));
+            SetWidth(shellFooterGap3, B1Draw.Px(10, s));
+            SetWidth(buttonAddGames, Math.Max(B1Draw.Px(130, s), TextRenderer.MeasureText(buttonAddGames.Text, buttonAddGames.Font).Width + B1Draw.Px(32, s)));
             SetWidth(buttonFindCovers, Math.Max(B1Draw.Px(150, s), buttonFindCovers.GetPreferredSize(Size.Empty).Width));
             SetWidth(buttonStart, Math.Max(B1Draw.Px(130, s), TextRenderer.MeasureText(buttonStart.Text, buttonStart.Font).Width + B1Draw.Px(32, s)));
 
@@ -313,6 +334,9 @@ namespace com.clusterrr.hakchi_gui
             SetHeight(shellLeftHeader, shellLeftHeader.Padding.Vertical + shellCollectionCaption.Height + gamesConsoleComboBox.Height + shellLeftGap.Height + structureButton.Height);
 
             // fiche : la description (ligne 22, AutoSize ; ShowSelected remet panel1 a 1x1) garde une hauteur utilisable
+            // cadre Nintendo resserre sur la miniature (la grande jaquette est dans l'en-tete) : habillage du cadre + miniature
+            var gn = groupBoxArtNintendo;
+            SetHeight(gn, gn.Height - gn.DisplayRectangle.Height + panel2.Padding.Vertical + pictureBoxThumbnail.Height + 2 * pictureBoxArt.Left);
             var dmin = new Size(0, B1Draw.Px(DescriptionMinHeight, s));
             if (panel1.MinimumSize != dmin) panel1.MinimumSize = dmin;
 
@@ -333,19 +357,28 @@ namespace com.clusterrr.hakchi_gui
             SetHeight(shellChips, y + lineH + B1Draw.Px(4, s));
         }
 
-        /// <summary>Illustration Nintendo : la miniature reste en bas a droite, la jaquette prend le reste de la largeur.</summary>
+        /// <summary>
+        /// Illustration Nintendo : la grande jaquette est celle de l'en-tete de la fiche ; il ne reste ici que la miniature
+        /// (image distincte), en haut a gauche, et le cadre se resserre autour d'elle.
+        /// </summary>
         private void LayoutArtPanel()
         {
             int m = pictureBoxArt.Left;
-            int tx = Math.Max(m, panel2.ClientSize.Width - pictureBoxThumbnail.Width - m);
-            if (pictureBoxThumbnail.Left != tx) pictureBoxThumbnail.Left = tx;
-            int aw = Math.Max(10, tx - m - pictureBoxArt.Left);
-            if (pictureBoxArt.Width != aw) pictureBoxArt.Width = aw;
-            // hauteurs : tout tient dans le panneau (le concepteur debordait de 2 px une fois la fiche plus etroite)
-            int ah = Math.Max(10, panel2.ClientSize.Height - 2 * m);
-            if (pictureBoxArt.Height != ah) pictureBoxArt.Height = ah;
-            int ty = Math.Max(m, panel2.ClientSize.Height - pictureBoxThumbnail.Height - m);
-            if (pictureBoxThumbnail.Top != ty) pictureBoxThumbnail.Top = ty;
+            if (pictureBoxThumbnail.Left != m) pictureBoxThumbnail.Left = m;
+            if (pictureBoxThumbnail.Top != m) pictureBoxThumbnail.Top = m;
+        }
+
+        /// <summary>Le point (coordonnees de la fiche) est sur la jaquette de l'en-tete d'un jeu choisi.</summary>
+        internal bool SheetCoverHit(Point p)
+        {
+            return shellBuilt && sheet.Game != null && !sheet.CoverBounds.IsEmpty && sheet.CoverBounds.Contains(p);
+        }
+
+        /// <summary>Glisser au-dessus de la fiche : accepte (comme l'ancienne image) seulement sur la jaquette.</summary>
+        private void SheetCoverDrag(DragEventArgs e)
+        {
+            if (SheetCoverHit(sheet.PointToClient(new Point(e.X, e.Y)))) pictureBoxArt_DragEnter(pictureBoxArt, e);
+            else e.Effect = DragDropEffects.None;
         }
 
         /// <summary>Illustrations Mega Drive : tranche puis face, cote a cote sans chevauchement, a la hauteur du panneau.</summary>
@@ -369,25 +402,39 @@ namespace com.clusterrr.hakchi_gui
             fittingCombos = true;
             try
             {
-                var t = tableLayoutPanelGameInfo;
-                t.PerformLayout();
-                var rows = t.GetRowHeights();
+                // Ecart entre la hauteur reelle (imposee par Windows) et la hauteur « demandee » que le TableLayoutPanel utilise
+                // pour la ligne. Calcule a partir de la marge d'origine, donc idempotent : l'ancienne version relisait les
+                // hauteurs de ligne, nulles tant que la fiche etait cachee, et empilait la marge (trou sous Genre).
                 bool changed = false;
-                foreach (Control c in t.Controls)
+                foreach (Control c in tableLayoutPanelGameInfo.Controls)
                 {
                     if (!(c is ComboBox)) continue;
-                    int row = t.GetRow(c);
-                    if (row < 0 || row >= rows.Length || t.GetRowSpan(c) != 1) continue;
-                    int over = c.Height + c.Margin.Vertical - rows[row];
-                    if (over > 0)
-                    {
-                        c.Margin = new Padding(c.Margin.Left, c.Margin.Top, c.Margin.Right, c.Margin.Bottom + over);
-                        changed = true;
-                    }
+                    Padding baseMargin;
+                    if (!comboBaseMargins.TryGetValue(c, out baseMargin)) comboBaseMargins[c] = baseMargin = c.Margin;
+                    int spec = SpecifiedHeight(c);
+                    int over = spec > 0 ? Math.Max(0, c.Height - spec) : 0;
+                    var m = new Padding(baseMargin.Left, baseMargin.Top, baseMargin.Right, baseMargin.Bottom + over);
+                    if (c.Margin != m) { c.Margin = m; changed = true; }
                 }
-                if (changed) t.PerformLayout();
+                if (changed) tableLayoutPanelGameInfo.PerformLayout();
             }
             finally { fittingCombos = false; }
+        }
+
+        private readonly Dictionary<Control, Padding> comboBaseMargins = new Dictionary<Control, Padding>();
+        private static System.Reflection.MethodInfo specifiedBounds;
+
+        /// <summary>Hauteur « demandee » (SpecifiedBounds de WinForms, celle que la mise en page utilise), 0 si inaccessible.</summary>
+        private static int SpecifiedHeight(Control c)
+        {
+            try
+            {
+                if (specifiedBounds == null)
+                    specifiedBounds = typeof(Control).Assembly.GetType("System.Windows.Forms.Layout.CommonProperties", true)
+                        .GetMethod("GetSpecifiedBounds", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+                return ((Rectangle)specifiedBounds.Invoke(null, new object[] { c })).Height;
+            }
+            catch (Exception) { return 0; }
         }
 
         protected override void OnHandleCreated(EventArgs e)

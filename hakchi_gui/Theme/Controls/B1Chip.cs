@@ -21,6 +21,34 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
 
         protected override void OnCheckedChanged(EventArgs e) { base.OnCheckedChanged(e); Invalidate(); }
 
+        [System.Runtime.InteropServices.DllImport("user32.dll")] private static extern short GetKeyState(int key);
+        private bool entering;
+
+        /// <summary>
+        /// RadioButton « clique » le bouton qui recoit le focus hors tabulation (comme un radio Win32 atteint aux fleches) : la
+        /// premiere puce prenait le focus a l'ouverture de la fenetre et s'allumait seule. Le clic n'est garde que si une fleche
+        /// est enfoncee (navigation au clavier) ; souris, Espace et fleches choisissent toujours.
+        /// </summary>
+        protected override void OnEnter(EventArgs e)
+        {
+            entering = true;
+            try { base.OnEnter(e); }
+            finally { entering = false; }
+        }
+
+        protected override void OnClick(EventArgs e)
+        {
+            if (entering && !ArrowDown()) return;
+            base.OnClick(e);
+        }
+
+        private static bool ArrowDown()
+        {
+            foreach (var k in new[] { Keys.Up, Keys.Down, Keys.Left, Keys.Right })
+                if (GetKeyState((int)k) < 0) return true;
+            return false;
+        }
+
         public override Size GetPreferredSize(Size proposedSize)
         {
             float s = B1Dpi.Scale(this);

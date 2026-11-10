@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -47,6 +48,29 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             if (string.IsNullOrEmpty(name)) return string.Empty;
             int i = name.IndexOf(" - ", StringComparison.Ordinal);
             return i > 0 && i + 3 < name.Length ? name.Substring(i + 3) : name;
+        }
+
+        /// <summary>
+        /// Libelles affiches d'une liste de systemes. Quand deux noms se reduisent au meme libelle (« FBA - Arcade Games » et
+        /// « FB Alpha - Arcade Games » donnent « Arcade Games »), le prefixe retire les distingue : « Arcade Games · FBA ».
+        /// </summary>
+        public static Dictionary<string, string> SystemDisplayNames(IEnumerable<string> names)
+        {
+            var list = (names ?? Enumerable.Empty<string>()).Where(n => !string.IsNullOrEmpty(n)).Distinct(StringComparer.Ordinal).ToList();
+            var shortOf = list.ToDictionary(n => n, SystemDisplay, StringComparer.Ordinal);
+            var clash = new HashSet<string>(shortOf.Values.GroupBy(v => v, StringComparer.Ordinal).Where(g => g.Count() > 1).Select(g => g.Key), StringComparer.Ordinal);
+            var result = new Dictionary<string, string>(StringComparer.Ordinal);
+            foreach (var n in list)
+            {
+                string d = shortOf[n];
+                if (clash.Contains(d))
+                {
+                    int i = n.IndexOf(" - ", StringComparison.Ordinal);
+                    d = i > 0 && d != n ? d + " · " + n.Substring(0, i) : n;
+                }
+                result[n] = d;
+            }
+            return result;
         }
 
         public static int Width(string text, Font f)

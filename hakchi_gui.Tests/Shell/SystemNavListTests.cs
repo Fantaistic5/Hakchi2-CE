@@ -180,5 +180,36 @@ namespace hakchi_gui.Tests.Shell
                 finally { B1Dpi.Override = 0f; }
             }
         }
-    }
+    
+        [StaFact]
+        public void NavDisambiguatesSystemsWithTheSameShortName()
+        {
+            // donnees reelles de la copie de test : deux AppInfo d'arcade (fbneo et fbalpha2018) donnent « Arcade Games »
+            var names = ShellText.SystemDisplayNames(new[] { "FBA - Arcade Games", "FB Alpha - Arcade Games", "Nintendo - Game Boy", "DOS" });
+            Assert.Equal("Arcade Games · FBA", names["FBA - Arcade Games"]);
+            Assert.Equal("Arcade Games · FB Alpha", names["FB Alpha - Arcade Games"]);
+            Assert.Equal("Game Boy", names["Nintendo - Game Boy"]);
+            Assert.Equal("DOS", names["DOS"]);
+            // nom court identique a un nom sans prefixe : le prefixe distingue l'autre
+            var mixed = ShellText.SystemDisplayNames(new[] { "Arcade", "MAME - Arcade" });
+            Assert.Equal("Arcade", mixed["Arcade"]);
+            Assert.Equal("Arcade · MAME", mixed["MAME - Arcade"]);
+
+            var nav = new SystemNavList { Bounds = new Rectangle(0, 0, 260, 500) };
+            nav.SetSystems(new[] { ("FBA - Arcade Games", 39), ("FB Alpha - Arcade Games", 32), ("Nintendo - Game Boy", 2) });
+            var f = ShellFixture.Host(nav, new Size(260, 500));
+            using (f)
+            {
+                Assert.Equal("Arcade Games · FBA", nav.DisplayOf("FBA - Arcade Games"));
+                Assert.Equal("Arcade Games · FB Alpha", nav.DisplayOf("FB Alpha - Arcade Games"));
+                Assert.Equal("Game Boy", nav.DisplayOf("Nintendo - Game Boy"));
+                // cles de filtre distinctes
+                var got = new List<GameFilter>();
+                nav.FilterChanged += (s, flt) => got.Add(flt);
+                ShellFixture.Click(nav, ShellFixture.Center(nav.GetSystemRowBounds("FB Alpha - Arcade Games")));
+                ShellFixture.Click(nav, ShellFixture.Center(nav.GetSystemRowBounds("FBA - Arcade Games")));
+                Assert.Equal(new[] { "FB Alpha - Arcade Games", "FBA - Arcade Games" }, got.ConvertAll(x => x.System).ToArray());
+            }
+        }
+}
 }
