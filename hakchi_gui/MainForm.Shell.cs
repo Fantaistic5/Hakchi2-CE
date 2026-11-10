@@ -34,6 +34,7 @@ namespace com.clusterrr.hakchi_gui
         internal Panel shellLeft, shellLeftHeader, shellLeftGap, shellCenter, shellChips, shellChipAzHost;
         internal Panel shellFooter, shellFooterRule, shellFooterPad, shellFooterRow, shellFooterGap1, shellFooterGap2;
         internal Panel sheetEditPanel;
+        internal ShellCaption shellCollectionCaption;
         internal ContextMenuStrip coverChooserMenu;
         internal ToolStripMenuItem changeCoverToolStripMenuItem, googleCoverToolStripMenuItem, defaultCoverToolStripMenuItem, spineCoverToolStripMenuItem;
         private bool shellBuilt, shellLayingOut;
@@ -41,6 +42,7 @@ namespace com.clusterrr.hakchi_gui
 
         /// <summary>Taille minimale de la fenetre (logique, 96 dpi).</summary>
         private bool fittingCombos;
+        internal const int DescriptionMinHeight = 120;      // px a 96 dpi
         internal static readonly Size ShellMinimumSize = new Size(1024, 640);
 
         private float ShellScale { get { return B1Dpi.Scale(this); } }
@@ -90,6 +92,9 @@ namespace com.clusterrr.hakchi_gui
             shellLeftHeader.Controls.Add(structureButton);      // Dock Top : le dernier ajoute est en haut
             shellLeftHeader.Controls.Add(shellLeftGap);
             shellLeftHeader.Controls.Add(gamesConsoleComboBox);
+            // titre de la liste deroulante : le titre d'origine de son cadre (« Collection de jeux actuelle »), style « SYSTEMES »
+            shellCollectionCaption = new ShellCaption { Name = "shellCollectionCaption", Dock = DockStyle.Top, Text = groupBoxCurrentGamesCollection.Text };
+            shellLeftHeader.Controls.Add(shellCollectionCaption);
             shellLeftHeader.Paint += (s, e) =>
             {
                 int r = B1Draw.Px(1, ShellScale);
@@ -122,6 +127,7 @@ namespace com.clusterrr.hakchi_gui
             sheetEditPanel.Controls.Add(groupBoxGameInfo);
             sheetEditPanel.Controls.Add(groupBoxButtons);
             sheet.Controls.Add(sheetEditPanel);
+            DarkTitleBar.ThemeScrollBars(sheetEditPanel);     // barres de defilement sombres (pose a la creation du handle)
             foreach (var c in new Control[] { textBoxName, textBoxPublisher, maskedTextBoxReleaseDate })
                 c.TextChanged += (s, e) => RefreshSheetHeader();
             maxPlayersComboBox.SelectedIndexChanged += (s, e) => RefreshSheetHeader();
@@ -303,7 +309,12 @@ namespace com.clusterrr.hakchi_gui
             shellLeftHeader.Padding = new Padding(B1Draw.Px(16, s), pad, B1Draw.Px(14, s) + B1Draw.Px(1, s), B1Draw.Px(8, s));
             SetHeight(shellLeftGap, B1Draw.Px(6, s));
             SetHeight(structureButton, Math.Max(B1Draw.Px(26, s), structureButton.Font.Height + B1Draw.Px(10, s)));
-            SetHeight(shellLeftHeader, shellLeftHeader.Padding.Vertical + gamesConsoleComboBox.Height + shellLeftGap.Height + structureButton.Height);
+            SetHeight(shellCollectionCaption, shellCollectionCaption.GetPreferredSize(Size.Empty).Height);
+            SetHeight(shellLeftHeader, shellLeftHeader.Padding.Vertical + shellCollectionCaption.Height + gamesConsoleComboBox.Height + shellLeftGap.Height + structureButton.Height);
+
+            // fiche : la description (ligne 22, AutoSize ; ShowSelected remet panel1 a 1x1) garde une hauteur utilisable
+            var dmin = new Size(0, B1Draw.Px(DescriptionMinHeight, s));
+            if (panel1.MinimumSize != dmin) panel1.MinimumSize = dmin;
 
             // puces : de gauche a droite, a la ligne si la largeur manque (jamais de chevauchement)
             int cw = Math.Max(1, W - lw - rw);
@@ -425,6 +436,13 @@ namespace com.clusterrr.hakchi_gui
         }
 
         /// <summary>Systemes et nombre de jeux (colonne gauche), jeux sans jaquette (collection + bouton du bas).</summary>
+        /// <summary>Pied de page : « N jeu(x) selectionne(s) · Console » devant la jauge (ancienne barre d'etat, memes chaines).</summary>
+        internal void ShowSelectedCount(int count)
+        {
+            if (storageBar == null) return;
+            storageBar.Caption = count + " " + Resources.GamesSelected + " · " + Resources.StorageBarCaption;
+        }
+
         internal void UpdateShellCounts()
         {
             if (!shellBuilt) return;
@@ -466,6 +484,53 @@ namespace com.clusterrr.hakchi_gui
             if (v.StartsWith("v", StringComparison.OrdinalIgnoreCase)) v = v.Substring(1);
             int dash = v.IndexOf('-');
             return dash > 0 ? v.Substring(0, dash) : v;
+        }
+    }
+
+    /// <summary>Petit titre de section de la coque : capitales espacees, TextFaint (comme « SYSTEMES » de la SystemNavList).</summary>
+    internal sealed class ShellCaption : Control
+    {
+        private readonly ShellFonts fonts = new ShellFonts();
+
+        public ShellCaption()
+        {
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint | ControlStyles.ResizeRedraw, true);
+            SetStyle(ControlStyles.Selectable, false);
+            TabStop = false;
+            BackColor = B1Palette.Slate;
+        }
+
+        private float S { get { return B1Dpi.Scale(this); } }
+        private Font Caps { get { return fonts.Get(ShellFonts.Kind.Caps, 7.5f, S); } }
+
+        /// <summary>Texte affiche (capitales de la culture d'interface).</summary>
+        public string DisplayText { get { return (Text ?? string.Empty).ToUpper(System.Globalization.CultureInfo.CurrentUICulture); } }
+
+        protected override void OnTextChanged(EventArgs e) { base.OnTextChanged(e); AccessibleName = Text; Invalidate(); }
+
+        public override Size GetPreferredSize(Size proposedSize)
+        {
+            return new Size(Width, Caps.Height + B1Draw.Px(8, S));
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            g.Clear(B1Palette.Slate);
+            var f = Caps;
+            string t = DisplayText;
+            int tw = B1Draw.TrackedWidth(g, t, f, 0.14f);
+            int x = RightToLeft == RightToLeft.Yes ? Math.Max(0, ClientSize.Width - tw) : 0;
+            var clip = g.Clip;
+            g.SetClip(ClientRectangle);
+            B1Draw.DrawTracked(g, t, f, B1Palette.TextFaint, x, 0, 0.14f);
+            g.Clip = clip;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) fonts.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

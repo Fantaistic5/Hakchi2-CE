@@ -469,6 +469,72 @@ namespace hakchi_gui.Tests.Shell
                 crType.GetField("Size").SetValue(cr, 123456789L);
                 show.Invoke(f, new[] { cr });
                 Assert.Equal(123456789L, f.storageBar.Used);
+                // nombre de jeux coches (ancienne barre d'etat) devant la jauge, meme chaine qu'avant
+                Assert.Equal("3 " + Resources.GamesSelected + " · " + Resources.StorageBarCaption, f.storageBar.Caption);
+                Assert.StartsWith(f.storageBar.Caption + " ", f.storageBar.AccessibleName);
+                crType.GetField("Count").SetValue(cr, 5);
+                show.Invoke(f, new[] { cr });
+                Assert.StartsWith("5 " + Resources.GamesSelected, f.storageBar.Caption);
+            }
+            finally { MainFormEnv.Close(f); }
+        }
+
+        [StaTheory]
+        [InlineData(1440, 900, 96)]
+        [InlineData(0, 0, 96)]
+        [InlineData(0, 0, 144)]
+        public void DescriptionStaysEditable(int w, int h, int dpi)
+        {
+            var f = MainFormEnv.Create(MainFormEnv.Games(4), dpi, w > 0 ? new Size(w, h) : (Size?)null);
+            try
+            {
+                f.listViewGames.Items[0].Selected = true;
+                f.ShowSelected();          // remet panel1 et textBoxDescription a 1x1 (code d'origine)
+                f.PerformLayout();
+                Application.DoEvents();
+                var desc = (TextBox)Field(f, "textBoxDescription");
+                float s = dpi / 96f;
+                Assert.True(MainFormEnv.Shown(desc));
+                Assert.True(desc.Height >= 100 * s, "description haute de " + desc.Height + " px (taille " + f.Size + ")");
+                Assert.True(desc.Width >= 150 * s, "description large de " + desc.Width + " px");
+                // atteignable par le defilement de la fiche
+                f.sheetEditPanel.ScrollControlIntoView(desc);
+                var r = f.sheetEditPanel.RectangleToClient(desc.RectangleToScreen(desc.ClientRectangle));
+                Assert.True(r.Top >= 0 && r.Top < f.sheetEditPanel.ClientSize.Height, "description hors de la vue : " + r);
+            }
+            finally { MainFormEnv.Close(f); }
+        }
+
+        [StaFact]
+        public void NavHeaderLabelsCollectionComboAndSheetScrollsDark()
+        {
+            var f = MainFormEnv.Create(MainFormEnv.Games(2));
+            try
+            {
+                var group = (GroupBox)Field(f, "groupBoxCurrentGamesCollection");
+                var combo = (ComboBox)Field(f, "gamesConsoleComboBox");
+                Assert.Equal(group.Text, f.shellCollectionCaption.Text);
+                Assert.True(MainFormEnv.Shown(f.shellCollectionCaption));
+                Assert.Same(combo.Parent, f.shellCollectionCaption.Parent);
+                Assert.True(f.shellCollectionCaption.Bottom <= combo.Top);
+                Assert.True(f.shellCollectionCaption.Height >= f.shellCollectionCaption.GetPreferredSize(Size.Empty).Height);
+                // le titre est peint en TextFaint sur Slate
+                using (var bmp = ShellFixture.Draw(f.shellCollectionCaption))
+                {
+                    bool faint = false;
+                    for (int x = 0; x < bmp.Width && !faint; x++)
+                        for (int y = 0; y < bmp.Height && !faint; y++)
+                            faint = bmp.GetPixel(x, y).ToArgb() == com.clusterrr.hakchi_gui.Theme.B1Palette.TextFaint.ToArgb();
+                    Assert.True(faint, "titre non peint en TextFaint");
+                }
+
+                // barres de defilement sombres sur le panneau des champs de la fiche (theme pose a la creation du handle)
+                var nt = typeof(MainForm).Assembly.GetType("com.clusterrr.hakchi_gui.Theme.NativeTheme", true);
+                var hooked = nt.GetField("hooked", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+                var args = new object[] { f.sheetEditPanel, null };
+                Assert.True((bool)hooked.GetType().GetMethod("TryGetValue").Invoke(hooked, args));
+                var keys = ((System.Collections.IDictionary)args[1]).Keys.Cast<string>().ToList();
+                Assert.Contains("darkscroll", keys);
             }
             finally { MainFormEnv.Close(f); }
         }

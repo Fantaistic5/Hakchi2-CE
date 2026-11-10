@@ -1833,6 +1833,7 @@ namespace com.clusterrr.hakchi_gui
                     (toolStripProgressBar.Value < toolStripProgressBar.Maximum) ?
                     SystemColors.ControlText :
                     Color.Red;
+                ShowSelectedCount(stats.Count);
                 if (storageBar != null)
                     storageBar.SetUsage(stats.Size, MemoryStats.StorageTotal > 0 ? maxGamesSize : 0);
                 UpdateShellCounts();
