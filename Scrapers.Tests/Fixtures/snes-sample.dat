@@ -1,0 +1,17 @@
+clrmamepro (
+	name "Nintendo - Super Nintendo Entertainment System"
+	description "Nintendo - Super Nintendo Entertainment System"
+	version "2026.10.07"
+	extensions "bin|sfc"
+	homepage "http://github.com/robloach/libretro-dats"
+)
+game (
+	name "Super Mario World (USA)"
+	region "USA"
+	rom ( name "Super Mario World (USA).sfc" size 524288 crc B19ED489 md5 CDD3C8C37322978CA8669B34BC89C804 sha1 6B47BB75D16514B6A476AA0C73A683A2A4C18765 )
+)
+game (
+	name "Super Metroid (USA, Europe) (En,Ja) (Virtual Console, Classic Mini, Switch Online)"
+	region "USA"
+	rom ( name "Super Metroid (USA, Europe) (En,Ja) (Virtual Console, Classic Mini, Switch Online).sfc" size 3145728 crc 45913E52 md5 6DB92BFD8F039C847F584A437322DB4A sha1 754BFAB196C40799A74A79D2BF51DBB850163334 )
+)

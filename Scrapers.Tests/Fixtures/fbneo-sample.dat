@@ -1,0 +1,21 @@
+clrmamepro (
+	name "FBNeo - Arcade Games"
+	description "FBNeo v1.0.0.03 Arcade Games"
+	version 1.0.0.03
+)
+
+game (
+	name "The King of Fighters '98 - The Slugfest / King of Fighters '98 - Dream Match Never Ends (NGM-2420)"
+	releaseyear "1998"
+	publisher "SNK"
+	rom ( name kof98.zip size 40445835 crc BA159910 md5 60344e3c402ff52ef37e2917f7c30619 sha1 bde244b013e92dff8894d60e5fd21119aa4c5a59 )
+)
+
+
+game (
+	name "'88 Games"
+	releaseyear "1988"
+	publisher "Konami"
+	rom ( name 88games.zip size 758474 crc C1544E79 md5 512c9d6d85b185be4be1150891301a68 sha1 3d9935c4622637ce80b6c3b18477d74aa4c2fb3d )
+)
+
