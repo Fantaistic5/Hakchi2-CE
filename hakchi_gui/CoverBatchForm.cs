@@ -18,13 +18,13 @@ namespace com.clusterrr.hakchi_gui
     /// </summary>
     public partial class CoverBatchForm : Form
     {
-        private const int SearchChunk = 16;     // SearchManyAsync par lots : une annulation garde les lots termines
+        private const int SearchChunk = 8;      // SearchManyAsync par lots : une annulation garde les lots termines
         private const int PreviewParallelism = 4;
         private const int MaxFallbackTries = 4;
         private const int MaxAlternatives = 12;
         private const int ThumbSize = 64;
 
-        private enum State { NotSearched, Searching, NotFound, ToCheck, Ready, HasCover, Applied, Failed }
+        private enum State { NotSearched, Searching, NotFound, NetworkError, Cancelled, ToCheck, Ready, HasCover, Applied, Failed }
 
         private sealed class Row
         {
@@ -34,7 +34,9 @@ namespace com.clusterrr.hakchi_gui
             public CoverProposal Proposal;
             public CoverCandidate Chosen;
             public Bitmap Full;
-            public bool Searched, Searching, Applied, Failed;
+            public bool Searched, Searching, Applied, Failed, Cancelled;
+            public int ThumbIndex = -1;
+            public Bitmap ThumbFor;
             public ListViewItem Item;
         }
 
@@ -44,6 +46,10 @@ namespace com.clusterrr.hakchi_gui
         private readonly Dictionary<string, Bitmap> _images = new Dictionary<string, Bitmap>();
         private readonly ImageList _thumbs = new ImageList { ImageSize = new Size(ThumbSize, ThumbSize), ColorDepth = ColorDepth.Depth32Bit };
         private readonly ToolTip _tip = new ToolTip();
+        private readonly Dictionary<string, Task<Bitmap>> _downloads = new Dictionary<string, Task<Bitmap>>();
+        private readonly CancellationTokenSource _closeCts = new CancellationTokenSource();
+        private CoverSearchService _service;
+        private bool _disposed;
         private CancellationTokenSource _cts;
         private int _altVersion;
         private bool _busy;
@@ -112,7 +118,8 @@ namespace com.clusterrr.hakchi_gui
             if (r.Failed) return State.Failed;
             if (r.Searching) return State.Searching;
             if (!r.Searched) return r.HadCover ? State.HasCover : State.NotSearched;
-            if (r.Chosen == null) return State.NotFound;
+            if (r.Cancelled) return State.Cancelled;
+            if (r.Chosen == null) return r.Proposal != null && r.Proposal.Error != null ? State.NetworkError : State.NotFound;
             return r.Item != null && r.Item.Checked ? State.Ready : State.ToCheck;
         }
 
@@ -136,15 +143,18 @@ namespace com.clusterrr.hakchi_gui
                     r.Item.SubItems[1].Text = string.Empty;
                     r.Item.SubItems[2].Text = string.Empty;
                 }
-                if (r.Full != null)
-                    r.Item.ImageIndex = AddThumb(r.Full);
-                else
-                    r.Item.ImageIndex = -1;
+                if (!ReferenceEquals(r.Full, r.ThumbFor))
+                {
+                    if (r.Full == null) r.ThumbIndex = -1;
+                    else r.ThumbIndex = AddThumb(r.Full, r.ThumbIndex);
+                    r.ThumbFor = r.Full;
+                }
+                r.Item.ImageIndex = r.ThumbIndex;
             }
             finally { _updating = was; }
         }
 
-        private int AddThumb(Bitmap src)
+        private int AddThumb(Bitmap src, int replaceIndex)
         {
             var thumb = new Bitmap(ThumbSize, ThumbSize);
             using (var g = Graphics.FromImage(thumb))
@@ -154,9 +164,11 @@ namespace com.clusterrr.hakchi_gui
                 int w = Math.Max(1, (int)(src.Width * k)), h = Math.Max(1, (int)(src.Height * k));
                 g.DrawImage(src, (ThumbSize - w) / 2, (ThumbSize - h) / 2, w, h);
             }
-            _thumbs.Images.Add(thumb);
+            int idx = replaceIndex;
+            if (idx >= 0 && idx < _thumbs.Images.Count) _thumbs.Images[idx] = thumb; // remplace, la liste ne grossit pas
+            else { _thumbs.Images.Add(thumb); idx = _thumbs.Images.Count - 1; }
             thumb.Dispose();
-            return _thumbs.Images.Count - 1;
+            return idx;
         }
 
         private void UpdateSummary(bool applied)
@@ -200,7 +212,7 @@ namespace com.clusterrr.hakchi_gui
             _updating = true;
             foreach (var r in rows)
             {
-                r.Proposal = null; r.Chosen = null; r.Failed = false;
+                r.Proposal = null; r.Chosen = null; r.Failed = false; r.Cancelled = false;
                 r.Full = null; // le bitmap reste dans le cache _images
                 r.Searched = false; r.Searching = true;
                 r.Item.Checked = false;
@@ -212,9 +224,11 @@ namespace com.clusterrr.hakchi_gui
             progressBar.Maximum = rows.Count;
             progressBar.Value = 0;
             string message = T("Msg.Done");
+            bool cancelled = false;
             try
             {
-                var service = CoverServices.CreateSearchService();
+                if (_service == null) _service = CoverServices.CreateSearchService();
+                var service = _service;
                 int offset = 0;
                 for (int i = 0; i < rows.Count; i += SearchChunk)
                 {
@@ -234,18 +248,27 @@ namespace com.clusterrr.hakchi_gui
                 var withProposal = rows.Where(r => r.Chosen != null).ToList();
                 await LoadPreviewsAsync(withProposal, ct);
             }
-            catch (OperationCanceledException) { message = T("Msg.Cancelled"); }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { cancelled = true; message = T("Msg.Cancelled"); }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("CoverBatchForm: " + ex.Message);
                 message = T("Msg.Error");
             }
+            if (_disposed) return;
 
             // tout ce qui n'a pas abouti (annule, reseau coupe) devient « non trouve »
             _updating = true;
             foreach (var r in rows)
             {
                 r.Searching = false;
+                if (cancelled && (r.Proposal == null || r.Full == null))
+                {
+                    // annule avant la fin pour ce jeu : etat distinct, pas non trouve
+                    r.Cancelled = true; r.Searched = true; r.Chosen = null;
+                    r.Item.Checked = false;
+                    RefreshItem(r);
+                    continue;
+                }
                 r.Searched = true;
                 if (r.Full == null) r.Chosen = null;
                 r.Item.Checked = r.Chosen != null && !r.HadCover && IsExact(r.Chosen);
@@ -253,6 +276,12 @@ namespace com.clusterrr.hakchi_gui
             }
             _updating = false;
 
+            if (!cancelled)
+            {
+                int errors = rows.Count(r => r.Chosen == null && r.Proposal != null && r.Proposal.Error != null);
+                if (errors > 0 && errors == rows.Count) message = T("Msg.NetworkDown");
+                else if (errors > 0) message = string.Format(T("Msg.NetworkSome"), errors, rows.Count);
+            }
             _busy = false;
             labelStatus.Text = message;
             progressBar.Value = progressBar.Maximum;
@@ -296,9 +325,10 @@ namespace com.clusterrr.hakchi_gui
                         {
                             Bitmap img;
                             try { img = await GetImageAsync(c.Url, ct); }
-                            catch (OperationCanceledException) { throw; }
+                            catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
                             catch (Exception ex)
                             {
+                                // delai depasse (TaskCanceledException) ou erreur : candidat suivant
                                 System.Diagnostics.Trace.WriteLine("CoverBatchForm: " + ex.Message);
                                 continue;
                             }
@@ -316,13 +346,45 @@ namespace com.clusterrr.hakchi_gui
             }
         }
 
+        // Telechargements dedoublonnes par URL, lies a la vie de la fenetre ; l'appelant peut seulement
+        // arreter d'attendre (ct). Toujours appele depuis le thread UI.
         private async Task<Bitmap> GetImageAsync(string url, CancellationToken ct)
         {
             Bitmap cached;
             if (_images.TryGetValue(url, out cached)) return cached;
-            var img = await CoverServices.DownloadImageAsync(url, ct);
-            _images[url] = img;
-            return img;
+            Task<Bitmap> task;
+            if (!_downloads.TryGetValue(url, out task))
+            {
+                task = DownloadAndStoreAsync(url);
+                if (!task.IsCompleted) _downloads[url] = task;
+            }
+            return await WithCancel(task, ct);
+        }
+
+        private async Task<Bitmap> DownloadAndStoreAsync(string url)
+        {
+            try
+            {
+                var img = await CoverServices.DownloadImageAsync(url, _closeCts.Token);
+                if (_disposed) { img.Dispose(); throw new OperationCanceledException(_closeCts.Token); }
+                _images[url] = img;
+                return img;
+            }
+            finally
+            {
+                _downloads.Remove(url); // un echec ne reste pas en cache
+            }
+        }
+
+        private static async Task<T> WithCancel<T>(Task<T> task, CancellationToken ct)
+        {
+            if (!ct.CanBeCanceled) return await task;
+            var tcs = new TaskCompletionSource<bool>();
+            using (ct.Register(() => tcs.TrySetResult(true)))
+            {
+                if (await Task.WhenAny(task, tcs.Task) != task) throw new OperationCanceledException(ct);
+            }
+            return await task;
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -372,8 +434,8 @@ namespace com.clusterrr.hakchi_gui
 
                 try
                 {
-                    var img = await GetImageAsync(cand.Url, CancellationToken.None);
-                    if (version != _altVersion || box.IsDisposed) return;
+                    var img = await GetImageAsync(cand.Url, _closeCts.Token);
+                    if (_disposed || version != _altVersion || box.IsDisposed) return;
                     box.Image = img;
                 }
                 catch (Exception ex)
@@ -390,7 +452,8 @@ namespace com.clusterrr.hakchi_gui
             if (_busy || row.Applied) return;
             try
             {
-                var img = await GetImageAsync(cand.Url, CancellationToken.None);
+                var img = await GetImageAsync(cand.Url, _closeCts.Token);
+                if (_disposed) return;
                 row.Chosen = cand;
                 row.Full = img;
                 row.Failed = false;
@@ -432,7 +495,7 @@ namespace com.clusterrr.hakchi_gui
                         r.Applied = true;
                         AppliedCount++;
                     }
-                    catch (OperationCanceledException) { throw; }
+                    catch (OperationCanceledException) when (ct.IsCancellationRequested) { throw; }
                     catch (Exception ex)
                     {
                         System.Diagnostics.Trace.WriteLine("CoverBatchForm: apply failed: " + ex.Message);
@@ -444,7 +507,7 @@ namespace com.clusterrr.hakchi_gui
                 }
                 labelStatus.Text = T("Msg.Done");
             }
-            catch (OperationCanceledException) { labelStatus.Text = T("Msg.Cancelled"); }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { labelStatus.Text = T("Msg.Cancelled"); }
             _busy = false;
             UpdateSummary(true);
             UpdateButtons();
@@ -477,11 +540,11 @@ namespace com.clusterrr.hakchi_gui
         {
             if (_busy)
             {
-                // fermeture pendant un traitement : annule d'abord, la fenetre reste ouverte
                 var cts = _cts;
                 if (cts != null) cts.Cancel();
-                e.Cancel = true;
-                return;
+                // fermeture voulue par l'utilisateur : on annule d'abord et la fenetre reste ouverte ;
+                // fin de session, arret de l'application... : on laisse fermer
+                if (e.CloseReason == CloseReason.UserClosing) { e.Cancel = true; return; }
             }
             base.OnFormClosing(e);
         }
@@ -489,6 +552,8 @@ namespace com.clusterrr.hakchi_gui
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
+            _disposed = true;
+            _closeCts.Cancel();
             ClearAlternatives();
             foreach (var img in _images.Values) img.Dispose();
             _images.Clear();
