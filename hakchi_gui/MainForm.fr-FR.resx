@@ -1166,4 +1166,10 @@
   <data name="groupBoxGameInfo.Text" xml:space="preserve">
     <value>Infos Jeu</value>
   </data>
+  <data name="coversToolStripMenuItem.Text" xml:space="preserve">
+    <value>Pochettes</value>
+  </data>
+  <data name="findMissingCoversToolStripMenuItem.Text" xml:space="preserve">
+    <value>Chercher les jaquettes manquantes...</value>
+  </data>
 </root>

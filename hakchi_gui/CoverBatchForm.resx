@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="$this.Text" xml:space="preserve"><value>Find covers</value></data>
+  <data name="checkBoxIncludeExisting.Text" xml:space="preserve"><value>Also include games that already have a cover</value></data>
+  <data name="buttonSearch.Text" xml:space="preserve"><value>Search</value></data>
+  <data name="buttonCancel.Text" xml:space="preserve"><value>Cancel</value></data>
+  <data name="buttonApply.Text" xml:space="preserve"><value>Apply</value></data>
+  <data name="buttonClose.Text" xml:space="preserve"><value>Close</value></data>
+  <data name="labelAlternatives.Text" xml:space="preserve"><value>Other candidates for the selected game (click one to choose it)</value></data>
+  <data name="columnGame.Text" xml:space="preserve"><value>Game</value></data>
+  <data name="columnSource.Text" xml:space="preserve"><value>Source · Region</value></data>
+  <data name="columnMatch.Text" xml:space="preserve"><value>Match</value></data>
+  <data name="columnState.Text" xml:space="preserve"><value>Status</value></data>
+  <data name="Match.Crc" xml:space="preserve"><value>Exact (CRC)</value></data>
+  <data name="Match.RomName" xml:space="preserve"><value>Exact (ROM name)</value></data>
+  <data name="Match.Title" xml:space="preserve"><value>By title</value></data>
+  <data name="State.NotSearched" xml:space="preserve"><value>Not searched yet</value></data>
+  <data name="State.Searching" xml:space="preserve"><value>Searching...</value></data>
+  <data name="State.NotFound" xml:space="preserve"><value>Not found</value></data>
+  <data name="State.ToCheck" xml:space="preserve"><value>To check</value></data>
+  <data name="State.Ready" xml:space="preserve"><value>Found</value></data>
+  <data name="State.HasCover" xml:space="preserve"><value>Already has a cover</value></data>
+  <data name="State.Applied" xml:space="preserve"><value>Applied</value></data>
+  <data name="State.Failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="Msg.Searching" xml:space="preserve"><value>Searching... {0}/{1}</value></data>
+  <data name="Msg.Previews" xml:space="preserve"><value>Loading previews... {0}/{1}</value></data>
+  <data name="Msg.Applying" xml:space="preserve"><value>Applying... {0}/{1}</value></data>
+  <data name="Msg.Done" xml:space="preserve"><value>Search finished.</value></data>
+  <data name="Msg.Cancelled" xml:space="preserve"><value>Cancelled: the remaining games are marked as not found.</value></data>
+  <data name="Msg.Error" xml:space="preserve"><value>Search interrupted (network unavailable?): the remaining games are marked as not found.</value></data>
+  <data name="Msg.NoGames" xml:space="preserve"><value>No game to search.</value></data>
+  <data name="Msg.SummarySearch" xml:space="preserve"><value>{0} ready · {1} to check · {2} not found</value></data>
+  <data name="Msg.SummaryApplied" xml:space="preserve"><value>{0} applied · {1} to check · {2} not found</value></data>
+</root>

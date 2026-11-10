@@ -4029,6 +4029,28 @@ internal static
             }
         }
 
+        private void findMissingCoversToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var games = listViewGames.Items.Cast<ListViewItem>()
+                .Select(i => i.Tag as NesApplication).Where(a => a != null).ToList();
+            if (games.Count == 0) return;
+
+            int applied;
+            using (var form = new CoverBatchForm(games))
+            {
+                form.ShowDialog(this);
+                applied = form.AppliedCount;
+            }
+            if (applied == 0) return;
+
+            var selected = listViewGames.SelectedItems.Cast<ListViewItem>().Select(i => i.Tag).ToList();
+            listViewGames.BeginUpdate();
+            LoadGames(false);
+            foreach (ListViewItem item in listViewGames.Items)
+                item.Selected = selected.Contains(item.Tag);
+            listViewGames.EndUpdate();
+        }
+
         private void listViewGames_Resize(object sender, EventArgs e)
         {
             gameName.Width = listViewGames.Width - 35;

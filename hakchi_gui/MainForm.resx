@@ -4638,4 +4638,10 @@
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="coversToolStripMenuItem.Text" xml:space="preserve">
+    <value>Covers</value>
+  </data>
+  <data name="findMissingCoversToolStripMenuItem.Text" xml:space="preserve">
+    <value>Find missing covers...</value>
+  </data>
 </root>

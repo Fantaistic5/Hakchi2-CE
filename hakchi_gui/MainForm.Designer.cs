@@ -175,6 +175,8 @@
             this.setRegionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.scrapeSelectedGamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.coversToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findMissingCoversToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.scanForNewBoxArtForSelectedGamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.downloadBoxArtForSelectedGamesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteSelectedGamesBoxArtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1112,7 +1114,8 @@
             this.switchRunningFirmwareToolStripMenuItem,
             this.formatSDCardToolStripMenuItem,
             this.toolStripMenuItem18,
-            this.prepareArtDirectoryToolStripMenuItem});
+            this.prepareArtDirectoryToolStripMenuItem,
+            this.coversToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             resources.ApplyResources(this.toolsToolStripMenuItem, "toolsToolStripMenuItem");
             // 
@@ -1378,6 +1381,19 @@
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
+            // 
+            // coversToolStripMenuItem
+            // 
+            this.coversToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.findMissingCoversToolStripMenuItem});
+            this.coversToolStripMenuItem.Name = "coversToolStripMenuItem";
+            resources.ApplyResources(this.coversToolStripMenuItem, "coversToolStripMenuItem");
+            // 
+            // findMissingCoversToolStripMenuItem
+            // 
+            this.findMissingCoversToolStripMenuItem.Name = "findMissingCoversToolStripMenuItem";
+            resources.ApplyResources(this.findMissingCoversToolStripMenuItem, "findMissingCoversToolStripMenuItem");
+            this.findMissingCoversToolStripMenuItem.Click += new System.EventHandler(this.findMissingCoversToolStripMenuItem_Click);
             // 
             // scrapeSelectedGamesToolStripMenuItem
             // 
@@ -2480,6 +2496,8 @@
         private System.Windows.Forms.TextBox textBoxCopyright;
         private System.Windows.Forms.Label labelCopyright;
         private System.Windows.Forms.ToolStripMenuItem scrapeSelectedGamesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem coversToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem findMissingCoversToolStripMenuItem;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMain;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="$this.Text" xml:space="preserve"><value>Chercher les jaquettes</value></data>
+  <data name="checkBoxIncludeExisting.Text" xml:space="preserve"><value>Inclure aussi les jeux qui ont déjà une jaquette</value></data>
+  <data name="buttonSearch.Text" xml:space="preserve"><value>Chercher</value></data>
+  <data name="buttonCancel.Text" xml:space="preserve"><value>Annuler</value></data>
+  <data name="buttonApply.Text" xml:space="preserve"><value>Appliquer</value></data>
+  <data name="buttonClose.Text" xml:space="preserve"><value>Fermer</value></data>
+  <data name="labelAlternatives.Text" xml:space="preserve"><value>Autres candidats pour le jeu sélectionné (cliquer pour choisir)</value></data>
+  <data name="columnGame.Text" xml:space="preserve"><value>Jeu</value></data>
+  <data name="columnSource.Text" xml:space="preserve"><value>Source · Région</value></data>
+  <data name="columnMatch.Text" xml:space="preserve"><value>Correspondance</value></data>
+  <data name="columnState.Text" xml:space="preserve"><value>État</value></data>
+  <data name="Match.Crc" xml:space="preserve"><value>Exacte (CRC)</value></data>
+  <data name="Match.RomName" xml:space="preserve"><value>Exacte (nom de ROM)</value></data>
+  <data name="Match.Title" xml:space="preserve"><value>Par titre</value></data>
+  <data name="State.NotSearched" xml:space="preserve"><value>Pas encore cherchée</value></data>
+  <data name="State.Searching" xml:space="preserve"><value>Recherche...</value></data>
+  <data name="State.NotFound" xml:space="preserve"><value>Non trouvée</value></data>
+  <data name="State.ToCheck" xml:space="preserve"><value>À vérifier</value></data>
+  <data name="State.Ready" xml:space="preserve"><value>Trouvée</value></data>
+  <data name="State.HasCover" xml:space="preserve"><value>A déjà une jaquette</value></data>
+  <data name="State.Applied" xml:space="preserve"><value>Appliquée</value></data>
+  <data name="State.Failed" xml:space="preserve"><value>Échec</value></data>
+  <data name="Msg.Searching" xml:space="preserve"><value>Recherche... {0}/{1}</value></data>
+  <data name="Msg.Previews" xml:space="preserve"><value>Chargement des aperçus... {0}/{1}</value></data>
+  <data name="Msg.Applying" xml:space="preserve"><value>Application... {0}/{1}</value></data>
+  <data name="Msg.Done" xml:space="preserve"><value>Recherche terminée.</value></data>
+  <data name="Msg.Cancelled" xml:space="preserve"><value>Annulé : les jeux restants sont marqués non trouvés.</value></data>
+  <data name="Msg.Error" xml:space="preserve"><value>Recherche interrompue (réseau indisponible ?) : les jeux restants sont marqués non trouvés.</value></data>
+  <data name="Msg.NoGames" xml:space="preserve"><value>Aucun jeu à chercher.</value></data>
+  <data name="Msg.SummarySearch" xml:space="preserve"><value>{0} prêtes · {1} à vérifier · {2} non trouvées</value></data>
+  <data name="Msg.SummaryApplied" xml:space="preserve"><value>{0} appliquées · {1} à vérifier · {2} non trouvées</value></data>
+</root>

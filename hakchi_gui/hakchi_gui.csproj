@@ -117,6 +117,7 @@ Gert Driesen for SSH.NET.</Description>
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
   </ItemGroup>
 
