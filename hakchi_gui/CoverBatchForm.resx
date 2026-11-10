@@ -38,7 +38,7 @@
   <data name="Msg.Previews" xml:space="preserve"><value>Loading previews... {0}/{1}</value></data>
   <data name="Msg.Applying" xml:space="preserve"><value>Applying... {0}/{1}</value></data>
   <data name="Msg.Done" xml:space="preserve"><value>Search finished.</value></data>
-  <data name="Msg.Cancelled" xml:space="preserve"><value>Cancelled: the remaining games are marked as not found.</value></data>
+  <data name="Msg.Cancelled" xml:space="preserve"><value>Cancelled: games not searched yet are marked as cancelled.</value></data>
   <data name="Msg.Error" xml:space="preserve"><value>Search interrupted (network unavailable?): the remaining games are marked as not found.</value></data>
   <data name="Msg.NoGames" xml:space="preserve"><value>No game to search.</value></data>
   <data name="Msg.SummarySearch" xml:space="preserve"><value>{0} ready · {1} to check · {2} not found</value></data>

@@ -177,6 +177,7 @@ namespace com.clusterrr.hakchi_gui
             foreach (var r in VisibleRows())
             {
                 if (r.Applied) continue;
+                if (r.Cancelled) continue;
                 if (r.Searched && r.Chosen == null) notFound++;
                 else if (r.Chosen != null)
                 {
