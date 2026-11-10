@@ -43,6 +43,11 @@ namespace FormGallery
                     var strip = Find<Control>(c, "panel1");
                     if (strip != null) strip.SendToBack();
                     break;
+                case "WaitingShellForm":
+                    // construite sans son constructeur (Host.DesignerOnlyTypes) : on rejoue sa seule mise en page, le bouton a droite de l'etiquette
+                    var labelDriver = Find<Control>(c, "labelDriver"); var buttonDriver = Find<Control>(c, "buttonDriver");
+                    if (labelDriver != null && buttonDriver != null) buttonDriver.Left = labelDriver.Left + labelDriver.Width;
+                    break;
                 case "SnesPresetEditor":
                     // meme raison : en vrai les champs (avant dans la collection) recouvrent la fin des etiquettes « 0x », pas l'inverse
                     foreach (var n in new[] { "textBoxPresetID", "textBoxExtra" }) { var box = Find<Control>(c, n); if (box != null) box.SendToBack(); }

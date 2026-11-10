@@ -114,7 +114,7 @@ namespace hakchi_gui.Tests.Forms
 
         // --- controle des pixels rendus (galerie) -------------------------------------------------------------------------
 
-        private static readonly Lazy<string> GalleryDir = new Lazy<string>(RunGallery);
+        internal static readonly Lazy<string> GalleryDir = new Lazy<string>(RunGallery);
 
         private static string RunGallery()
         {
@@ -208,7 +208,9 @@ namespace hakchi_gui.Tests.Forms
         public void OnlyPaletteColorsAfterSkin(string name)
         {
             int bad, total, worst;
-            MeasurePalette(name, out bad, out total, out worst);
+            // AboutBox : texte dependant du build (hash du commit dans « Version » / « Git Commit ») ; selon les caracteres, les franges
+            // ClearType d'une tuile passaient de 53 a 69 pixels (seuil 60). Mesure insensible a ClearType pour cette fenetre seulement.
+            MeasurePalette(name, out bad, out total, out worst, clearTypeSafe: name == "AboutBox");
             if (total == 0) return;                          // fenetre sans zone a juger (DumperForm : vide, ImagesForm : images seules)
             double ratio = 1.0 - (double)bad / total;
             Assert.True(ratio >= 0.98, name + " : " + (ratio * 100).ToString("0.00") + " % des pixels dans la palette (" + bad + " hors palette sur " + total + ")");

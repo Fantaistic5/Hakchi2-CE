@@ -58,6 +58,7 @@
             // labelDriver
             // 
             resources.ApplyResources(this.labelDriver, "labelDriver");
+            this.labelDriver.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.labelDriver.Name = "labelDriver";
             // 
             // buttonDriver

@@ -150,7 +150,11 @@ namespace FormGallery
             var ctors = t.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                          .OrderBy(c => c.GetParameters().Length).ToList();
             if (ctors.Count == 0) { reason = "aucun constructeur d'instance"; return null; }
-            if (!DriverCheckIsSafe(t, out reason)) return null;
+            if (DesignerOnlyTypes.Contains(t.Name))
+            {
+                ctorDescription = DesignerOnlyDescription;
+                return ConstructDesignerOnly(t);
+            }
             if (t.Name == "MessageForm")
             {
                 // vrai chemin d'affichage (MessageForm.Get) : textes et boutons Oui / Non / Annuler poses, sans ShowDialog
@@ -197,25 +201,23 @@ namespace FormGallery
         }
 
         /// <summary>
-        /// WaitingFelForm installe le pilote FEL (installeur avec elevation) a la construction si "pnputil -e" ne le liste pas,
-        /// et WaitingShellForm interroge le meme pnputil (chemin complet Sysnative : la doublure pnputil de Program.Main ne l'intercepte plus).
-        /// On ne construit ces fenetres que si DriverInstalled() repond deja vrai : l'installeur n'est jamais lance.
+        /// Fenetres dont le constructeur applicatif ne doit JAMAIS s'executer dans la galerie : WaitingFelForm appelle
+        /// DriverInstalled() || InstallDriver() (installeur du pilote avec elevation "runas"), WaitingShellForm interroge pnputil.
+        /// Elles sont construites comme le concepteur : objet non initialise, constructeur de B1Form, InitializeComponent, minuteurs coupes.
+        /// Aucun chemin ne mene a pnputil ni a l'installeur (pas de controle prealable du pilote, donc pas de « verifier puis agir »).
         /// </summary>
-        private static bool DriverCheckIsSafe(Type t, out string reason)
+        public static readonly string[] DesignerOnlyTypes = { "WaitingFelForm", "WaitingShellForm" };
+        public const string DesignerOnlyDescription = "concepteur seul (B1Form + InitializeComponent, sans constructeur applicatif)";
+
+        public static Control ConstructDesignerOnly(Type t)
         {
-            reason = null;
-            if (t.Name != "WaitingFelForm" && t.Name != "WaitingShellForm") return true;
-            try
-            {
-                var fel = Asm.GetType(RootNamespace + ".WaitingFelForm", true);
-                if ((bool)fel.GetMethod("DriverInstalled", BindingFlags.Public | BindingFlags.Static).Invoke(null, null)) return true;
-                reason = "pilote FEL absent : la construction lancerait son installeur, fenetre non construite";
-            }
-            catch (Exception ex)
-            {
-                reason = "detection du pilote FEL impossible (" + FirstLine((ex.InnerException ?? ex).Message) + "), fenetre non construite";
-            }
-            return false;
+            var b1 = Asm.GetType(RootNamespace + ".Theme.B1Form", true);
+            if (!b1.IsAssignableFrom(t)) throw new InvalidOperationException(t.Name + " n'herite pas de B1Form : construction concepteur impossible");
+            var f = (Form)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(t);
+            b1.GetConstructor(Type.EmptyTypes).Invoke(f, null);
+            t.GetMethod("InitializeComponent", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly).Invoke(f, null);
+            StopTimers(f);
+            return f;
         }
 
         /// <summary>

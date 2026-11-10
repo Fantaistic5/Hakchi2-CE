@@ -69,9 +69,20 @@ namespace com.clusterrr.hakchi_gui.Theme
             lock (fonts) fonts.Clear();
         }
 
+        // Nombre d'habillages par racine (une fenetre B1Form s'habille elle-meme) : observe par les tests, pour verifier
+        // qu'une fenetre de tache n'est pas re-habillee a chaque mise a jour de progression.
+        private static readonly ConditionalWeakTable<Control, StrongBox<int>> applyCounts = new ConditionalWeakTable<Control, StrongBox<int>>();
+
+        internal static int ApplyCountFor(Control root)
+        {
+            StrongBox<int> box;
+            return root != null && applyCounts.TryGetValue(root, out box) ? System.Threading.Volatile.Read(ref box.Value) : 0;
+        }
+
         public static void Apply(Control root)
         {
             if (root == null || IsSkipped(root)) return;
+            System.Threading.Interlocked.Increment(ref applyCounts.GetValue(root, k => new StrongBox<int>()).Value);
 
             // Renderer par defaut du thread UI (une fois par thread) : menus et barres crees plus tard, hors arbre, sont plats aussi.
             if (!managerRendererSet) { managerRendererSet = true; ToolStripManager.Renderer = renderer; }

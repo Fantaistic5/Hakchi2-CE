@@ -244,13 +244,15 @@ namespace hakchi_gui.Tests.Forms
         }
 
         // Rendu reel (galerie) : >= 98 % des pixels de la zone cliente dans la palette, aucune tuile dense hors palette.
-        // Fenetres petites et riches en texte (WaitingFelForm, SDFormat) : les franges ClearType y depassent 2 % ; la mesure les neutralise
-        // (moyenne horizontale sur 3 pixels), un texte ou un fond de couleur etrangere reste detecte.
+        // Fenetres petites et riches en texte (WaitingFelForm, SDFormat) seulement : les franges ClearType y depassent 2 % ; la mesure les
+        // neutralise (moyenne horizontale sur 3 pixels), un texte ou un fond de couleur etrangere reste detecte. Les autres : mesure brute.
+        private static readonly HashSet<string> ClearTypeDense = new HashSet<string> { "WaitingFelForm", "Tasks.SDFormat" };
+
         [StaTheory, MemberData(nameof(All))]
         public void OnlyPaletteColorsAfterSkin(string name)
         {
             int bad, total, worst;
-            SimpleFormsTests.MeasurePalette(Short(name), out bad, out total, out worst, clearTypeSafe: true);
+            SimpleFormsTests.MeasurePalette(Short(name), out bad, out total, out worst, clearTypeSafe: ClearTypeDense.Contains(name));
             if (total == 0) return;
             double ratio = 1.0 - (double)bad / total;
             Assert.True(ratio >= 0.98, name + " : " + (ratio * 100).ToString("0.00") + " % des pixels dans la palette (" + bad + " hors palette sur " + total + ")");
@@ -267,7 +269,8 @@ namespace hakchi_gui.Tests.Forms
                 var view = (TaskerForm)f;
                 var label = Tree(f).Single(c => c.Name == "statusLabel");
                 var bar = Tree(f).Single(c => c.Name == "progressBarEx1");
-                var labelFont = label.Font; var barFont = bar.Font; var back = f.BackColor;
+                int skins = B1Skin.ApplyCountFor(f);
+                Assert.True(skins >= 1, "fenetre non habillee a la creation du handle");
                 const int n = 400;
                 int done = 0;
                 Exception error = null;
@@ -290,11 +293,84 @@ namespace hakchi_gui.Tests.Forms
                 Assert.Null(error);
                 Assert.Equal(n + 1, done);
                 Assert.Equal("Etape " + n, label.Text);
-                Assert.Same(labelFont, label.Font);              // aucune nouvelle police : pas de re-habillage
-                Assert.Same(barFont, bar.Font);
-                Assert.Equal(back, f.BackColor);
+                Assert.Equal(skins, B1Skin.ApplyCountFor(f));     // aucun habillage pendant les 802 mises a jour
                 Assert.True(sw.ElapsedMilliseconds < 15000, "trop lent : " + sw.ElapsedMilliseconds + " ms");
             }
+        }
+        // --- aucun chemin de test ni de galerie n'atteint le constructeur reel des fenetres qui lancent pnputil / l'installeur du pilote ---
+
+        private static readonly MethodInfo DriverInstalledM = typeof(WaitingFelForm).GetMethod("DriverInstalled", BindingFlags.Public | BindingFlags.Static);
+        private static readonly MethodInfo InstallDriverM = typeof(WaitingFelForm).GetMethod("InstallDriver", BindingFlags.Public | BindingFlags.Static);
+
+        /// <summary>Methodes appelees (call, callvirt, newobj) dans le corps IL de m. Lecture d'octets : un jeton mal aligne est ignore.</summary>
+        private static IEnumerable<MethodBase> Callees(MethodBase m)
+        {
+            byte[] il;
+            try { var body = m.GetMethodBody(); il = body == null ? null : body.GetILAsByteArray(); } catch { il = null; }
+            if (il == null) yield break;
+            for (int i = 0; i + 4 < il.Length; i++)
+            {
+                if (il[i] != 0x28 && il[i] != 0x6F && il[i] != 0x73) continue;
+                int token = BitConverter.ToInt32(il, i + 1);
+                MethodBase target = null;
+                try { target = m.Module.ResolveMethod(token, m.DeclaringType != null && m.DeclaringType.IsGenericType ? m.DeclaringType.GetGenericArguments() : null, m.IsGenericMethod ? m.GetGenericArguments() : null); } catch { }
+                if (target != null) yield return target;
+            }
+        }
+
+        private static IEnumerable<MethodBase> AllMethods(Assembly a)
+        {
+            Type[] types;
+            try { types = a.GetTypes(); } catch (ReflectionTypeLoadException ex) { types = ex.Types.Where(x => x != null).ToArray(); }
+            const BindingFlags all = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
+            foreach (var t in types)
+            {
+                foreach (var c in t.GetConstructors(all)) yield return c;
+                foreach (var m in t.GetMethods(all)) yield return m;
+            }
+        }
+
+        /// <summary>Fenetres de hakchi dont un constructeur appelle DriverInstalled() ou InstallDriver() (pnputil, installeur avec elevation).</summary>
+        private static List<Type> DriverTouchingForms()
+        {
+            return AllMethods(Asm).OfType<ConstructorInfo>()
+                .Where(c => typeof(Form).IsAssignableFrom(c.DeclaringType) && Callees(c).Any(x => x == DriverInstalledM || x == InstallDriverM))
+                .Select(c => c.DeclaringType).Distinct().ToList();
+        }
+
+        [Fact]
+        public void DriverTouchingFormsAreKnown()
+        {
+            Assert.NotNull(DriverInstalledM); Assert.NotNull(InstallDriverM);
+            var names = DriverTouchingForms().Select(t => t.Name).OrderBy(x => x).ToList();
+            // Si une autre fenetre se met a toucher au pilote, elle doit etre ajoutee a Host.DesignerOnlyTypes (galerie) et a cette liste.
+            Assert.Equal(new[] { "WaitingFelForm", "WaitingShellForm" }, names);
+        }
+
+        // Galerie : chacune de ces fenetres est construite sans son constructeur applicatif (aucun appel a pnputil ni a l'installeur).
+        [Fact]
+        public void GalleryNeverRunsDriverTouchingConstructors()
+        {
+            var entries = Newtonsoft.Json.Linq.JArray.Parse(File.ReadAllText(Path.Combine(SimpleFormsTests.GalleryDir.Value, "gallery.json")));
+            foreach (var t in DriverTouchingForms())
+            {
+                var e = entries.Single(x => (string)x["Type"] == t.FullName);
+                Assert.True(((string)e["Constructor"] ?? "").StartsWith("concepteur seul"), t.Name + " construite par " + (string)e["Constructor"]);
+            }
+        }
+
+        // Tests : aucune methode du projet de tests ne cree ces fenetres (newobj) ni n'appelle InstallDriver ; seul DriverInstalled
+        // (lecture « pnputil -e ») est appele par WaitingFelFormTests.
+        [Fact]
+        public void TestsNeverRunDriverTouchingConstructors()
+        {
+            var forbidden = DriverTouchingForms();
+            foreach (var m in AllMethods(typeof(TaskFormsTests).Assembly))
+                foreach (var c in Callees(m))
+                {
+                    Assert.False(c == InstallDriverM, m.DeclaringType.Name + "." + m.Name + " appelle InstallDriver");
+                    Assert.False(c is ConstructorInfo && forbidden.Contains(c.DeclaringType), m.DeclaringType.Name + "." + m.Name + " construit " + c.DeclaringType.Name);
+                }
         }
     }
 }

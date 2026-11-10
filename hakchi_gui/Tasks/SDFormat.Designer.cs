@@ -94,7 +94,7 @@
             this.btnOk.Name = "btnOk";
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.BtnOk_Click);
-            com.clusterrr.hakchi_gui.Theme.B1Skin.SetKind(this.btnOk, com.clusterrr.hakchi_gui.Theme.Controls.B1ButtonKind.Danger);
+            com.clusterrr.hakchi_gui.Theme.B1Skin.SetKind(this.btnOk, com.clusterrr.hakchi_gui.Theme.Controls.B1ButtonKind.Danger); // B1: do not remove (Danger)
             // 
             // btnCancel
             // 

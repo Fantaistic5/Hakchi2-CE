@@ -54,7 +54,7 @@
             this.progressBarEx1.BackgroundPainter = this.fruityLoopsBackgroundPainter1;
             this.progressBarEx1.BorderPainter = this.styledBorderPainter1;
             resources.ApplyResources(this.progressBarEx1, "progressBarEx1");
-            this.progressBarEx1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(226)))), ((int)(((byte)(234)))));
+            this.progressBarEx1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(236)))), ((int)(((byte)(233)))), ((int)(((byte)(248)))));
             this.progressBarEx1.MarqueePercentage = 25;
             this.progressBarEx1.MarqueeSpeed = 30;
             this.progressBarEx1.MarqueeStep = 1;
