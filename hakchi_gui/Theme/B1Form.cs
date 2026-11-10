@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui.Theme
@@ -14,7 +15,8 @@ namespace com.clusterrr.hakchi_gui.Theme
 
         private void Skin()
         {
-            if (applying) return;
+            // Concepteur Visual Studio : ne jamais habiller (les valeurs seraient serialisees dans le .Designer.cs).
+            if (applying || DesignMode || LicenseManager.UsageMode == LicenseUsageMode.Designtime) return;
             applying = true;
             try
             {

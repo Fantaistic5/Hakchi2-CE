@@ -45,6 +45,8 @@ namespace com.clusterrr.hakchi_gui.Theme
         public static Func<string, byte[]> FontSource;
 
         private static readonly object gate = new object();
+        private static PrivateFontCollection defaultCollection;                  // chargement depuis les ressources embarquees, garde a vie
+        private static Dictionary<string, FontFamily> defaultFamilies;
         private static volatile bool tried;
         private static volatile bool loaded;
         private static PrivateFontCollection collection;                        // jamais Dispose : des Font en dependent
@@ -61,6 +63,9 @@ namespace com.clusterrr.hakchi_gui.Theme
         {
             lock (gate)
             {
+                // Reset est un auxiliaire de test. On ne libere ni la collection ni la memoire (des Font en dependent,
+                // et GDI+ ne copie pas la memoire) ; pour ne pas re-epingler a chaque Reset, le chargement depuis les
+                // ressources embarquees reussi une fois est conserve et reutilise (defaultCollection).
                 tried = false;
                 loaded = false;
                 collection = null;
@@ -82,6 +87,8 @@ namespace com.clusterrr.hakchi_gui.Theme
         /// </summary>
         public static Font Restyle(Font src)
         {
+            // Polices fonctionnelles (code, symboles) : jamais converties, seule la couleur change.
+            if (!IsUiFamily(src.FontFamily.Name)) return (Font)src.Clone();
             float pt = src.SizeInPoints;
             if (src.Name == "Microsoft Sans Serif" && Math.Abs(pt - 8.25f) < 0.01f) pt = 9f;
             bool title = src.Bold || src.FontFamily.Name == FamilySemiBold;
@@ -89,6 +96,15 @@ namespace com.clusterrr.hakchi_gui.Theme
             var keep = src.Style & (FontStyle.Underline | FontStyle.Strikeout | FontStyle.Italic);
             return Make(title ? FamilySemiBold : small ? FamilyRegular : FamilyMedium, pt, title, keep);
         }
+
+        private static readonly HashSet<string> UiFamilies = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "Microsoft Sans Serif", "Segoe UI", "Segoe UI Semibold", "Tahoma", "Arial", "Verdana", "MS Shell Dlg", "MS Shell Dlg 2",
+            FamilyRegular, FamilyMedium, FamilySemiBold,
+        };
+
+        /// <summary>Familles d'interface que le theme remplace par Jost. Toute autre (Consolas, Courier New, Marlett, Wingdings...) est conservee.</summary>
+        public static bool IsUiFamily(string name) { return name != null && UiFamilies.Contains(name); }
 
         private static Font Make(string jostFamily, float pt, bool bold, FontStyle extra)
         {
@@ -114,6 +130,14 @@ namespace com.clusterrr.hakchi_gui.Theme
                 loaded = false;
                 try
                 {
+                    if (FontSource == null && defaultFamilies != null)
+                    {
+                        families.Clear();
+                        foreach (var kv in defaultFamilies) families[kv.Key] = kv.Value;
+                        collection = defaultCollection;
+                        loaded = true;
+                        return;
+                    }
                     var col = new PrivateFontCollection();
                     var source = FontSource ?? ReadResource;
                     foreach (var file in FontFiles)
@@ -134,6 +158,7 @@ namespace com.clusterrr.hakchi_gui.Theme
                     families.Clear();
                     foreach (var kv in found) families[kv.Key] = kv.Value;
                     loaded = true;
+                    if (FontSource == null) { defaultCollection = col; defaultFamilies = new Dictionary<string, FontFamily>(found); }
                 }
                 catch (Exception)
                 {

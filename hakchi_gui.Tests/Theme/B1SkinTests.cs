@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -296,6 +297,124 @@ namespace hakchi_gui.Tests.Theme
                 Assert.Equal(FlatStyle.Flat, b.FlatStyle);
                 Assert.Equal(B1Palette.Text.ToArgb(), l.ForeColor.ToArgb());
                 Assert.Equal("OK", b.Text);
+            }
+        }
+
+        private static Form ScaledForm(string fontName, float fontPt)
+        {
+            var f = new Form();
+            f.SuspendLayout();                      // comme InitializeComponent : la mise a l'echelle reste en attente jusqu'au premier affichage
+            f.AutoScaleDimensions = new SizeF(6F, 13F); f.AutoScaleMode = AutoScaleMode.Font; f.ClientSize = new Size(300, 200);
+            f.StartPosition = FormStartPosition.Manual; f.Location = new Point(-30000, -30000); f.ShowInTaskbar = false;
+            f.Controls.Add(new Label { Name = "l", AutoSize = false, Text = "abc", Bounds = new Rectangle(10, 10, 100, 20) });
+            f.Controls.Add(new Button { Name = "b", Text = "ok", Bounds = new Rectangle(10, 50, 80, 26) });
+            f.Controls.Add(new Panel { Name = "p", Bounds = new Rectangle(120, 50, 100, 60) });
+            if (fontName != null) f.Font = new Font(fontName, fontPt);
+            f.ResumeLayout(true);
+            return f;
+        }
+
+        // Mise a l'echelle automatique : une fenetre habillee AVANT son premier affichage prend les memes Bounds qu'une jumelle non habillee.
+        [StaTheory]
+        [InlineData(null, 0f)]
+        [InlineData("Segoe UI", 9f)]
+        [InlineData("Segoe UI", 12f)]
+        public void SkinBeforeShowKeepsNormalAutoScaling(string fontName, float pt)
+        {
+            using (var twin = ScaledForm(fontName, pt))
+            using (var skinned = ScaledForm(fontName, pt))
+            {
+                B1Skin.Apply(skinned);
+                twin.Show(); skinned.Show();
+                Application.DoEvents();
+                Assert.Equal(twin.ClientSize, skinned.ClientSize);
+                foreach (Control c in twin.Controls)
+                    Assert.True(c.Bounds == skinned.Controls[c.Name].Bounds, c.Name + " " + c.Bounds + " vs " + skinned.Controls[c.Name].Bounds);
+            }
+        }
+
+        // Polices fonctionnelles (code, symboles) : conservees, seule la couleur change
+        [StaFact]
+        public void SkinKeepsNonUiFonts()
+        {
+            using (var f = new Form())
+            using (var mono = new Font("Consolas", 10f))
+            using (var sym = new Font("Marlett", 11f))
+            using (var courier = new Font("Courier New", 9f, FontStyle.Bold))
+            {
+                var tb = new TextBox { Multiline = true, Font = mono, Text = "code" };
+                var lb = new Label { Font = sym, Text = "a" };
+                var rt = new RichTextBox { Font = courier };
+                var normal = new Label { Text = "x" };
+                f.Controls.AddRange(new Control[] { tb, lb, rt, normal });
+                B1Skin.Apply(f);
+                Assert.Equal("Consolas", tb.Font.Name); Assert.Equal(10f, tb.Font.SizeInPoints, 1);
+                Assert.Equal("Marlett", lb.Font.Name); Assert.Equal(11f, lb.Font.SizeInPoints, 1);
+                Assert.Equal("Courier New", rt.Font.Name); Assert.Equal(FontStyle.Bold, rt.Font.Style);
+                Assert.True(Sample.InPalette(tb.ForeColor) && Sample.InPalette(tb.BackColor));
+                Assert.True(Sample.InPalette(lb.ForeColor));
+                Assert.NotEqual("Marlett", normal.Font.Name);       // les polices d'interface, elles, sont converties (ou heritent)
+                Assert.StartsWith("Jost", normal.Font.Name);
+                Assert.True(B1Fonts.IsUiFamily("Segoe UI") && B1Fonts.IsUiFamily("Microsoft Sans Serif") && B1Fonts.IsUiFamily("Tahoma"));
+                Assert.False(B1Fonts.IsUiFamily("Consolas") || B1Fonts.IsUiFamily("Wingdings") || B1Fonts.IsUiFamily("Symbol"));
+            }
+        }
+
+        private sealed class DesignSite : ISite
+        {
+            public IComponent Component { get; set; }
+            public IContainer Container => null;
+            public bool DesignMode => true;
+            public string Name { get; set; }
+            public object GetService(Type t) => null;
+        }
+
+        // Concepteur Visual Studio : B1Form ne doit rien habiller (sinon les valeurs finissent dans le .Designer.cs)
+        [StaFact]
+        public void B1FormDoesNothingInDesignMode()
+        {
+            using (var f = new B1Form())
+            {
+                var b = new Button { Text = "OK" };
+                f.Controls.Add(b);
+                f.Site = new DesignSite { Component = f };
+                var fontBefore = f.Font;
+                var h = f.Handle;
+                typeof(Form).GetMethod("OnLoad", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(f, new object[] { EventArgs.Empty });
+                Assert.Equal(SystemColors.Control.ToArgb(), f.BackColor.ToArgb());
+                Assert.NotEqual(FlatStyle.Flat, b.FlatStyle);
+                Assert.Same(fontBefore, f.Font);
+            }
+        }
+
+        // Menu rempli apres Apply : habille a l'ouverture ; renderer par defaut du processus
+        [StaFact]
+        public void MenuFilledAfterApplyIsSkinnedOnOpening()
+        {
+            using (var f = new Form())
+            {
+                var menu = new MenuStrip();
+                var top = new ToolStripMenuItem("Regions");
+                menu.Items.Add(top);
+                f.Controls.Add(menu);
+                B1Skin.Apply(f);
+                Assert.IsType<B1ToolStripRenderer>(ToolStripManager.Renderer);
+
+                var late = new ToolStripMenuItem("Europe");                 // couleurs systeme : ajoute apres Apply
+                late.DropDownItems.Add(new ToolStripMenuItem("France"));
+                top.DropDownItems.Add(late);
+                Assert.False(Sample.InPalette(late.ForeColor) && Sample.InPalette(late.BackColor));
+                top.ShowDropDown();
+                try
+                {
+                    Assert.True(Sample.InPalette(late.ForeColor) && Sample.InPalette(late.BackColor), "Europe " + late.ForeColor + "/" + late.BackColor);
+                    Assert.IsType<B1ToolStripRenderer>(top.DropDown.Renderer);
+                    Assert.StartsWith("Jost", top.DropDown.Font.Name);
+                    late.ShowDropDown();
+                    var sub = late.DropDownItems[0];
+                    Assert.True(Sample.InPalette(sub.ForeColor) && Sample.InPalette(sub.BackColor));
+                }
+                finally { top.HideDropDown(); }
             }
         }
 

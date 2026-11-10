@@ -26,6 +26,8 @@ namespace com.clusterrr.hakchi_gui.Theme
     {
         private static readonly ConditionalWeakTable<Control, object> skipped = new ConditionalWeakTable<Control, object>();
         private static readonly ConditionalWeakTable<Control, object> primary = new ConditionalWeakTable<Control, object>();
+        [ThreadStatic] private static bool managerRendererSet;      // ToolStripManager.Renderer est propre au thread UI
+        private static readonly ConditionalWeakTable<ToolStripItem, object> openingHooked = new ConditionalWeakTable<ToolStripItem, object>();
         private static readonly B1ToolStripRenderer renderer = new B1ToolStripRenderer();
 
         // Polices B1 deja creees (les Font ne sont pas liberees : des controles les referencent).
@@ -53,6 +55,9 @@ namespace com.clusterrr.hakchi_gui.Theme
         public static void Apply(Control root)
         {
             if (root == null || IsSkipped(root)) return;
+
+            // Renderer par defaut du thread UI (une fois par thread) : menus et barres crees plus tard, hors arbre, sont plats aussi.
+            if (!managerRendererSet) { managerRendererSet = true; ToolStripManager.Renderer = renderer; }
 
             // Mise a l'echelle automatique par la police : suspendue pendant la changement de police (voir resume).
             var scaling = new List<ContainerControl>();
@@ -454,13 +459,27 @@ namespace com.clusterrr.hakchi_gui.Theme
                 if (!SameFont(f, t)) item.Font = t;
             }
             var dd = item as ToolStripDropDownItem;
-            if (dd != null && dd.HasDropDownItems)
+            if (dd != null)
             {
-                var menu = dd.DropDown;
-                StyleStrip(menu);
-                var tf = menu.Font;
-                if (!SameFont(tf, Themed(tf))) menu.Font = Themed(tf);
+                // Les elements ajoutes apres Apply (menus remplis a l'execution) sont habilles a l'ouverture du menu.
+                object o;
+                if (!openingHooked.TryGetValue(dd, out o)) { openingHooked.Add(dd, new object()); dd.DropDownOpening += OnDropDownOpening; }
+                if (dd.HasDropDownItems) StyleDropDown(dd);
             }
+        }
+
+        private static void OnDropDownOpening(object sender, EventArgs e)
+        {
+            StyleDropDown((ToolStripDropDownItem)sender);
+        }
+
+        private static void StyleDropDown(ToolStripDropDownItem dd)
+        {
+            var menu = dd.DropDown;
+            StyleStrip(menu);
+            var tf = menu.Font;
+            var themed = Themed(tf);
+            if (!SameFont(tf, themed)) menu.Font = themed;
         }
     }
 }
