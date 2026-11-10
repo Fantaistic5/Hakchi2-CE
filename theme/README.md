@@ -27,4 +27,12 @@ Le Python système n'a pas pytest ; utiliser le venv dédié :
   `sprites_sheet.png` :
 
       P:\HakchiSNESUSA\venv_theme\Scripts\python -m theme.build_theme --ref P:\HakchiSNESUSA\ui_ref --out P:\HakchiSNESUSA\theme_out
+- `music/compose.py` : musique de menu originale (ré mineur, 135 BPM, A-A'-B-A sur
+  32 mesures, boucle de 56,9 s sans couture), partition en données ; `music/synth.py` :
+  clavecin Karplus-Strong, orgue à tirettes, basse carrée filtrée, caisse/charleston :
+
+      P:\HakchiSNESUSA\venv_theme\Scripts\python -m theme.music.compose --out P:\HakchiSNESUSA\theme_out\bgm_home.wav
+
+  écrit aussi `bgm_home_x2.wav` (boucle jouée deux fois, pour écouter la couture) et
+  `bgm_spectrogram.png`.
 - `docs/superpowers/notes/theme-ressources.md` : carte des ressources clover-ui.
