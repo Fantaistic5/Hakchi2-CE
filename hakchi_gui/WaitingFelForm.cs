@@ -11,6 +11,19 @@ namespace com.clusterrr.hakchi_gui
     public partial class WaitingFelForm : Form
     {
         bool deviceFound = false;
+
+        /// <summary>
+        /// pnputil.exe n'existe qu'en 64 bits (System32). hakchi tourne en 32 bits (AnyCPU, Prefer32Bit) :
+        /// la redirection WOW64 envoie "pnputil.exe" vers SysWOW64, ou il est absent -> Win32Exception
+        /// "fichier introuvable". On passe par Sysnative quand le processus 32 bits tourne sur un Windows 64 bits.
+        /// </summary>
+        internal static string PnpUtilPath(bool is64BitProcess, bool is64BitOs, string windowsDir)
+        {
+            if (!is64BitProcess && is64BitOs)
+                return Path.Combine(windowsDir, "Sysnative", "pnputil.exe");
+            return Path.Combine(windowsDir, "System32", "pnputil.exe");
+        }
+
         public static bool DriverInstalled()
         {
             if (!Shared.isWindows)
@@ -20,7 +33,8 @@ namespace com.clusterrr.hakchi_gui
             {
                 StartInfo = new ProcessStartInfo
                 {
-                    FileName = "pnputil.exe",
+                    FileName = PnpUtilPath(Environment.Is64BitProcess, Environment.Is64BitOperatingSystem,
+                        Environment.GetFolderPath(Environment.SpecialFolder.Windows)),
                     Arguments = "-e",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
@@ -60,7 +74,19 @@ namespace com.clusterrr.hakchi_gui
         {
             InitializeComponent();
 
-            if (DriverInstalled() || InstallDriver() == 0)
+            bool driverOk;
+            try
+            {
+                driverOk = DriverInstalled() || InstallDriver() == 0;
+            }
+            catch (Exception ex)
+            {
+                // Detection impossible : on laisse le panneau pilote visible (installation manuelle)
+                // au lieu de faire planter l'attente de la console.
+                Trace.WriteLine(ex.ToString());
+                driverOk = false;
+            }
+            if (driverOk)
             {
                 tableLayoutPanelDriver.Visible = false;
             }
