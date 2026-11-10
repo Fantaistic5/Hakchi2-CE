@@ -44,6 +44,26 @@ namespace TeamShinkansen.Scrapers.Covers
             return system;
         }
 
+        private const string DatBase = "https://raw.githubusercontent.com/libretro/libretro-database/master/metadat/";
+        private static readonly string[] RedumpSystems =
+        {
+            "Sony - PlayStation", "Sony - PlayStation Portable", "The 3DO Company - 3DO",
+            "NEC - PC Engine CD - TurboGrafx-CD", "Sega - Mega-CD - Sega CD", "Sega - Saturn"
+        };
+
+        /// <summary>URL brute (GitHub) du DAT libretro-database d'un système de miniatures.</summary>
+        public static string DatUrl(string thumbnailSystem)
+        {
+            thumbnailSystem = thumbnailSystem ?? string.Empty;
+            string file = Uri.EscapeDataString(thumbnailSystem) + ".dat";
+            if (thumbnailSystem.Equals(FbNeo, StringComparison.OrdinalIgnoreCase))
+                return DatBase + "fbneo-split/" + file;
+            foreach (var r in RedumpSystems)
+                if (thumbnailSystem.Equals(r, StringComparison.OrdinalIgnoreCase))
+                    return DatBase + "redump/" + file;
+            return DatBase + "no-intro/" + file;
+        }
+
         public static string BoxartUrl(string thumbnailSystem, string gameName)
         {
             return BaseUrl + Uri.EscapeDataString(thumbnailSystem ?? string.Empty)
