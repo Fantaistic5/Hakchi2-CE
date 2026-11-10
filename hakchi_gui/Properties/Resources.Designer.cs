@@ -2822,6 +2822,15 @@ namespace com.clusterrr.hakchi_gui.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select a game to see its details.
+        /// </summary>
+        internal static string SheetNoSelection {
+            get {
+                return ResourceManager.GetString("SheetNoSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to change.
         /// </summary>
         internal static string SheetChangeCover {

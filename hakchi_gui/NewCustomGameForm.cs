@@ -6,13 +6,14 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class NewCustomGameForm : Form
+    public partial class NewCustomGameForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public NesApplication NewApp = null;
 
         public NewCustomGameForm()
         {
             InitializeComponent();
+            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(button1);
             DialogResult = DialogResult.Cancel;
         }
 

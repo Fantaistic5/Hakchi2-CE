@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class SpineForm : Form
+    public partial class SpineForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public Image Spine { get => pictureBoxSpine.Image; }
         public Image ClearLogo { get; set; }

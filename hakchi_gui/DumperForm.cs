@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class DumperForm : Form
+    public partial class DumperForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public DumperForm()
         {

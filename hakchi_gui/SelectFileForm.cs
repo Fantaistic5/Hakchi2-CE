@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class SelectFileForm : Form
+    public partial class SelectFileForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public SelectFileForm(string[] fileNames, string title = null, string secondButton = null)
         {

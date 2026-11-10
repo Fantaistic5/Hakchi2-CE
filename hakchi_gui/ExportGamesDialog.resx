@@ -123,10 +123,10 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="comboDriveLetters.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 25</value>
+    <value>16, 36</value>
   </data>
   <data name="comboDriveLetters.Size" type="System.Drawing.Size, System.Drawing">
-    <value>282, 21</value>
+    <value>330, 21</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="comboDriveLetters.TabIndex" type="System.Int32, mscorlib">
@@ -148,7 +148,7 @@
     <value>True</value>
   </data>
   <data name="lblSelectDrive.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 9</value>
+    <value>16, 14</value>
   </data>
   <data name="lblSelectDrive.Size" type="System.Drawing.Size, System.Drawing">
     <value>131, 13</value>
@@ -202,13 +202,13 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 98</value>
+    <value>16, 124</value>
   </data>
   <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>290, 29</value>
+    <value>330, 34</value>
   </data>
   <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -289,7 +289,7 @@
     <value>False</value>
   </data>
   <data name="checkLinked.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 52</value>
+    <value>16, 68</value>
   </data>
   <data name="checkLinked.Size" type="System.Drawing.Size, System.Drawing">
     <value>90, 17</value>
@@ -322,7 +322,7 @@
     <value>NoControl</value>
   </data>
   <data name="checkCreateSavesFolder.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 75</value>
+    <value>16, 92</value>
   </data>
   <data name="checkCreateSavesFolder.Size" type="System.Drawing.Size, System.Drawing">
     <value>117, 17</value>
@@ -352,7 +352,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>306, 134</value>
+    <value>362, 172</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterParent</value>

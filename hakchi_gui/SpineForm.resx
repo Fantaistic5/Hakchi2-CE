@@ -132,7 +132,7 @@
     <value>30, 216</value>
   </data>
   <data name="pictureBoxSpine.Location" type="System.Drawing.Point, System.Drawing">
-    <value>679, 12</value>
+    <value>691, 16</value>
   </data>
   <data name="&gt;&gt;buttonOk.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -162,13 +162,13 @@
     <value>False</value>
   </data>
   <data name="buttonLoadLogo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>601, 414</value>
+    <value>612, 424</value>
   </data>
   <data name="buttonOk.Location" type="System.Drawing.Point, System.Drawing">
-    <value>601, 443</value>
+    <value>612, 466</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>800, 478</value>
+    <value>816, 510</value>
   </data>
   <data name="&gt;&gt;buttonLoadLogo.ZOrder" xml:space="preserve">
     <value>1</value>
@@ -177,7 +177,7 @@
     <value>buttonOk</value>
   </data>
   <data name="imageGoogler1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>583, 454</value>
+    <value>580, 478</value>
   </data>
   <data name="&gt;&gt;imageGoogler1.Name" xml:space="preserve">
     <value>imageGoogler1</value>
@@ -202,7 +202,7 @@
     <value>StretchImage</value>
   </data>
   <data name="imageGoogler1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 12</value>
+    <value>16, 16</value>
   </data>
   <data name="&gt;&gt;buttonLoadLogo.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -211,16 +211,16 @@
     <value>listBoxTemplates</value>
   </data>
   <data name="buttonOk.Size" type="System.Drawing.Size, System.Drawing">
-    <value>187, 23</value>
+    <value>188, 28</value>
   </data>
   <data name="listBoxTemplates.Location" type="System.Drawing.Point, System.Drawing">
-    <value>601, 234</value>
+    <value>612, 240</value>
   </data>
   <data name="&gt;&gt;listBoxTemplates.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="buttonLoadLogo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>187, 23</value>
+    <value>188, 28</value>
   </data>
   <data name="&gt;&gt;imageGoogler1.ZOrder" xml:space="preserve">
     <value>4</value>
@@ -235,7 +235,7 @@
     <value>pictureBoxSpine</value>
   </data>
   <data name="listBoxTemplates.Size" type="System.Drawing.Size, System.Drawing">
-    <value>187, 173</value>
+    <value>188, 170</value>
   </data>
   <data name="&gt;&gt;buttonLoadLogo.Name" xml:space="preserve">
     <value>buttonLoadLogo</value>

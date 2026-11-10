@@ -123,10 +123,10 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="imageGoogler.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 12</value>
+    <value>16, 16</value>
   </data>
   <data name="imageGoogler.Size" type="System.Drawing.Size, System.Drawing">
-    <value>802, 469</value>
+    <value>794, 461</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="imageGoogler.TabIndex" type="System.Int32, mscorlib">

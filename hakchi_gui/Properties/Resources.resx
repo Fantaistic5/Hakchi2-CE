@@ -1743,6 +1743,9 @@ Are you sure?</value>
   <data name="SheetCoverSourceUnknown" xml:space="preserve">
     <value>unknown</value>
   </data>
+  <data name="SheetNoSelection" xml:space="preserve">
+    <value>Select a game to see its details</value>
+  </data>
   <data name="SheetChangeCover" xml:space="preserve">
     <value>change</value>
   </data>

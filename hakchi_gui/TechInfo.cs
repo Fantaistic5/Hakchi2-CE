@@ -8,11 +8,12 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class TechInfo : Form
+    public partial class TechInfo : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public TechInfo()
         {
             InitializeComponent();
+            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(buttonOk);
         }
 
         private void TechInfo_Load(object sender, EventArgs e)

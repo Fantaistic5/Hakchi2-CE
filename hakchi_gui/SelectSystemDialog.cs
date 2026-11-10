@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class SelectSystemDialog : Form
+    public partial class SelectSystemDialog : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         private void fillSystems()
         {
@@ -24,6 +24,7 @@ namespace com.clusterrr.hakchi_gui
         public SelectSystemDialog()
         {
             InitializeComponent();
+            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(buttonPrepare);
             Icon = Resources.icon;
             fillSystems();
         }

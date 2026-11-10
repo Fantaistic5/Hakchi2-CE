@@ -1330,6 +1330,9 @@ Il y a une faible chance de pertes de données, donc s.v.p. assurez-vous d'avoir
   <data name="SheetCoverSourceUnknown" xml:space="preserve">
     <value>inconnue</value>
   </data>
+  <data name="SheetNoSelection" xml:space="preserve">
+    <value>S&#233;lectionnez un jeu pour voir sa fiche</value>
+  </data>
   <data name="SheetChangeCover" xml:space="preserve">
     <value>changer</value>
   </data>

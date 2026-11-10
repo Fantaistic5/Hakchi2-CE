@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -203,6 +203,7 @@ namespace FormGallery
             try
             {
                 StripHandlers(host);
+                try { FormSamples.Fill(host); } catch (Exception ex) { Console.WriteLine("exemples ignores : " + ex.Message); }
                 host.StartPosition = FormStartPosition.Manual;
                 host.Location = new Point(-30000, -30000);
                 host.ShowInTaskbar = false;

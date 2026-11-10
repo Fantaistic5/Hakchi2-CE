@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class SelectFirmwareDialog : Form
+    public partial class SelectFirmwareDialog : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public SelectFirmwareDialog()
         {

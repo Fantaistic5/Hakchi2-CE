@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class ExportGamesDialog : Form
+    public partial class ExportGamesDialog : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         private readonly string baseDrive = Path.GetPathRoot(Program.BaseDirectoryExternal).ToLower();
         public string ExportPath;
@@ -40,6 +40,7 @@ namespace com.clusterrr.hakchi_gui
         public ExportGamesDialog()
         {
             InitializeComponent();
+            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(btnOk);
             DialogResult = DialogResult.Abort;
 
             DriveInfo[] allDrives = DriveInfo.GetDrives();

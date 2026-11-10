@@ -837,13 +837,13 @@
     <value>6, 0, 3, 9</value>
   </data>
   <data name="labelProductName.MaximumSize" type="System.Drawing.Size, System.Drawing">
-    <value>0, 17</value>
+    <value>0, 28</value>
   </data>
   <data name="labelProductName.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>0, 17</value>
+    <value>0, 28</value>
   </data>
   <data name="labelProductName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>417, 17</value>
+    <value>417, 28</value>
   </data>
   <data name="labelProductName.TabIndex" type="System.Int32, mscorlib">
     <value>19</value>
@@ -1095,7 +1095,7 @@
     <value>21, 0, 21, 0</value>
   </data>
   <data name="okButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 23</value>
+    <value>74, 28</value>
   </data>
   <data name="okButton.TabIndex" type="System.Int32, mscorlib">
     <value>24</value>
@@ -1134,7 +1134,7 @@
     <value>21, 0, 21, 0</value>
   </data>
   <data name="licenseInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>151, 23</value>
+    <value>151, 28</value>
   </data>
   <data name="licenseInfo.TabIndex" type="System.Int32, mscorlib">
     <value>24</value>
@@ -1173,7 +1173,7 @@
     <value>21, 0, 21, 0</value>
   </data>
   <data name="buttonCommitsSinceTag.Size" type="System.Drawing.Size, System.Drawing">
-    <value>173, 23</value>
+    <value>173, 28</value>
   </data>
   <data name="buttonCommitsSinceTag.TabIndex" type="System.Int32, mscorlib">
     <value>24</value>
@@ -1203,7 +1203,7 @@
     <value>1</value>
   </data>
   <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>416, 29</value>
+    <value>416, 34</value>
   </data>
   <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>24</value>
@@ -1302,10 +1302,10 @@
     <value>True</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>634, 455</value>
+    <value>648, 469</value>
   </data>
   <data name="$this.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>9, 9, 9, 9</value>
+    <value>16, 16, 16, 16</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterParent</value>

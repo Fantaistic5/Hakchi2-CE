@@ -119,7 +119,7 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="buttonOk.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left</value>
+    <value>Bottom, Right</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="buttonOk.Enabled" type="System.Boolean, mscorlib">
@@ -130,10 +130,10 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="buttonOk.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 186</value>
+    <value>220, 220</value>
   </data>
   <data name="buttonOk.Size" type="System.Drawing.Size, System.Drawing">
-    <value>140, 33</value>
+    <value>110, 28</value>
   </data>
   <data name="buttonOk.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -157,10 +157,10 @@
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="listBoxFirmwares.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 12</value>
+    <value>16, 16</value>
   </data>
   <data name="listBoxFirmwares.Size" type="System.Drawing.Size, System.Drawing">
-    <value>290, 160</value>
+    <value>314, 196</value>
   </data>
   <data name="listBoxFirmwares.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -178,16 +178,16 @@
     <value>2</value>
   </data>
   <data name="buttonCancel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left</value>
+    <value>Bottom, Right</value>
   </data>
   <data name="buttonCancel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="buttonCancel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>162, 186</value>
+    <value>102, 220</value>
   </data>
   <data name="buttonCancel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>140, 33</value>
+    <value>110, 28</value>
   </data>
   <data name="buttonCancel.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -214,7 +214,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>314, 231</value>
+    <value>346, 264</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterParent</value>

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class SelectIconForm : Form
+    public partial class SelectIconForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public class IconItem
         {

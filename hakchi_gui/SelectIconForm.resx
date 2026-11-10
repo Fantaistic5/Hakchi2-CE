@@ -123,10 +123,10 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="listBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 12</value>
+    <value>16, 16</value>
   </data>
   <data name="listBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>276, 238</value>
+    <value>276, 261</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="listBox.TabIndex" type="System.Int32, mscorlib">
@@ -145,16 +145,16 @@
     <value>2</value>
   </data>
   <data name="buttonOk.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Left, Right</value>
+    <value>Bottom, Right</value>
   </data>
   <data name="buttonOk.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
   <data name="buttonOk.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 260</value>
+    <value>440, 289</value>
   </data>
   <data name="buttonOk.Size" type="System.Drawing.Size, System.Drawing">
-    <value>510, 33</value>
+    <value>110, 28</value>
   </data>
   <data name="buttonOk.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -181,10 +181,10 @@
     <value>NoControl</value>
   </data>
   <data name="pictureBoxArt.Location" type="System.Drawing.Point, System.Drawing">
-    <value>294, 12</value>
+    <value>308, 16</value>
   </data>
   <data name="pictureBoxArt.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 204</value>
+    <value>242, 204</value>
   </data>
   <data name="pictureBoxArt.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>CenterImage</value>
@@ -211,10 +211,10 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>534, 301</value>
+    <value>566, 333</value>
   </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>447, 314</value>
+    <value>480, 340</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterParent</value>

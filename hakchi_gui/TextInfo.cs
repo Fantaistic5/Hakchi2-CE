@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class TextInfo : Form
+    public partial class TextInfo : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public TextInfo()
         {

@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class SettingsForm : Form
+    public partial class SettingsForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public SettingsForm()
         {

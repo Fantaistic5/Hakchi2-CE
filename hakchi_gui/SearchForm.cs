@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class SearchForm : Form
+    public partial class SearchForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         MainForm mainForm;
 

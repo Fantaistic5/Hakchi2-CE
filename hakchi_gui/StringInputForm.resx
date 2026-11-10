@@ -148,13 +148,13 @@
     <value>3, 0, 0, 0</value>
   </data>
   <data name="buttonOK.MaximumSize" type="System.Drawing.Size, System.Drawing">
-    <value>9999, 22</value>
+    <value>9999, 28</value>
   </data>
   <data name="buttonOK.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>15, 0, 15, 0</value>
   </data>
   <data name="buttonOK.Size" type="System.Drawing.Size, System.Drawing">
-    <value>62, 22</value>
+    <value>80, 28</value>
   </data>
   <data name="buttonOK.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -178,7 +178,7 @@
     <value>Bottom, Left, Right</value>
   </data>
   <data name="textBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 34</value>
+    <value>16, 38</value>
   </data>
   <data name="textBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 1</value>
@@ -208,7 +208,7 @@
     <value>0, 0</value>
   </data>
   <data name="tableLayoutPanel1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>12, 12, 12, 12</value>
+    <value>16, 16, 16, 16</value>
   </data>
   <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
     <value>2</value>
@@ -235,19 +235,19 @@
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="labelComments" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="buttonOK" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBox" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,AutoSize,0" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="labelComments.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 12</value>
+    <value>16, 16</value>
   </data>
   <data name="labelComments.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 3</value>
   </data>
   <data name="labelComments.MaximumSize" type="System.Drawing.Size, System.Drawing">
-    <value>350, 9999</value>
+    <value>380, 9999</value>
   </data>
   <data name="labelComments.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>350, 0</value>
+    <value>380, 0</value>
   </data>
   <data name="labelComments.Size" type="System.Drawing.Size, System.Drawing">
-    <value>350, 13</value>
+    <value>380, 13</value>
   </data>
   <data name="labelComments.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>

@@ -1,0 +1,171 @@
+{
+ "AboutBox": {
+  "names": [
+   "buttonCommitsSinceTag",
+   "labelCompanyName",
+   "labelCopyright",
+   "labelGitCommit",
+   "labelGitTag",
+   "labelProductName",
+   "labelVersion",
+   "licenseInfo",
+   "logoPictureBox",
+   "okButton",
+   "tableLayoutPanel",
+   "tableLayoutPanel1",
+   "textBoxDescription"
+  ],
+  "accept": "okButton",
+  "cancel": null
+ },
+ "Motd": {
+  "names": [
+   "button1",
+   "panel1"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "TextInfo": {
+  "names": [
+   "panel1",
+   "textBoxInfo"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "StringInputForm": {
+  "names": [
+   "buttonOK",
+   "labelComments",
+   "tableLayoutPanel1",
+   "textBox"
+  ],
+  "accept": "buttonOK",
+  "cancel": null
+ },
+ "SelectFileForm": {
+  "names": [
+   "buttonArchive",
+   "buttonOk",
+   "listBoxFiles"
+  ],
+  "accept": "buttonOk",
+  "cancel": null
+ },
+ "SearchForm": {
+  "names": [
+   "textBoxSearch"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "SettingsForm": {
+  "names": [
+   "groupBox1"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "TechInfo": {
+  "names": [
+   "buttonOk",
+   "buttonSave",
+   "label1",
+   "listView1",
+   "logContentsRichTextBox",
+   "saveFileDialog1"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "SelectIconForm": {
+  "names": [
+   "buttonOk",
+   "listBox",
+   "pictureBoxArt"
+  ],
+  "accept": "buttonOk",
+  "cancel": null
+ },
+ "SelectSystemDialog": {
+  "names": [
+   "buttonCancel",
+   "buttonCheckAll",
+   "buttonPrepare",
+   "buttonUncheckAll",
+   "checkedListBox",
+   "label1"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "SelectFirmwareDialog": {
+  "names": [
+   "buttonCancel",
+   "buttonOk",
+   "listBoxFirmwares"
+  ],
+  "accept": "buttonOk",
+  "cancel": "buttonCancel"
+ },
+ "ExportGamesDialog": {
+  "names": [
+   "btnCancel",
+   "btnOk",
+   "checkCreateSavesFolder",
+   "checkLinked",
+   "comboDriveLetters",
+   "lblSelectDrive",
+   "tableLayoutPanel1"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "NewCustomGameForm": {
+  "names": [
+   "button1",
+   "button2",
+   "checkBox1",
+   "label1",
+   "label2",
+   "maskedTextBox1",
+   "textBox1"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "SpineForm": {
+  "names": [
+   "buttonLoadLogo",
+   "buttonOk",
+   "imageGoogler1",
+   "listBoxTemplates",
+   "pictureBoxSpine"
+  ],
+  "accept": "buttonOk",
+  "cancel": null
+ },
+ "ImagesForm": {
+  "names": [
+   "pictureBox1",
+   "pictureBox2",
+   "pictureBox3",
+   "pictureBox4"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "ImageGooglerForm": {
+  "names": [
+   "imageGoogler"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "DumperForm": {
+  "names": [],
+  "accept": null,
+  "cancel": null
+ }
+}

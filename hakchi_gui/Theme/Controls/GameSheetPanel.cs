@@ -280,7 +280,17 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             bool rtl = RightToLeft == RightToLeft.Yes;
             int edge = B1Draw.Px(1, s);
             B1Draw.Fill(g, B1Palette.Rule, rtl ? ClientSize.Width - edge : 0, 0, edge, ClientSize.Height);   // filet cote grille
-            if (app == null) return;
+            if (app == null)
+            {
+                // aucun jeu choisi : une courte phrase centree (au lieu d'une colonne vide)
+                var hint = fonts.Get(ShellFonts.Kind.Body, 9f, s);
+                int pad = B1Draw.Px(16, s);
+                var box = new Rectangle(pad, pad, Math.Max(1, ClientSize.Width - 2 * pad), Math.Max(1, ClientSize.Height - 2 * pad));
+                TextRenderer.DrawText(g, Resources.SheetNoSelection, hint, box, B1Palette.TextDim,
+                    TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.WordBreak | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix
+                    | (rtl ? TextFormatFlags.RightToLeft : 0));
+                return;
+            }
 
             var body = fonts.Get(ShellFonts.Kind.Body, 9f, s);
             var head = fonts.Get(ShellFonts.Kind.Title, 13f, s);

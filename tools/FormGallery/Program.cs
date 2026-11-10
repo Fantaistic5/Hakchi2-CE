@@ -58,6 +58,8 @@ namespace FormGallery
             try
             {
                 Application.EnableVisualStyles();
+                Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+                Application.ThreadException += (s, ev) => Console.WriteLine("exception UI interceptee : " + ev.Exception);
                 Application.SetCompatibleTextRenderingDefault(false);
                 Watchdog.Start();
 

@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class ImageGooglerForm : Form
+    public partial class ImageGooglerForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public Image Result { get; private set; }
         private string query;
