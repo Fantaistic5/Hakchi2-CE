@@ -2,8 +2,10 @@ r"""Empaquetage du hmod ``snes_usa_b1`` (tar.gz deterministe).
 
     python -m theme.b1.pack --out P:\HakchiSNESUSA\theme_out\snes_usa_b1.hmod
 
-La racine du hmod reflete le rootfs de hakchi : ``readme.md``, ``uninstall``,
-``etc/preinit.d/p8030_snes_usa_b1`` et ``usr/share/snes_usa_b1/resources/**``.
+La racine du hmod reflete le rootfs de hakchi : ``readme.md``, ``install``,
+``uninstall``, ``etc/preinit.d/p8030_snes_usa_b1``, ``usr/share/snes_usa_b1/resources/**``
+et ``usr/share/snes_usa_b1/retroarch/**`` (habillage RetroArch : apply/restore.sh,
+b1.cfg, fond et police generes par ``theme.retroarch.build``).
 Les ressources sont lues dans le dossier de sortie de ``build_theme`` (par defaut
 le dossier du ``--out``). Aucune police ``title`` n'est embarquee (voir README).
 """
@@ -28,8 +30,14 @@ OFL = THEME / "fonts" / "OFL.txt"
 MTIME = 1762732800  # 2025-11-10T00:00:00Z, fixe pour un paquet reproductible
 ROOT = "usr/share/snes_usa_b1/resources/"
 SCRIPT = "etc/preinit.d/p8030_snes_usa_b1"
+RA_DIR = "usr/share/snes_usa_b1/retroarch/"
+RA_SRC = THEME / "retroarch"
 # fichiers texte du hmod (copies de theme/hmod/, fins de ligne forcees en LF)
-TEXT = ("readme.md", "uninstall", SCRIPT)
+TEXT = ("readme.md", "install", "uninstall", SCRIPT)
+# fichiers texte RetroArch (copies de theme/retroarch/) ; scripts executables
+RA_TEXT = ("apply.sh", "restore.sh", "b1.cfg")
+RA_BIN = ("b1_wallpaper.png", "Jost-Medium.ttf")  # <theme_out>/retroarch/
+EXEC = {SCRIPT, RA_DIR + "apply.sh", RA_DIR + "restore.sh"}
 FONTS = ("fonts/s.font", "fonts/m.font", "fonts/l.font", "fonts/copyright.fnt")
 SOUND_SRC, SOUND_DST = "bgm_home.wav", "sounds/hvc/bgm_home.wav"
 
@@ -43,6 +51,8 @@ def _mapping() -> dict:
         m[ROOT + "layout/asset/sprite/" + n] = "resources/layout/asset/sprite/" + n
     for f in FONTS:
         m[ROOT + f] = f
+    for n in RA_BIN:
+        m[RA_DIR + n] = "retroarch/" + n
     return m
 
 
@@ -60,6 +70,8 @@ def collect(src: Path) -> dict:
     for rel in TEXT:
         files[rel] = _lf((HMOD_DIR / rel).read_bytes())
     files[ROOT + "fonts/OFL.txt"] = _lf(OFL.read_bytes())
+    for n in RA_TEXT:
+        files[RA_DIR + n] = _lf((RA_SRC / n).read_bytes())
     for dst, rel in _mapping().items():
         p = Path(src) / rel
         if not p.is_file():
@@ -89,7 +101,7 @@ def build(out: Path, src: Path) -> list:
             if name in files:
                 data = files[name]
                 ti.size = len(data)
-                ti.mode = 0o755 if name == SCRIPT else 0o644
+                ti.mode = 0o755 if name in EXEC else 0o644
                 tar.addfile(ti, io.BytesIO(data))
             else:
                 ti.type, ti.mode = tarfile.DIRTYPE, 0o755

@@ -9,6 +9,7 @@ Sorties (jamais dans le dépôt) :
 * ``<out>/resources/layout/asset/sprite/**.png`` fonds, cadeau, sprites neutralisés
 * ``<out>/preview_home.png``  menu d'accueil 1280x720 recomposé d'après les ``.scn``
 * ``<out>/sprites_sheet.png`` planche de tous les sprites produits, nommés, sur ardoise
+* ``<out>/retroarch/`` fond XMB 1280x720 et Jost-Medium.ttf (RetroArch B1)
 """
 from __future__ import annotations
 
@@ -24,9 +25,11 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from theme.b1 import art, atlas, clover_font, font_gen  # noqa: E402
     from theme.b1 import palette as P  # noqa: E402
+    from theme.retroarch import build as retroarch_build  # noqa: E402
 else:
     from .b1 import art, atlas, clover_font, font_gen
     from .b1 import palette as P
+    from .retroarch import build as retroarch_build
 
 JOST = Path(__file__).resolve().parent / "fonts" / "Jost-Variable.ttf"
 LAYOUT_DIR = Path("resources") / "layout" / "asset" / "sprite"
@@ -310,6 +313,7 @@ def main(argv=None) -> int:
     fonts = Fonts(out / "fonts")
     make_preview(packed, js, layout, fonts).save(out / "preview_home.png")
     make_sheet(overrides, layout, dot).save(out / "sprites_sheet.png")
+    retroarch_build.build(out)
     print(f"atlas : {len(overrides)} sprites repeints, {len(art.KEEP)} laissés")
     print(f"layout : {len(layout)} images ; sorties dans {out}")
     return 0

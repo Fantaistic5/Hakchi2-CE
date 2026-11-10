@@ -1,6 +1,7 @@
 """Tests du hmod snes_usa_b1 (script de demarrage, empaquetage, garde-fous)."""
 import hashlib
 import re
+import shutil
 import subprocess
 import tarfile
 from pathlib import Path
@@ -17,12 +18,13 @@ BUSYBOX = REPO / "tools" / "busybox.exe"
 UI_REF = Path(r"P:\HakchiSNESUSA\ui_ref")
 THEME_OUT = Path(r"P:\HakchiSNESUSA\theme_out")
 ROOT = "usr/share/snes_usa_b1/resources/"
+RA = "usr/share/snes_usa_b1/retroarch/"
 
 
 # ------------------------------------------------------------------ sources
 
 def test_source_files_exist_and_are_lf():
-    for p in (HMOD / "readme.md", HMOD / "uninstall", PREINIT):
+    for p in (HMOD / "readme.md", HMOD / "install", HMOD / "uninstall", PREINIT):
         assert p.is_file(), p
         assert b"\r" not in p.read_bytes(), f"CR dans {p.name}"
 
@@ -37,7 +39,7 @@ def test_readme_header():
 def test_preinit_syntax():
     if not BUSYBOX.is_file():
         pytest.skip("tools/busybox.exe absent")
-    for p in (PREINIT, HMOD / "uninstall"):
+    for p in (PREINIT, HMOD / "install", HMOD / "uninstall"):
         r = subprocess.run([str(BUSYBOX), "sh", "-n", str(p)], capture_output=True, text=True)
         assert r.returncode == 0, r.stderr
 
@@ -94,8 +96,9 @@ def _members(path):
 
 def test_structure(built):
     m = _members(built[0])
-    for name in ("readme.md", "uninstall", "etc/preinit.d/p8030_snes_usa_b1",
-                 ROOT + "fonts/OFL.txt", ROOT + "sprites/packed.png", ROOT + "sprites/dot_num.png",
+    for name in ("readme.md", "install", "uninstall", "etc/preinit.d/p8030_snes_usa_b1",
+                 RA + "apply.sh", RA + "restore.sh", RA + "b1.cfg", RA + "b1_wallpaper.png",
+                 RA + "Jost-Medium.ttf", ROOT + "fonts/OFL.txt", ROOT + "sprites/packed.png", ROOT + "sprites/dot_num.png",
                  ROOT + "sounds/hvc/bgm_home.wav", ROOT + "fonts/s.font", ROOT + "fonts/m.font",
                  ROOT + "fonts/l.font", ROOT + "fonts/copyright.fnt"):
         assert name in m, name
@@ -106,7 +109,7 @@ def test_structure(built):
 def test_never_ships_title_font_or_foreign_paths(built):
     for name in _members(built[0]):
         assert "title." not in name
-        if name in ("readme.md", "uninstall", "etc", "etc/preinit.d", "etc/preinit.d/p8030_snes_usa_b1",
+        if name in ("readme.md", "install", "uninstall", "etc", "etc/preinit.d", "etc/preinit.d/p8030_snes_usa_b1",
                     "usr", "usr/share"):
             continue
         assert name.startswith("usr/share/snes_usa_b1"), name
@@ -120,7 +123,7 @@ def test_metadata_and_lf(built):
         assert info.mtime == pack.MTIME
         if info.isdir():
             assert info.mode == 0o755
-        elif name == "etc/preinit.d/p8030_snes_usa_b1":
+        elif name in ("etc/preinit.d/p8030_snes_usa_b1", RA + "apply.sh", RA + "restore.sh"):
             assert info.mode == 0o755
             assert b"\r" not in data
         else:
@@ -139,6 +142,7 @@ def test_crlf_in_script_is_normalised(tmp_path, monkeypatch):
     (src / "etc" / "preinit.d").mkdir(parents=True)
     (src / "readme.md").write_bytes(b"a\r\nb\r\n")
     (src / "uninstall").write_bytes(b"x\r\n")
+    (src / "install").write_bytes(b"y\r\n")
     (src / "etc" / "preinit.d" / "p8030_snes_usa_b1").write_bytes(b"echo 1\r\necho 2\r\n")
     monkeypatch.setattr(pack, "HMOD_DIR", src)
     for rel in pack.expected_sources():
@@ -154,6 +158,77 @@ def test_crlf_in_script_is_normalised(tmp_path, monkeypatch):
 def test_missing_source_is_an_error(tmp_path):
     with pytest.raises(FileNotFoundError):
         pack.build(tmp_path / "x.hmod", tmp_path)
+
+
+# ------------------------------------------------------------------ install / uninstall
+
+def _sh(cwd, code):
+    return subprocess.run([str(BUSYBOX), "sh", "-c", code], cwd=str(cwd), capture_output=True, text=True)
+
+
+def _posix(p):
+    return str(p).replace("\\", "/")
+
+
+def test_install_uninstall_scripts_never_exit():
+    for n in ("install", "uninstall"):
+        t = (HMOD / n).read_text(encoding="utf-8")
+        assert not re.search(r"^\s*exit\b", t, re.M), n  # scripts sources par preinit
+        assert t.rstrip().endswith("true"), n
+    assert "retroarch" not in PREINIT.read_text(encoding="utf-8")  # p8030 ne lie que resources/
+
+
+def _extract(built, tmp_path):
+    transfer = tmp_path / "transfer"
+    with tarfile.open(built[0], "r:gz") as t:
+        t.extractall(transfer, filter="data")
+    return transfer
+
+
+def test_install_then_uninstall_roundtrip(built, tmp_path):
+    if not BUSYBOX.is_file():
+        pytest.skip("tools/busybox.exe absent")
+    transfer = _extract(built, tmp_path)
+    rootfs = tmp_path / "rootfs"
+    cfgdir = rootfs / "etc" / "libretro"
+    (cfgdir / "config" / "4DO").mkdir(parents=True)
+    cfg = cfgdir / "retroarch.cfg"
+    original = b'menu_driver = "ozone"\nxmb_font = "~/fonts/_Default.ttf"\nvideo_vsync = "true"\n'
+    cfg.write_bytes(original)
+    do4 = cfgdir / "config" / "4DO" / "4DO.cfg"
+    do4.write_bytes(b'audio_latency = "64"\n')
+    title = rootfs / "usr" / "share" / "fonts" / "title.fnt"
+    title.parent.mkdir(parents=True)
+    title.write_bytes(b"user title font")
+
+    # install : source par le shell de preinit, cwd = hmod ; "after" prouve qu'on ne quitte pas
+    r = _sh(transfer, f'rootfs="{_posix(rootfs)}"; . ./install; echo after rc=$?')
+    assert r.returncode == 0, r.stderr
+    assert "after rc=0" in r.stdout
+    assert b'menu_driver = "xmb"' in cfg.read_bytes()
+    assert (cfgdir / "retroarch.cfg.b1bak").read_bytes() == original
+
+    # hakchi copie ensuite les fichiers du hmod dans le rootfs
+    shutil.copytree(transfer / "usr", rootfs / "usr", dirs_exist_ok=True)
+    assert (rootfs / "usr/share/snes_usa_b1/retroarch/restore.sh").is_file()
+
+    # uninstall : source, cwd = rootfs, avant les rm de hakchi
+    r = _sh(rootfs, f'rootfs="{_posix(rootfs)}"; . "{_posix(transfer)}/uninstall"; echo after rc=$?')
+    assert r.returncode == 0, r.stderr
+    assert "after rc=0" in r.stdout
+    assert cfg.read_bytes() == original
+    assert not (cfgdir / "retroarch.cfg.b1bak").exists()
+    assert not (rootfs / "usr/share/snes_usa_b1").exists()
+    assert do4.read_bytes() == b'audio_latency = "64"\n'
+    assert title.read_bytes() == b"user title font"
+
+
+def test_install_survives_missing_retroarch_cfg(built, tmp_path):
+    if not BUSYBOX.is_file():
+        pytest.skip("tools/busybox.exe absent")
+    transfer = _extract(built, tmp_path)
+    r = _sh(transfer, f'rootfs="{_posix(tmp_path / "nothing")}"; . ./install; echo after rc=$?')
+    assert "after rc=0" in r.stdout
 
 
 # ------------------------------------------------------------------ garde-fous

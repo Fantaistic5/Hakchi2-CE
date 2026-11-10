@@ -1,0 +1,6 @@
+#!/bin/sh
+# Source par hakchi (cwd = dossier du hmod, avant la copie dans le rootfs) : ne jamais
+# utiliser exit. Habille RetroArch en B1 (sauvegarde puis cles de menu seulement).
+# Echec de l'habillage = on installe quand meme le theme TV (return 0 toujours).
+sh ./usr/share/snes_usa_b1/retroarch/apply.sh "$rootfs/etc/libretro/retroarch.cfg" ./usr/share/snes_usa_b1/retroarch/b1.cfg
+true

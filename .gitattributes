@@ -9,3 +9,5 @@ hakchi_gui/data/moon_hashes/* text eol=lf
 
 theme/hmod/** text eol=lf
 theme/fonts/OFL.txt text eol=lf
+theme/retroarch/*.sh text eol=lf
+theme/retroarch/*.cfg text eol=lf
