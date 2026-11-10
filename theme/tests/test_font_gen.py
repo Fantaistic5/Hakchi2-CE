@@ -125,3 +125,25 @@ def test_menu_strings_covered(name):
         wanted = {c for c in _lng_chars(lang) if ord(c) in ref.chars}
         assert all(ord(c) in out.chars for c in wanted), lang
         assert {c for c in wanted if c.isalpha()}, lang
+
+
+def test_baseline_synthetic():
+    ref = _synthetic_ref()
+    ref.chars = {c: cf.Glyph(c, 0, 0, 1, 1, 0, 0, 1, 0, 15) for c in (0x48, 0x67)}
+    ref.common.scale_w = ref.common.scale_h = 128
+    ref.common.base = 17
+    out = fg.generate(ref, str(JOST), "Medium")
+    pad_b = out.info.padding[2]
+    h = out.chars[0x48]
+    assert abs(h.yoffset + h.height - pad_b - out.common.base) <= 1
+    g = out.chars[0x67]
+    assert g.yoffset + g.height - pad_b > out.common.base
+
+
+@NEEDS_REF
+@pytest.mark.parametrize("name", ["s.font", "m.font"])
+def test_cap_height_matches_reference(name):
+    ref = cf.parse((FONTS / name).read_bytes())
+    out = fg.generate(ref, str(JOST), "Medium")
+    ink = lambda f: f.chars[0x48].height - f.info.padding[0] - f.info.padding[2]
+    assert abs(ink(out) - ink(ref)) <= 1

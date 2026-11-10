@@ -94,7 +94,7 @@ def _render(font: ImageFont.FreeTypeFont, ch: str, px: int):
 
 
 def _cap_scale(ref: cf.CloverFont, jost: ImageFont.FreeTypeFont, px: int) -> float:
-    """Reduit le corps si la hauteur de capitale de Jost depasse celle de la reference."""
+    """Facteur de corps qui egale la hauteur de capitale (encre de H) de la reference ; peut depasser 1."""
     g = ref.chars.get(ord("H"))
     if g is None:
         return 1.0
@@ -104,7 +104,7 @@ def _cap_scale(ref: cf.CloverFont, jost: ImageFont.FreeTypeFont, px: int) -> flo
     cap = -top
     if ref_cap <= 0 or cap <= 0:
         return 1.0
-    return min(1.0, ref_cap / cap)
+    return ref_cap / cap
 
 
 def _pack(sizes: dict, width: int, height: int, gap: int):
@@ -185,6 +185,18 @@ def generate_with_report(reference: cf.CloverFont, ttf_path: str, weight,
 
     probe = _load(str(ttf_path), size, w)
     start = max(4, round(size * _cap_scale(reference, probe, size)))
+    g = reference.chars.get(ord("H"))
+    if g is not None:  # affine : encre de H rendue == celle de la reference
+        ref_cap = g.height - reference.info.padding[0] - reference.info.padding[2]
+        best = None
+        for cand in (start - 1, start, start + 1):
+            img = _render(_load(str(ttf_path), cand, w), "H", cand)[0]
+            if img is not None:
+                d = abs(img.height - ref_cap)
+                if best is None or d < best[0]:
+                    best = (d, cand)
+        if best:
+            start = max(4, best[1])
     err = None
     for px in range(start, max(3, int(start * 0.75)), -1):
         try:
