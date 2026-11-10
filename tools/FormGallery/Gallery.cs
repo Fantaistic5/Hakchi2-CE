@@ -41,6 +41,8 @@ namespace FormGallery
             Thread.CurrentThread.CurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
 
+            if (string.Equals(o.Only, ThemeSample.Name, StringComparison.OrdinalIgnoreCase)) return RunThemeSample(o);
+
             var entries = new List<Entry>();
             var types = Host.UiTypes().Where(t => o.Only == null || string.Equals(t.Name, o.Only, StringComparison.OrdinalIgnoreCase)).ToList();
             if (types.Count == 0) { Console.Error.WriteLine("Aucune fenetre ne correspond a --only " + o.Only); return 3; }
@@ -86,6 +88,22 @@ namespace FormGallery
             File.WriteAllText(Path.Combine(o.Out, "gallery.json"), JsonConvert.SerializeObject(entries, Formatting.Indented));
             WriteIndex(o, entries);
             Console.WriteLine("Rendues : " + entries.Count(x => x.Status == "rendered") + ", non rendues : " + entries.Count(x => x.Status != "rendered") + ", dossier : " + o.Out);
+            return 0;
+        }
+
+        /// <summary>--only ThemeSample : fenetre d'essai du theme B1 (hors hakchi.exe) + un menu ouvert.</summary>
+        private static int RunThemeSample(Options o)
+        {
+            var f = ThemeSample.Build();
+            try
+            {
+                ThemeSample.Skin(f);
+                var e = new Entry { Name = ThemeSample.Name, Type = "FormGallery.ThemeSample", Kind = "Form", Dpi = o.Dpi.ToString(CultureInfo.InvariantCulture) };
+                Render(f, o, Path.Combine(o.Out, ThemeSample.Name + ".png"), e);
+                Console.WriteLine("OK    " + ThemeSample.Name + " " + e.Width + "x" + e.Height + " fonte Jost : " + com.clusterrr.hakchi_gui.Theme.B1Fonts.JostLoaded);
+                using (var bmp = ThemeSample.RenderMenu()) bmp.Save(Path.Combine(o.Out, ThemeSample.Name + "_menu.png"), ImageFormat.Png);
+            }
+            finally { try { f.Dispose(); } catch { } }
             return 0;
         }
 

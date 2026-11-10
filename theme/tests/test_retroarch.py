@@ -202,3 +202,18 @@ def test_restore_refuses_truncated_write_and_keeps_backup(console):
     # sans incident, la restauration marche ensuite
     run("restore.sh", cfg)
     assert cfg.read_bytes() == ORIGINAL
+
+
+def test_pc_instances_are_static_distinct_families_and_reproducible(tmp_path):
+    from fontTools.ttLib import TTFont
+
+    a, b = tmp_path / "a", tmp_path / "b"
+    font.build_pc(a)
+    font.build_pc(b)
+    expect = {"Jost-Regular.ttf": ("Jost", 400), "Jost-Medium.ttf": ("Jost Medium", 500), "Jost-SemiBold.ttf": ("Jost SemiBold", 600)}
+    for name, (family, weight) in expect.items():
+        assert (a / name).read_bytes() == (b / name).read_bytes()
+        f = TTFont(str(a / name))
+        assert "fvar" not in f
+        assert f["name"].getDebugName(1) == family
+        assert f["OS/2"].usWeightClass == weight
