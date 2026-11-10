@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.CompilerServices;
@@ -307,6 +307,18 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             catch (Exception) { }
         }
 
+        private static BorderStyle LogicalBorder(Control c)
+        {
+            if (c is TextBoxBase) return ((TextBoxBase)c).BorderStyle;
+            if (c is ListBox) return ((ListBox)c).BorderStyle;
+            if (c is ListView) return ((ListView)c).BorderStyle;
+            if (c is TreeView) return ((TreeView)c).BorderStyle;
+            if (c is Panel) return ((Panel)c).BorderStyle;
+            if (c is PictureBox) return ((PictureBox)c).BorderStyle;
+            if (c is Label) return ((Label)c).BorderStyle;
+            return BorderStyle.None;
+        }
+
         private bool HoverNow()
         {
             ControlNative.RECT wr;
@@ -317,6 +329,9 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         private void Draw(IntPtr hdc)
         {
             int thick = (GetWindowLong(Handle, GWL_EXSTYLE) & WS_EX_CLIENTEDGE) != 0 ? 2 : (GetWindowLong(Handle, GWL_STYLE) & WS_BORDER) != 0 ? 1 : 0;
+            // Un TextBox multiligne a defilement n'a parfois plus de WS_BORDER natif (le cadre gris du systeme est alors peint dans la zone
+            // cliente, a gauche de la barre de defilement) : le cadre B1 suit alors le BorderStyle et entoure la fenetre entiere, barre comprise.
+            if (thick == 0 && LogicalBorder(owner) == BorderStyle.FixedSingle) thick = 1;
             if (thick == 0) return;
             ControlNative.RECT wr;
             if (!GetWindowRect(Handle, out wr)) return;
@@ -477,7 +492,9 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         private const int WM_REFLECT_NOTIFY = 0x2000 + 0x4E;
         private const int NM_CUSTOMDRAW = -12;
         private const int CDDS_PREPAINT = 0x1, CDDS_ITEMPREPAINT = 0x10001, CDDS_ITEMPOSTPAINT = 0x10002, CDDS_SUBITEM = 0x20000;
-        private const int CDRF_NEWFONT = 0x2, CDRF_NOTIFYPOSTPAINT = 0x10, CDRF_NOTIFYITEMDRAW = 0x20;
+        private const int CDRF_NEWFONT = 0x2, CDRF_SKIPDEFAULT = 0x4, CDRF_NOTIFYPOSTPAINT = 0x10, CDRF_NOTIFYITEMDRAW = 0x20;
+        private const int LVCDI_GROUP = 1, LVM_GETGROUPRECT = 0x1062, LVGGR_HEADER = 1;
+        [DllImport("user32.dll")] private static extern IntPtr SendMessage(IntPtr hwnd, int msg, IntPtr wParam, ref ControlNative.RECT rect);
         private const int CDIS_SELECTED = 0x1, CDIS_FOCUS = 0x10, CDIS_HOT = 0x40, CDIS_MARKED = 0x80;
 
         [StructLayout(LayoutKind.Sequential)]
@@ -502,11 +519,21 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             public int clrText;
             public int clrTextBk;
             public int iSubItem;
+            // extension Vista : en-tetes de groupe (dwItemType = LVCDI_GROUP)
+            public int dwItemType;
+            public int clrFace;
+            public int iIconEffect;
+            public int iIconPhase;
+            public int iPartId;
+            public int iStateId;
+            public ControlNative.RECT rcText;
+            public uint uAlign;
         }
 
         private static readonly int offState = (int)Marshal.OffsetOf(typeof(NMCUSTOMDRAW), "uItemState");
         private static readonly int offText = (int)Marshal.OffsetOf(typeof(NMLVCUSTOMDRAW), "clrText");
         private static readonly int offBack = (int)Marshal.OffsetOf(typeof(NMLVCUSTOMDRAW), "clrTextBk");
+        private static readonly int sizeVista = Marshal.SizeOf(typeof(NMLVCUSTOMDRAW));
 
         private readonly ListView list;
         public ListViewWindow(ListView l) { list = l; }
@@ -529,6 +556,13 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
                 var cd = (NMLVCUSTOMDRAW)Marshal.PtrToStructure(m.LParam, typeof(NMLVCUSTOMDRAW));
                 int stage = cd.nmcd.dwDrawStage & ~CDDS_SUBITEM;
                 int result = (int)m.Result;
+                if (stage == CDDS_PREPAINT && cd.dwItemType == LVCDI_GROUP && cd.nmcd.hdc != IntPtr.Zero)
+                {
+                    // un groupe : le theme peint l'en-tete (titre bleu systeme) ; les elements du groupe restent dessines par la liste
+                    PaintGroupHeader(cd);
+                    m.Result = (IntPtr)CDRF_SKIPDEFAULT;
+                    return;
+                }
                 if (stage == CDDS_PREPAINT) { m.Result = (IntPtr)(result | CDRF_NOTIFYITEMDRAW); return; }
                 if (stage == CDDS_ITEMPREPAINT)
                 {
@@ -554,6 +588,51 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
                 }
             }
             catch (Exception) { /* cosmetique */ }
+        }
+
+        private static readonly System.Reflection.PropertyInfo groupId = typeof(ListViewGroup).GetProperty("ID", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+
+        private ListViewGroup GroupById(int id)
+        {
+            try
+            {
+                if (groupId == null) return null;
+                foreach (ListViewGroup g in list.Groups) if ((int)groupId.GetValue(g, null) == id) return g;
+            }
+            catch (Exception) { }
+            return null;
+        }
+
+        /// <summary>En-tete de groupe : fond de la liste, titre en capitales espacees (Lavender) puis filet Rule de 1 px ; jamais le bleu systeme.</summary>
+        private void PaintGroupHeader(NMLVCUSTOMDRAW cd)
+        {
+            var rc = cd.nmcd.rc.ToRectangle();                     // tout le groupe : l'en-tete en est le haut
+            var hr = new ControlNative.RECT { Top = LVGGR_HEADER };
+            if (SendMessage(list.Handle, LVM_GETGROUPRECT, cd.nmcd.dwItemSpec, ref hr) != IntPtr.Zero && hr.Bottom > hr.Top) rc = hr.ToRectangle();
+            else rc = new Rectangle(rc.Left, rc.Top, rc.Width, Math.Min(rc.Height, list.Font.Height + 8));
+            if (rc.Width <= 0 || rc.Height <= 0) return;
+            float s = B1Dpi.Scale(list);
+            var group = GroupById((int)cd.nmcd.dwItemSpec);
+            string text = group == null ? "" : (group.Header ?? "").Replace("&", "").ToUpper(System.Globalization.CultureInfo.CurrentUICulture);
+            bool rtl = list.RightToLeft == RightToLeft.Yes;
+            using (var g = Graphics.FromHdc(cd.nmcd.hdc))
+            {
+                B1Draw.Fill(g, B1Draw.IsPalette(list.BackColor) ? list.BackColor : B1Palette.Slate, rc);
+                int pad = B1Draw.Px(6, s), gap = B1Draw.Px(8, s);
+                int textW = 0;
+                if (text.Length > 0)
+                {
+                    var caps = B1Draw.CapsFont(list.Font);          // police en cache partagee : jamais liberee ici
+                    textW = B1Draw.TrackedWidth(g, text, caps, B1Fonts.CapsTracking);
+                    int x = rtl ? rc.Right - pad - textW : rc.Left + pad;
+                    int y = rc.Top + Math.Max(0, (rc.Height - caps.Height) / 2);
+                    B1Draw.DrawTracked(g, text, caps, B1Palette.Lavender, x, y, B1Fonts.CapsTracking);
+                }
+                int ly = rc.Top + rc.Height / 2;
+                int from = rtl ? rc.Left + pad : rc.Left + pad + textW + (textW > 0 ? gap : 0);
+                int to = rtl ? rc.Right - pad - textW - (textW > 0 ? gap : 0) : rc.Right - pad;
+                if (to > from) B1Draw.Fill(g, B1Palette.Rule, from, ly, to - from, B1Draw.Px(1, s));
+            }
         }
 
         private ListViewItem ItemAt(int index)

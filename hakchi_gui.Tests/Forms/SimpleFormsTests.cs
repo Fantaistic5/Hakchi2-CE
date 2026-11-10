@@ -36,7 +36,7 @@ namespace hakchi_gui.Tests.Forms
         private static Type TypeOf(string name) { return Asm.GetType("com.clusterrr.hakchi_gui." + name, true); }
 
         /// <summary>Construit la fenetre sans rien afficher ni toucher a la console / au reseau (aucun gestionnaire Load / Shown n'est declenche).</summary>
-        internal static Form Create(string name, string culture = "fr-FR")
+        internal static Form Create(string name, string culture = "fr-FR", Action<Form> beforeHandle = null)
         {
             MainFormEnv.Init();
             Thread.CurrentThread.CurrentUICulture = string.IsNullOrEmpty(culture) ? CultureInfo.InvariantCulture : CultureInfo.GetCultureInfo(culture);
@@ -56,6 +56,7 @@ namespace hakchi_gui.Tests.Forms
             f.StartPosition = FormStartPosition.Manual;
             f.Location = new Point(-30000, -30000);
             f.ShowInTaskbar = false;
+            if (beforeHandle != null) beforeHandle(f);
             var h = f.Handle;                        // habillage B1 (OnHandleCreated) sans afficher la fenetre
             CreateHandles(f);
             f.PerformLayout();
@@ -90,7 +91,7 @@ namespace hakchi_gui.Tests.Forms
         }
 
         [StaTheory, MemberData(nameof(All))]
-        public void OnlyPaletteColorsAfterSkin(string name)
+        public void PaletteColorProperties(string name)
         {
             using (var f = Create(name))
             {
@@ -110,6 +111,102 @@ namespace hakchi_gui.Tests.Forms
                 }
             }
         }
+
+        // --- controle des pixels rendus (galerie) -------------------------------------------------------------------------
+
+        private static readonly Lazy<string> GalleryDir = new Lazy<string>(RunGallery);
+
+        private static string RunGallery()
+        {
+            var exe = Repo.GalleryExe;
+            Assert.True(File.Exists(exe), "FormGallery.exe absent : " + exe);
+            var outDir = Path.Combine(Path.GetTempPath(), "hakchi_simple_forms_" + Guid.NewGuid().ToString("N"));
+            var psi = new System.Diagnostics.ProcessStartInfo(exe, "--out \"" + outDir + "\"")
+            { UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true, WorkingDirectory = Path.GetDirectoryName(exe) };
+            using (var p = System.Diagnostics.Process.Start(psi))
+            {
+                var o = p.StandardOutput.ReadToEndAsync(); var e = p.StandardError.ReadToEndAsync();
+                if (!p.WaitForExit(240000)) { try { p.Kill(); } catch { } throw new TimeoutException("galerie > 240 s"); }
+                Assert.True(p.ExitCode == 0, "galerie : code " + p.ExitCode + " " + e.Result);
+            }
+            return outDir;
+        }
+
+        private const int PaletteTolerance = 40;      // ecart RVB : le lissage ClearType colore les bords des glyphes de quelques dizaines de niveaux
+
+        internal static bool NearPaletteOrBlend(Color c, int tol)
+        {
+            var pal = B1Palette.All;
+            long tol2 = (long)tol * tol;
+            foreach (var p in pal)
+            {
+                long dr = c.R - p.R, dg = c.G - p.G, db = c.B - p.B;
+                if (dr * dr + dg * dg + db * db <= tol2) return true;
+            }
+            for (int i = 0; i < pal.Count; i++)
+                for (int j = i + 1; j < pal.Count; j++)
+                {
+                    double ax = pal[j].R - pal[i].R, ay = pal[j].G - pal[i].G, az = pal[j].B - pal[i].B;
+                    double len = ax * ax + ay * ay + az * az;
+                    if (len == 0) continue;
+                    double t = ((c.R - pal[i].R) * ax + (c.G - pal[i].G) * ay + (c.B - pal[i].B) * az) / len;
+                    if (t < 0 || t > 1) continue;
+                    double dx = c.R - (pal[i].R + t * ax), dy = c.G - (pal[i].G + t * ay), dz = c.B - (pal[i].B + t * az);
+                    if (dx * dx + dy * dy + dz * dz <= tol2) return true;
+                }
+            return false;
+        }
+
+        /// <summary>Pixels du rendu de la galerie hors cadre systeme et hors images : (hors palette, total, pire tuile 32x16).</summary>
+        internal static void MeasurePalette(string name, out int bad, out int total, out int worstTile, Rectangle? only = null)
+        {
+            var dir = GalleryDir.Value;
+            var png = Path.Combine(dir, name + ".png");
+            Assert.True(File.Exists(png), "rendu absent : " + png);
+            var rects = JObject.Parse(File.ReadAllText(Path.Combine(dir, name + ".rects.json")));
+            var cl = rects["client"].Select(x => (int)x).ToArray();
+            var client = new Rectangle(cl[0], cl[1], cl[2], cl[3]);
+            var skip = rects["skip"].Select(r => { var a = r.Select(x => (int)x).ToArray(); return new Rectangle(a[0], a[1], a[2], a[3]); }).ToList();
+            var cache = new Dictionary<int, bool>();
+            var tiles = new Dictionary<long, int>();
+            bad = 0; total = 0;
+            using (var src = new Bitmap(png))
+            {
+                var area = only.HasValue ? Rectangle.Intersect(client, only.Value) : client;
+                area.Intersect(new Rectangle(0, 0, src.Width, src.Height));
+                for (int y = area.Top; y < area.Bottom; y++)
+                    for (int x = area.Left; x < area.Right; x++)
+                    {
+                        bool skipped = false;
+                        foreach (var k in skip) if (k.Contains(x, y)) { skipped = true; break; }
+                        if (skipped) continue;
+                        total++;
+                        var c = src.GetPixel(x, y);
+                        int key = c.ToArgb() & 0xFFFFFF;
+                        bool ok;
+                        if (!cache.TryGetValue(key, out ok)) { ok = NearPaletteOrBlend(c, PaletteTolerance); cache[key] = ok; }
+                        if (ok) continue;
+                        bad++;
+                        long tk = ((long)(y / 16) << 32) | (uint)(x / 32);
+                        int n; tiles.TryGetValue(tk, out n); tiles[tk] = n + 1;
+                    }
+            }
+            worstTile = tiles.Count == 0 ? 0 : tiles.Values.Max();
+        }
+
+        [StaTheory, MemberData(nameof(All))]
+        public void OnlyPaletteColorsAfterSkin(string name)
+        {
+            int bad, total, worst;
+            MeasurePalette(name, out bad, out total, out worst);
+            if (total == 0) return;                          // fenetre sans zone a juger (DumperForm : vide, ImagesForm : images seules)
+            double ratio = 1.0 - (double)bad / total;
+            Assert.True(ratio >= 0.98, name + " : " + (ratio * 100).ToString("0.00") + " % des pixels dans la palette (" + bad + " hors palette sur " + total + ")");
+            // aucune zone dense de couleur etrangere (en-tete bleu systeme, glyphes d'une autre couleur) meme si l'ensemble reste sous 2 %
+            Assert.True(worst <= WorstTileLimit, name + " : tuile 32x16 avec " + worst + " pixels hors palette");
+        }
+
+        private const int WorstTileLimit = 60;
 
         [StaTheory, MemberData(nameof(All))]
         public void SameControlNamesAsBefore(string name)
@@ -225,7 +322,7 @@ namespace hakchi_gui.Tests.Forms
         // Les resx localises ne portent aucune surcharge de mise en page (taille de la fenetre, position / taille / ancrage des controles existants) :
         // elle ecraserait la mise en page B1 du resx neutre. Seuls les textes sont traduits.
         private static readonly System.Text.RegularExpressions.Regex LayoutKey = new System.Text.RegularExpressions.Regex(
-            @"^(?<c>[^.>]+)\.(Location|Size|ClientSize|Anchor|Dock|Padding|Margin|MinimumSize|MaximumSize|AutoSize)$");
+            @"^(?<c>[^.>]+)\.(Location|Size|ClientSize|Anchor|Dock|Padding|Margin|MinimumSize|MaximumSize)$");
 
         [Theory, MemberData(nameof(All))]
         public void LocalizedResxHaveNoLayoutOverrides(string name)

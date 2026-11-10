@@ -221,6 +221,7 @@ namespace FormGallery
                     host.DrawToBitmap(bmp, new Rectangle(0, 0, w, hgt));
                     bmp.Save(png, ImageFormat.Png);
                 }
+                WriteRects(host, png);
                 e.Width = w;
                 e.Height = hgt;
             }
@@ -228,6 +229,37 @@ namespace FormGallery
             {
                 if (wrapper != null) { try { wrapper.Dispose(); } catch { } }
             }
+        }
+
+        /// <summary>
+        /// Fichier .rects.json a cote de l'image : zone cliente (sans cadre ni barre de titre du systeme, qui ne sont pas habilles) et zones d'images
+        /// ou de pages externes (jaquettes, apercus, WebBrowser) que le controle de palette ne doit pas juger.
+        /// </summary>
+        private static void WriteRects(Form host, string png)
+        {
+            try
+            {
+                var org = host.PointToScreen(Point.Empty);
+                int ox = org.X - host.Location.X, oy = org.Y - host.Location.Y;
+                var skip = new List<int[]>();
+                Action<Control> walk = null;
+                walk = c =>
+                {
+                    foreach (Control ch in c.Controls)
+                    {
+                        if (ch is PictureBox || ch is WebBrowser || ch.GetType().Name == "ImageGoogler")
+                        {
+                            var b = ch.Parent.RectangleToScreen(ch.Bounds);
+                            skip.Add(new[] { b.X - host.Location.X, b.Y - host.Location.Y, b.Width, b.Height });
+                        }
+                        else walk(ch);
+                    }
+                };
+                walk(host);
+                File.WriteAllText(Path.ChangeExtension(png, ".rects.json"),
+                    JsonConvert.SerializeObject(new { client = new[] { ox, oy, host.ClientSize.Width, host.ClientSize.Height }, skip }));
+            }
+            catch (Exception) { }
         }
 
         /// <summary>Un Form jamais affiche n'a pas de handle pour ses enfants : sans eux DrawToBitmap ne dessine que le cadre.</summary>
