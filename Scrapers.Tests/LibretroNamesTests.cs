@@ -31,5 +31,17 @@ namespace Scrapers.Tests
         {
             Assert.Equal("the king of fighters 98", LibretroNames.NormalizeTitle("The King of Fighters '98 (Europe) [b]"));
         }
+
+        [Theory]
+        [InlineData("Game (USA).sfc", "USA")]
+        [InlineData("Game (Europe).sfc", "Europe")]
+        [InlineData("Game (Japan).sfc", "Japan")]
+        [InlineData("Game (USA, Europe).sfc", "USA")]
+        [InlineData("Game.sfc", null)]
+        [InlineData(null, null)]
+        public void RegionFromFileNameFindsFirstKnownRegion(string file, string expected)
+        {
+            Assert.Equal(expected, LibretroNames.RegionFromFileName(file));
+        }
     }
 }

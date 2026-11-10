@@ -166,6 +166,9 @@ namespace Scrapers.Tests
             var src3 = new TheGamesDbCoverSource("k", t => Task.FromResult<IEnumerable<IScraperData>>(arc));
             Assert.Single(await src3.FindAsync(new GameQuery { Title = "G", System = "", Core = "km_fbneo" }, CancellationToken.None));
             Assert.Single(await src3.FindAsync(new GameQuery { Title = "G", System = "CP System II" }, CancellationToken.None));
+            var neo = new[] { D("Neo Geo", "neo") };
+            var src4 = new TheGamesDbCoverSource("k", t => Task.FromResult<IEnumerable<IScraperData>>(neo));
+            Assert.Single(await src4.FindAsync(new GameQuery { Title = "G", System = "FBA - Arcade Games" }, CancellationToken.None));
         }
 
         [Fact]

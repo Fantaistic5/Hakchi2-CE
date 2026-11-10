@@ -899,7 +899,7 @@ namespace com.clusterrr.hakchi_gui
         /// <summary>Applique une jaquette trouvee par un scraper et memorise sa source (une seule sauvegarde de metadata).</summary>
         public void ApplyCover(Image img, string source)
         {
-            base.SetImage(img);
+            base.SetImage(img, ConfigIni.Instance.CompressCover);
             Metadata.CustomCoverArt = true;
             Metadata.CoverSource = source;
             SaveMetadata();

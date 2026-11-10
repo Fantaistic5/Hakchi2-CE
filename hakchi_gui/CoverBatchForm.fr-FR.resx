@@ -39,6 +39,8 @@
   <data name="Msg.Applying" xml:space="preserve"><value>Application... {0}/{1}</value></data>
   <data name="Msg.Done" xml:space="preserve"><value>Recherche terminée.</value></data>
   <data name="Msg.Cancelled" xml:space="preserve"><value>Annulé : les jeux pas encore cherchés sont marqués annulés.</value></data>
+  <data name="Msg.ApplyDone" xml:space="preserve"><value>Jaquettes appliquées.</value></data>
+  <data name="Msg.ApplyCancelled" xml:space="preserve"><value>Application annulée : les jeux restants sont inchangés.</value></data>
   <data name="Msg.Error" xml:space="preserve"><value>Recherche interrompue (réseau indisponible ?) : les jeux restants sont marqués non trouvés.</value></data>
   <data name="Msg.NoGames" xml:space="preserve"><value>Aucun jeu à chercher.</value></data>
   <data name="Msg.SummarySearch" xml:space="preserve"><value>{0} prêtes · {1} à vérifier · {2} non trouvées</value></data>

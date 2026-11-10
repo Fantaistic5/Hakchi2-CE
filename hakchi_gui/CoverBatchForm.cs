@@ -34,7 +34,7 @@ namespace com.clusterrr.hakchi_gui
             public CoverProposal Proposal;
             public CoverCandidate Chosen;
             public Bitmap Full;
-            public bool Searched, Searching, Applied, Failed, Cancelled;
+            public bool Searched, Searching, Applied, Failed, Cancelled, Checked;
             public int ThumbIndex = -1;
             public Bitmap ThumbFor;
             public ListViewItem Item;
@@ -90,7 +90,7 @@ namespace com.clusterrr.hakchi_gui
                         row = new Row { App = app, HadCover = !Covers.CoverTargets.NeedsCover(app), Query = Covers.CoverTargets.ToQuery(app) };
                         _rowByApp[app] = row;
                     }
-                    row.Item = new ListViewItem(app.Name ?? string.Empty) { Tag = row };
+                    row.Item = new ListViewItem(app.Name ?? string.Empty) { Tag = row, Checked = row.Checked };
                     row.Item.SubItems.Add(string.Empty);
                     row.Item.SubItems.Add(string.Empty);
                     row.Item.SubItems.Add(string.Empty);
@@ -180,7 +180,10 @@ namespace com.clusterrr.hakchi_gui
             {
                 if (r.Applied) continue;
                 if (r.Cancelled) continue;
-                if (r.Searched && r.Chosen == null) notFound++;
+                if (r.Searched && r.Chosen == null)
+                {
+                    if (r.Proposal == null || r.Proposal.Error == null) notFound++; // erreurs reseau : dans la ligne d'etat
+                }
                 else if (r.Chosen != null)
                 {
                     if (r.Item.Checked) ready++; else toCheck++;
@@ -489,12 +492,15 @@ namespace com.clusterrr.hakchi_gui
                 foreach (var r in targets)
                 {
                     ct.ThrowIfCancellationRequested();
+                    if (!r.Item.Checked) continue; // decochee pendant l'application
                     try
                     {
-                        Bitmap img = r.Full ?? await GetImageAsync(r.Chosen.Url, ct);
+                        Bitmap shared = r.Full ?? await GetImageAsync(r.Chosen.Url, ct);
                         string source = r.Chosen.SourceName;
                         var app = r.App;
-                        await Task.Run(() => app.ApplyCover(img, source));
+                        // copie privee : l'image partagee est aussi affichee dans l'interface (GDI+ non thread-safe)
+                        using (var img = new Bitmap(shared))
+                            await Task.Run(() => app.ApplyCover(img, source));
                         r.Applied = true;
                         AppliedCount++;
                     }
@@ -508,9 +514,9 @@ namespace com.clusterrr.hakchi_gui
                     done++;
                     ShowProgress("Msg.Applying", done, targets.Count);
                 }
-                labelStatus.Text = T("Msg.Done");
+                labelStatus.Text = T("Msg.ApplyDone");
             }
-            catch (OperationCanceledException) when (ct.IsCancellationRequested) { labelStatus.Text = T("Msg.Cancelled"); }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested) { labelStatus.Text = T("Msg.ApplyCancelled"); }
             _busy = false;
             UpdateSummary(true);
             UpdateButtons();
@@ -527,8 +533,10 @@ namespace com.clusterrr.hakchi_gui
 
         private void listViewResults_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
-            if (_updating || _busy || !listViewResults.Created || e.Item == null) return;
+            if (e.Item == null) return;
             var row = e.Item.Tag as Row;
+            if (row != null) row.Checked = e.Item.Checked;
+            if (_updating || _busy || !listViewResults.Created) return;
             if (row != null) RefreshItem(row);
             UpdateSummary(false);
             UpdateButtons();

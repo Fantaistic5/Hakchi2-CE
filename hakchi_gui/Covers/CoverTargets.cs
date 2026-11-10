@@ -16,7 +16,7 @@ namespace com.clusterrr.hakchi_gui.Covers
                 Crc32 = m != null ? m.OriginalCrc32 : 0,
                 RomFileName = m != null ? m.OriginalFilename : null,
                 Title = app.Name,
-                PreferredRegion = "Europe"
+                PreferredRegion = TeamShinkansen.Scrapers.Covers.LibretroNames.RegionFromFileName(m != null ? m.OriginalFilename : null) ?? "Europe"
             };
         }
 

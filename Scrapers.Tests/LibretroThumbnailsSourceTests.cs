@@ -158,6 +158,17 @@ namespace Scrapers.Tests
         }
 
         [Fact]
+        public async Task MissingDatIsRequestedOnlyOnce()
+        {
+            var h = new FakeHandler(); // aucun DAT : 404
+            var src = Make(h);
+            var q = new GameQuery { System = Snes, Title = "Anything" };
+            Assert.Empty(await src.FindAsync(q, CancellationToken.None));
+            Assert.Empty(await src.FindAsync(new GameQuery { System = Snes, Title = "Other" }, CancellationToken.None));
+            Assert.Equal(1, h.DatGets);
+        }
+
+        [Fact]
         public async Task GetTextReturnsNullOn404()
         {
             var h = new FakeHandler();

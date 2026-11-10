@@ -11,13 +11,6 @@ namespace TeamShinkansen.Scrapers.Covers
     public sealed class LibretroThumbnailsSource : ICoverSource
     {
         private const string FbNeo = "FBNeo - Arcade Games";
-        private static readonly string[] KnownRegions =
-        {
-            "USA", "Europe", "Japan", "World", "Germany", "France", "Spain", "Italy", "Australia", "Korea",
-            "Brazil", "China", "Asia", "Taiwan", "Netherlands", "Sweden", "Canada", "Russia", "Hong Kong",
-            "Denmark", "Finland", "Norway", "Portugal", "Greece", "Scandinavia", "Mexico", "Argentina"
-        };
-
         private readonly HttpCache _http;
         private readonly Func<string, string> _datUrlForSystem;
         private readonly ConcurrentDictionary<string, Lazy<Task<LibretroDatIndex>>> _indexes =
@@ -97,7 +90,7 @@ namespace TeamShinkansen.Scrapers.Covers
             return LibretroNames.NormalizeTitle((s ?? string.Empty).Replace('_', ' '));
         }
 
-        // Un seul chargement par système (single-flight) ; une entrée échouée ou vide est retirée pour permettre un nouvel essai.
+        // Un seul chargement par système (single-flight) ; une entrée échouée est retirée pour permettre un nouvel essai ; un DAT absent (404) est mémorisé pour la durée de vie de la source.
         private async Task<LibretroDatIndex> GetIndexAsync(string sys, CancellationToken ct)
         {
             var lazy = _indexes.GetOrAdd(sys, k => new Lazy<Task<LibretroDatIndex>>(() => LoadIndexAsync(k, ct)));
@@ -111,7 +104,6 @@ namespace TeamShinkansen.Scrapers.Covers
                 Evict(sys, lazy);
                 throw;
             }
-            if (idx == null) Evict(sys, lazy);
             return idx;
         }
 
@@ -139,7 +131,7 @@ namespace TeamShinkansen.Scrapers.Covers
             {
                 Url = url,
                 SourceName = Name,
-                Region = RegionTags(gameName).FirstOrDefault(),
+                Region = LibretroNames.RegionTags(gameName).FirstOrDefault(),
                 Match = kind,
                 MatchedName = gameName
             };
@@ -148,31 +140,11 @@ namespace TeamShinkansen.Scrapers.Covers
         // Rang de préférence : région demandée, Europe, USA, puis le reste.
         private static int RegionRank(string name, string preferred)
         {
-            var tags = RegionTags(name).ToList();
+            var tags = LibretroNames.RegionTags(name).ToList();
             string[] order = { preferred, "Europe", "USA" };
             for (int i = 0; i < order.Length; i++)
                 if (tags.Any(t => t.Equals(order[i], StringComparison.OrdinalIgnoreCase))) return i;
             return order.Length;
-        }
-
-        // Tags de région connus, dans l'ordre d'apparition, ex. "(USA, Europe)" -> USA, Europe.
-        private static IEnumerable<string> RegionTags(string name)
-        {
-            int pos = 0;
-            while (name != null && pos < name.Length)
-            {
-                int open = name.IndexOf('(', pos);
-                if (open < 0) yield break;
-                int close = name.IndexOf(')', open);
-                if (close < 0) yield break;
-                foreach (var part in name.Substring(open + 1, close - open - 1).Split(','))
-                {
-                    string t = part.Trim();
-                    string known = KnownRegions.FirstOrDefault(r => r.Equals(t, StringComparison.OrdinalIgnoreCase));
-                    if (known != null) yield return known;
-                }
-                pos = close + 1;
-            }
         }
     }
 }

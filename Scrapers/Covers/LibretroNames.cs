@@ -19,6 +19,40 @@ namespace TeamShinkansen.Scrapers.Covers
             return sb.ToString();
         }
 
+        private static readonly string[] KnownRegions =
+        {
+            "USA", "Europe", "Japan", "World", "Germany", "France", "Spain", "Italy", "Australia", "Korea",
+            "Brazil", "China", "Asia", "Taiwan", "Netherlands", "Sweden", "Canada", "Russia", "Hong Kong",
+            "Denmark", "Finland", "Norway", "Portugal", "Greece", "Scandinavia", "Mexico", "Argentina"
+        };
+
+        /// <summary>Tags de région connus d'un nom, dans l'ordre d'apparition ; ex. "(USA, Europe)" -> USA, Europe.</summary>
+        public static System.Collections.Generic.IEnumerable<string> RegionTags(string name)
+        {
+            int pos = 0;
+            while (name != null && pos < name.Length)
+            {
+                int open = name.IndexOf('(', pos);
+                if (open < 0) yield break;
+                int close = name.IndexOf(')', open);
+                if (close < 0) yield break;
+                foreach (var part in name.Substring(open + 1, close - open - 1).Split(','))
+                {
+                    string t = part.Trim();
+                    foreach (var r in KnownRegions)
+                        if (r.Equals(t, StringComparison.OrdinalIgnoreCase)) { yield return r; break; }
+                }
+                pos = close + 1;
+            }
+        }
+
+        /// <summary>Première région connue d'un nom de fichier ROM ; null si aucune.</summary>
+        public static string RegionFromFileName(string fileName)
+        {
+            foreach (var r in RegionTags(fileName)) return r;
+            return null;
+        }
+
         /// <summary>Nom de dossier libretro-thumbnails pour un système/core hakchi ; null si non pris en charge.</summary>
         public static string ThumbnailSystem(string system, string core)
         {

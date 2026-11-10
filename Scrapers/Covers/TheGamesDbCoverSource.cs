@@ -29,7 +29,7 @@ namespace TeamShinkansen.Scrapers.Covers
             { "NEC - PC Engine CD - TurboGrafx-CD", new[] { "TurboGrafx CD", "PC Engine CD" } },
         };
 
-        private static readonly string[] ArcadeNames = { "Arcade" };
+        private static readonly string[] ArcadeNames = { "Arcade", "Neo Geo" };
 
         private readonly string _apiKey;
         private readonly Func<string, Task<IEnumerable<IScraperData>>> _fetch;
