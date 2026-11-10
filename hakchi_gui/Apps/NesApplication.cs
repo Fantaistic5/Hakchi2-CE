@@ -92,6 +92,8 @@ namespace com.clusterrr.hakchi_gui
             public string OriginalFilename = string.Empty;
             public uint OriginalCrc32 = 0;
             public bool CustomCoverArt = false;
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public string CoverSource = null;
             [JsonIgnore]
             private AppTypeCollection.AppInfo appInfo = null;
             [JsonIgnore]
@@ -879,13 +881,13 @@ namespace com.clusterrr.hakchi_gui
         public override void SetImage(Image img, bool EightBitCompression = false)
         {
             base.SetImage(img, EightBitCompression);
-            Metadata.CustomCoverArt = true; SaveMetadata();
+            Metadata.CustomCoverArt = true; Metadata.CoverSource = null; SaveMetadata();
         }
 
         public override void SetImageFile(string path, bool EightBitCompression = false)
         {
             base.SetImageFile(path, EightBitCompression);
-            Metadata.CustomCoverArt = true; SaveMetadata();
+            Metadata.CustomCoverArt = true; Metadata.CoverSource = null; SaveMetadata();
         }
 
         public override void SetThumbnailFile(string path, bool EightBitCompression = false)
@@ -894,10 +896,19 @@ namespace com.clusterrr.hakchi_gui
             Metadata.CustomCoverArt = true; SaveMetadata();
         }
 
+        /// <summary>Applique une jaquette trouvee par un scraper et memorise sa source (une seule sauvegarde de metadata).</summary>
+        public void ApplyCover(Image img, string source)
+        {
+            base.SetImage(img);
+            Metadata.CustomCoverArt = true;
+            Metadata.CoverSource = source;
+            SaveMetadata();
+        }
+
         public void SetDefaultImage(Image img)
         {
             base.SetImage(img);
-            Metadata.CustomCoverArt = false; SaveMetadata();
+            Metadata.CustomCoverArt = false; Metadata.CoverSource = null; SaveMetadata();
         }
 
         public bool FindCover(string inputFileName, uint crc32 = 0, string alternateTitle = null)

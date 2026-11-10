@@ -11,15 +11,23 @@ namespace com.clusterrr.hakchi_gui
         public ImageGooglerForm(NesApplication app)
         {
             InitializeComponent();
-            query = app.Name ?? "";
-            query += " " + app.Metadata.AppInfo.GoogleSuffix + " (box|cover) art";
+            query = BuildQuery(app);
+        }
+
+        /// <summary>Requete Google Images partagee (formulaire, GoogleCoverSource).</summary>
+        public static string BuildQuery(NesApplication app)
+        {
+            return BuildQuery(app.Name, app.Metadata.AppInfo.GoogleSuffix);
+        }
+
+        public static string BuildQuery(string name, string googleSuffix)
+        {
+            return (name ?? "") + " " + googleSuffix + " (box|cover) art";
         }
 
         public static string[] GetImageUrls(NesApplication app)
         {
-            string query = app.Name ?? "";
-            query += " " + app.Metadata.AppInfo.GoogleSuffix + " (box|cover) art";
-            return ImageGoogler.GetImageUrls(query);
+            return ImageGoogler.GetImageUrls(BuildQuery(app));
         }
 
         private void ImageGooglerForm_FormClosing(object sender, FormClosingEventArgs e)
