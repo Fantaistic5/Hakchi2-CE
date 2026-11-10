@@ -19,8 +19,8 @@ from __future__ import annotations
 
 import argparse
 import re
+import struct
 import sys
-import wave
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -399,14 +399,29 @@ def render(score: dict = SCORE, sample_rate: int = 44100) -> np.ndarray:
     return np.clip(np.round(x * 32767.0), -32768, 32767).astype(np.int16)
 
 
+def _chunk(cid: bytes, body: bytes) -> bytes:
+    return cid + struct.pack("<I", len(body)) + body + (b"\x00" if len(body) & 1 else b"")
+
+
+def wav_bytes(audio: np.ndarray, sample_rate: int = 44100) -> bytes:
+    """WAV PCM 16 bits : fmt + data, puis ``smpl`` (une boucle avant sur tout le
+    morceau, bornes incluses) et ``inst``, comme le bgm_home.wav d'origine : le moteur
+    de l'UI ne boucle la musique de menu que grace a ``smpl``."""
+    n, ch = audio.shape
+    pcm = np.ascontiguousarray(audio, dtype="<i2").tobytes()
+    fmt = struct.pack("<HHIIHH", 1, ch, sample_rate, sample_rate * ch * 2, ch * 2, 16)
+    # manufacturer, product, periode (ns), note MIDI, fraction, SMPTE (2), nb boucles, donnees
+    smpl = struct.pack("<9I", 0, 0, int(round(1e9 / sample_rate)), 60, 0, 0, 0, 1, 0)
+    smpl += struct.pack("<6I", 0, 0, 0, n - 1, 0, 0)  # id, type avant, debut, fin, fraction, repetitions
+    inst = bytes([60, 0, 0, 0, 127, 1, 127])  # note, accord fin, gain, notes 0-127, vel 1-127
+    body = b"WAVE" + _chunk(b"fmt ", fmt) + _chunk(b"data", pcm) + _chunk(b"smpl", smpl) + _chunk(b"inst", inst)
+    return b"RIFF" + struct.pack("<I", len(body)) + body
+
+
 def write_wav(path: str | Path, audio: np.ndarray, sample_rate: int = 44100) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    with wave.open(str(path), "wb") as w:
-        w.setnchannels(audio.shape[1])
-        w.setsampwidth(2)
-        w.setframerate(sample_rate)
-        w.writeframes(np.ascontiguousarray(audio, dtype="<i2").tobytes())
+    path.write_bytes(wav_bytes(audio, sample_rate))
 
 
 def measure(audio: np.ndarray) -> dict:

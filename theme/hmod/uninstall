@@ -1,8 +1,9 @@
 #!/bin/sh
-# Source par hakchi (cwd = rootfs) AVANT ses suppressions automatiques : nos fichiers existent
-# encore. Ne jamais utiliser exit. D'abord rendre ses reglages a RetroArch (cles de
-# menu seulement), puis ne retirer que notre propre dossier. Les liaisons n'existent
-# qu'au demarrage et la police title de l'utilisateur (font_remount) n'est jamais touchee.
-[ -f usr/share/snes_usa_b1/retroarch/restore.sh ] && sh usr/share/snes_usa_b1/retroarch/restore.sh "$rootfs/etc/libretro/retroarch.cfg" usr/share/snes_usa_b1/retroarch/b1.cfg
-rm -rf usr/share/snes_usa_b1
+# Source par hakchi AVANT ses suppressions automatiques : nos fichiers existent
+# encore. Ne jamais utiliser exit. On ne fait que rendre ses reglages a RetroArch
+# (cles de menu seulement) ; hakchi retire ensuite lui-meme chaque fichier livre et
+# les dossiers vides. Les liaisons n'existent qu'au demarrage et la police title de
+# l'utilisateur (font_remount) n'est jamais touchee.
+ra="$rootfs/usr/share/snes_usa_b1/retroarch"
+[ -f "$ra/restore.sh" ] && sh "$ra/restore.sh" "$rootfs/etc/libretro/retroarch.cfg" "$ra/b1.cfg"
 true

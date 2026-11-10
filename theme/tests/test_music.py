@@ -110,3 +110,44 @@ def test_harpsichord_pitch():
 def test_voices_quiet_tail():
     for y in (synth.harpsichord(62, 0.2), synth.organ(62, 0.2), synth.square_bass(38, 0.2)):
         assert np.max(np.abs(y[-32:])) < 0.01
+
+
+def _chunks(raw):
+    assert raw[:4] == b"RIFF" and raw[8:12] == b"WAVE"
+    import struct
+    assert struct.unpack("<I", raw[4:8])[0] == len(raw) - 8
+    out, p = [], 12
+    while p < len(raw):
+        cid, sz = raw[p:p + 4], struct.unpack("<I", raw[p + 4:p + 8])[0]
+        out.append((cid, raw[p + 8:p + 8 + sz]))
+        p += 8 + sz + (sz & 1)
+    assert p == len(raw)
+    return out
+
+
+def test_wav_has_smpl_loop_and_inst(audio, tmp_path):
+    import struct
+    path = tmp_path / "bgm_home.wav"
+    compose.write_wav(path, audio, SR)
+    ch = _chunks(path.read_bytes())
+    assert [c for c, _ in ch] == [b"fmt ", b"data", b"smpl", b"inst"]
+    d = dict(ch)
+    assert d[b"data"] == np.ascontiguousarray(audio, "<i2").tobytes()
+    smpl = d[b"smpl"]
+    assert len(smpl) == 60
+    f = struct.unpack("<15I", smpl)
+    assert f[2] == round(1e9 / SR) and f[3] == 60
+    assert f[7] == 1  # une boucle
+    assert f[10] == 0 and f[11] == 0 and f[12] == audio.shape[0] - 1  # type avant, debut, fin
+    assert d[b"inst"] == bytes([60, 0, 0, 0, 127, 1, 127])
+    with wave.open(str(path), "rb") as w:
+        assert w.getnframes() == audio.shape[0]
+
+
+def test_circular_reverb_is_pinned():
+    """Le reverb (echos circulaires diffus, rad/s voulu) est le son approuve : empreinte figee."""
+    import hashlib
+    x = np.random.default_rng(1234).standard_normal((4410, 2)) * 0.1
+    y = synth.circular_reverb(x, SR)
+    q = np.round(y * 1e5).astype(np.int64)
+    assert hashlib.sha256(q.tobytes()).hexdigest() == "cbe0365e09d4a34c07b033ee34279381c1cb66525f39be43f4b582136eecbb87"

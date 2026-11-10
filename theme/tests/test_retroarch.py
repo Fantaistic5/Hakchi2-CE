@@ -163,3 +163,42 @@ def test_static_font_is_not_variable(tmp_path):
     tt = TTFont(str(out))
     assert "fvar" not in tt and "glyf" in tt
     assert ImageFont.truetype(str(out), 24).getlength("Menu") > 0
+
+
+def test_static_font_build_is_reproducible(tmp_path):
+    a, b = tmp_path / "a.ttf", tmp_path / "b.ttf"
+    font.build(a)
+    import time
+    time.sleep(1.1)  # un horodatage reel aurait change
+    font.build(b)
+    assert a.read_bytes() == b.read_bytes()
+
+
+def run_env(script, cfg, **env):
+    import os
+    return subprocess.run([str(BUSYBOX), "sh", str(RA / script), str(cfg)], capture_output=True,
+                          text=True, env={**os.environ, **env})
+
+
+def test_apply_refuses_truncated_write(console):
+    need_busybox()
+    cfg = console / "retroarch.cfg"
+    r = run_env("apply.sh", cfg, B1_TEST_KEEP_LINES="3")
+    assert r.returncode == 1 and "tronquee" in r.stderr
+    assert cfg.read_bytes() == ORIGINAL
+    assert (console / "retroarch.cfg.b1bak").read_bytes() == ORIGINAL
+    assert not (console / "retroarch.cfg.b1tmp").exists()
+
+
+def test_restore_refuses_truncated_write_and_keeps_backup(console):
+    need_busybox()
+    cfg = console / "retroarch.cfg"
+    run("apply.sh", cfg)
+    applied = cfg.read_bytes()
+    r = run_env("restore.sh", cfg, B1_TEST_KEEP_LINES="3")
+    assert r.returncode == 1 and "tronquee" in r.stderr
+    assert cfg.read_bytes() == applied
+    assert (console / "retroarch.cfg.b1bak").read_bytes() == ORIGINAL
+    # sans incident, la restauration marche ensuite
+    run("restore.sh", cfg)
+    assert cfg.read_bytes() == ORIGINAL

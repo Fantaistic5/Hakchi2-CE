@@ -199,9 +199,17 @@ def circular_highcut(x: np.ndarray, fc: float, sr: int = SR) -> np.ndarray:
 def circular_reverb(x: np.ndarray, sr: int = SR, t60: float = 1.3,
                     predelay_ms: float = 14.0, damp: float = 0.5,
                     return_cut: float = 3200.0) -> np.ndarray:
-    """Réverbération Schroeder (4 peignes amortis + 2 passe-tout par canal) calculée
-    comme réponse en fréquence sur la boucle entière : sortie 100 % mouillée, retour
-    coupé au-dessus de ``return_cut`` (queue sombre, pas de sifflement)."""
+    """Echos circulaires diffus (approuves a l'ecoute : ne pas "corriger").
+
+    Structure : 4 peignes amortis + 2 passe-tout par canal, evalues comme reponse en
+    frequence sur la boucle entiere (sortie 100 % mouillee, retour coupe au-dessus de
+    ``return_cut``). ATTENTION : ``w`` est en rad/s (2*pi*f) alors que les retards
+    ``D`` sont en echantillons ; un vrai Schroeder demanderait des rad/echantillon
+    (w / sr). Le produit ``w * D`` est donc ~``sr`` fois trop grand : les peignes et
+    passe-tout ne forment pas une plaque lisse mais un repliement de la reponse, que
+    l'on entend comme des echos circulaires diffus. Ce comportement fait partie du son
+    valide ; ``test_circular_reverb_is_pinned`` fige une empreinte du rendu pour que
+    personne ne le change sans s'en apercevoir."""
     n = x.shape[0]
     X = np.fft.rfft(x, axis=0)
     w = 2 * np.pi * np.fft.rfftfreq(n, 1.0 / sr)

@@ -70,9 +70,11 @@ def test_uninstall_restores_title_font():
         t = p.read_text(encoding="utf-8")
         assert "title.fnt" not in t and "title.font" not in t
         assert "fonts/title" not in t
-    for line in (HMOD / "uninstall").read_text(encoding="utf-8").splitlines():
-        if re.search(r"\brm\b", line):
-            assert "snes_usa_b1" in line, line
+    # hakchi retire lui-meme les fichiers livres : pas de rm, chemins absolus ($rootfs)
+    u = (HMOD / "uninstall").read_text(encoding="utf-8")
+    assert not re.search(r"\brm\b", u)
+    assert '"$rootfs/usr/share/snes_usa_b1/retroarch"' in u
+    assert not re.search(r'(^|[\s"])usr/share', u, re.M)
 
 
 # ------------------------------------------------------------------ paquet
@@ -218,7 +220,8 @@ def test_install_then_uninstall_roundtrip(built, tmp_path):
     assert "after rc=0" in r.stdout
     assert cfg.read_bytes() == original
     assert not (cfgdir / "retroarch.cfg.b1bak").exists()
-    assert not (rootfs / "usr/share/snes_usa_b1").exists()
+    # le dossier du theme est retire par hakchi (suppression automatique), pas par nous
+    assert (rootfs / "usr/share/snes_usa_b1/retroarch/restore.sh").is_file()
     assert do4.read_bytes() == b'audio_latency = "64"\n'
     assert title.read_bytes() == b"user title font"
 
@@ -289,3 +292,78 @@ def test_real_package_has_no_nintendo_file(tmp_path):
     for name, (info, data) in _members(out).items():
         if info.isfile():
             assert (len(data), hashlib.sha1(data).hexdigest()) not in ref, name
+
+
+# ------------------------------------------------------------------ p8030 fonctionnel
+
+def _run_p8030(built, tmp_path, ui_dirname="snes-eur", fail_binds=False):
+    """Execute p8030 (source dans une fonction, set -e) sur un faux rootfs et un faux
+    arbre d'UI construit d'apres les ressources livrees par le hmod. Renvoie (res, binds)."""
+    transfer = _extract(built, tmp_path)
+    rootfs = tmp_path / "rootfs"
+    shutil.copytree(transfer / "usr", rootfs / "usr")
+    ours = rootfs / "usr/share/snes_usa_b1/resources"
+    shipped = sorted(p.relative_to(ours).as_posix() for p in ours.rglob("*") if p.is_file())
+    mp = tmp_path / "mp"
+    ui = mp / "usr/share/ui" / ui_dirname / "resources"
+    for rel in shipped:
+        if rel.endswith(".txt") or rel.startswith("fonts/"):
+            continue
+        (ui / rel).parent.mkdir(parents=True, exist_ok=True)
+        (ui / rel).write_bytes(b"orig")
+    # l'UI possede l'autre extension pour s et copyright, la meme pour m et l ; plus un title
+    for name in ("s.fnt", "m.font", "l.font", "copyright.font", "title.fnt"):
+        (ui / "fonts" / name).parent.mkdir(parents=True, exist_ok=True)
+        (ui / "fonts" / name).write_bytes(b"orig")
+    log = tmp_path / "binds.log"
+    rc_bind = "return 1" if fail_binds else ":"
+    script = (
+        f'set -e\nrootfs="{_posix(rootfs)}"; mountpoint="{_posix(mp)}"; sftype=snes; sfregion=eur\n'
+        f'mount_bind(){{ echo "$1|$2" >> "{_posix(log)}"; {rc_bind}; }}\n'
+        f'outer(){{ . "{_posix(PREINIT)}"; echo "after rc=$?"; }}\n'
+        'outer\necho alive\n'
+    )
+    r = subprocess.run([str(BUSYBOX), "sh", "-c", script], capture_output=True, text=True)
+    binds = [l.split("|") for l in log.read_text().splitlines()] if log.exists() else []
+    return r, binds, rootfs, mp, shipped
+
+
+def test_p8030_binds_every_shipped_resource(built, tmp_path):
+    if not BUSYBOX.is_file():
+        pytest.skip("tools/busybox.exe absent")
+    r, binds, rootfs, mp, shipped = _run_p8030(built, tmp_path)
+    assert r.returncode == 0, r.stderr
+    assert "after rc=0" in r.stdout and "alive" in r.stdout
+    ours = _posix(rootfs) + "/usr/share/snes_usa_b1/resources/"
+    ui = _posix(mp) + "/usr/share/ui/snes-eur/resources/"
+    got = sorted((s[len(ours):], d[len(ui):]) for s, d in binds)
+    expected = []
+    for rel in shipped:
+        if rel.endswith(".txt") or rel.startswith("fonts/"):
+            continue
+        expected.append((rel, rel))
+    expected += [("fonts/s.font", "fonts/s.fnt"), ("fonts/m.font", "fonts/m.font"),
+                 ("fonts/l.font", "fonts/l.font"), ("fonts/copyright.fnt", "fonts/copyright.font")]
+    assert got == sorted(expected)
+    assert len(binds) == len(set(map(tuple, binds)))  # une seule liaison par ressource
+    for s, d in binds:
+        assert "fonts/title" not in s and "fonts/title" not in d
+        assert not s.endswith(".txt") and "/retroarch/" not in s
+
+
+def test_p8030_survives_failing_binds_under_set_e(built, tmp_path):
+    if not BUSYBOX.is_file():
+        pytest.skip("tools/busybox.exe absent")
+    r, binds, *_ = _run_p8030(built, tmp_path, fail_binds=True)
+    assert r.returncode == 0, r.stderr
+    assert "after rc=0" in r.stdout and "alive" in r.stdout
+    assert binds  # bien tentees
+
+
+def test_p8030_no_binds_without_matching_ui(built, tmp_path):
+    if not BUSYBOX.is_file():
+        pytest.skip("tools/busybox.exe absent")
+    r, binds, *_ = _run_p8030(built, tmp_path, ui_dirname="snes-usa")
+    assert r.returncode == 0, r.stderr
+    assert "after rc=0" in r.stdout
+    assert binds == []

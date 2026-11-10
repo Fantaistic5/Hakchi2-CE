@@ -17,7 +17,7 @@ snesUsaB1_fonts(){
       src="$1/fonts/$name.$ext"
       [ -f "$src" ] || continue
       for ext2 in fnt font; do
-        snesUsaB1_bind "$src" "$2/fonts/$name.$ext2" && break
+        snesUsaB1_bind "$src" "$2/fonts/$name.$ext2" && break || true
       done
     done
   done
@@ -32,11 +32,11 @@ snesUsaB1_main(){
   # tout sauf les polices (traitees a part)
   (cd "$ours" && find . -type f ! -path './fonts/*' ! -name '*.txt') | while read -r rel; do
     rel="${rel#./}"
-    snesUsaB1_bind "$ours/$rel" "$ui/$rel"
+    snesUsaB1_bind "$ours/$rel" "$ui/$rel" || true
   done
 
   # nos polices passent apres font_remount (p8025) ; title reste a l'utilisateur
-  snesUsaB1_fonts "$ours" "$ui"
+  snesUsaB1_fonts "$ours" "$ui" || true
   return 0
 }
 
