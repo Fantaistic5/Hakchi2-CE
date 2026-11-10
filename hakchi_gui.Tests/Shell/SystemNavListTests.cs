@@ -147,6 +147,22 @@ namespace hakchi_gui.Tests.Shell
         }
 
         [StaFact]
+        public void NavAccessibleNameFollowsActiveRow()
+        {
+            Form f;
+            var nav = Nav(out f);
+            using (f)
+            {
+                Assert.Equal(AccessibleRole.List, nav.AccessibleRole);
+                nav.SelectSystem("Arcade");
+                Assert.Contains("Arcade", nav.AccessibleName);
+                Assert.Contains("85", nav.AccessibleName);
+                nav.SelectCollection(GameCollection.NoCover);
+                Assert.Contains(com.clusterrr.hakchi_gui.Properties.Resources.NavNoCover, nav.AccessibleName);
+            }
+        }
+
+        [StaFact]
         public void NavScalesWithDpi()
         {
             Form f;

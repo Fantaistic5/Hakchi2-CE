@@ -82,6 +82,27 @@ namespace hakchi_gui.Tests.Shell
             }
         }
 
+        private sealed class BareApp : NesApplication
+        {
+            public BareApp() { desktop = null; Metadata = null; }
+            public override string Name { get { return "Bare"; } set { } }
+        }
+
+        [StaFact]
+        public void SheetToleratesMissingDesktopAndMetadata()
+        {
+            Form f; var p = Sheet(out f);
+            using (f)
+            {
+                p.Show(new BareApp());
+                Assert.Equal("Bare", p.TitleText);
+                Assert.Equal(Resources.SheetCoverSourceUnknown, p.CoverSourceText);
+                Assert.Empty(p.Fields);
+                Assert.Equal("", p.YearText);
+                Assert.True(p.HeaderHeight > 0);
+            }
+        }
+
         [StaFact]
         public void SheetChangeLinkRaisesEvent()
         {

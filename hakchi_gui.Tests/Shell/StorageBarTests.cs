@@ -78,8 +78,13 @@ namespace hakchi_gui.Tests.Shell
                     b.SetUsage(300 * MB, 512 * MB);
                     Assert.Equal("300 / 512 MB", b.UsageText);
                     b.SetUsage(0, 0);
-                    Assert.Equal("0 / 0 MB", b.UsageText);
+                    Assert.Equal("\u2014", b.UsageText);                  // capacite inconnue
+                    Assert.True(b.IsUnknown);
                     Assert.False(b.IsOverflow);
+                    Assert.NotEqual(B1Palette.Error, b.FillColor);
+                    var t = b.TrackBounds;
+                    using (var bmp = ShellFixture.Draw(b))
+                        Assert.Equal(B1Palette.Rule.ToArgb(), bmp.GetPixel(t.X + 2, t.Y + t.Height / 2).ToArgb());   // piste vide
                 }
                 Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("fr-FR");
                 Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("fr-FR");

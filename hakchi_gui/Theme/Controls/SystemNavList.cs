@@ -45,6 +45,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             BackColor = B1Palette.Slate;
             ForeColor = B1Palette.TextSecondary;
             Size = new Size(220, 400);
+            AccessibleRole = AccessibleRole.List;
             Rebuild();
         }
 
@@ -105,8 +106,15 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             if (system == selectedSystem && collection == selectedCollection) return;
             selectedSystem = system;
             selectedCollection = collection;
+            UpdateAccessibleName();
             Invalidate();
             RaiseFilterChanged();
+        }
+
+        private void UpdateAccessibleName()
+        {
+            var r = rows.FirstOrDefault(IsActive);
+            AccessibleName = r == null ? Resources.NavSystemsHeader : r.Text + (r.Count >= 0 ? ", " + r.Count : string.Empty);
         }
 
         private void RaiseFilterChanged()
@@ -133,6 +141,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             if (GameFilter.FavoritesAvailable)
                 rows.Add(new Row { Kind = RowKind.Collection, Collection = GameCollection.Favorites, Text = Resources.NavFavorites, Count = CountOf(GameCollection.Favorites) });
             hover = null;
+            UpdateAccessibleName();
             LayoutRows();
             Invalidate();
         }

@@ -75,9 +75,7 @@ namespace FormGallery
             var bar = new TopBar { Dock = DockStyle.Top };
             foreach (var t in new[] { "Jeux", "Mods", "Pochettes", "Outils" })
             {
-                var m = new ToolStripDropDownMenu();
-                m.Items.Add(t + " : entree");
-                bar.AddMenu(t, m);
+                bar.AddMenu(t).DropDownItems.Add(t + " : entree");
             }
             bar.Badge.SetState(true, "SNES Mini EUR", "1.0.4");
             f.Controls.Add(bar);

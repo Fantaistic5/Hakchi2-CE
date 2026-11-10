@@ -48,7 +48,11 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
 
         /// <summary>Plus rempli que 100 % (pas de depassement quand la place est pile pleine).</summary>
         [Browsable(false)]
-        public bool IsOverflow { get { return total > 0 ? used > total : used > 0; } }
+        public bool IsOverflow { get { return total > 0 && used > total; } }
+
+        /// <summary>Capacite inconnue (total 0) : texte « — », piste vide, jamais Error.</summary>
+        [Browsable(false)]
+        public bool IsUnknown { get { return total <= 0; } }
 
         [Browsable(false)]
         public Color FillColor { get { return IsOverflow ? B1Palette.Error : B1Palette.Accent; } }
@@ -59,9 +63,10 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         {
             get
             {
+                if (IsUnknown) return "—";
                 const double MB = 1024.0 * 1024.0, GB = MB * 1024.0;
                 var ci = CultureInfo.CurrentCulture;
-                bool gb = Math.Max(total, 0) >= GB || (total == 0 && used >= GB);
+                bool gb = total >= GB;
                 double div = gb ? GB : MB;
                 string fmt = gb ? "0.0" : "0";
                 return (used / div).ToString(fmt, ci) + " / " + (total / div).ToString(fmt, ci) + " " + (gb ? Resources.StorageUnitGB : Resources.StorageUnitMB);
@@ -107,7 +112,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
                 ShellText.Line | (rtl ? TextFormatFlags.RightToLeft | TextFormatFlags.Right : 0));
 
             B1Draw.Fill(g, B1Palette.Rule, track);
-            double ratio = total > 0 ? Math.Min(1.0, (double)used / total) : (used > 0 ? 1.0 : 0.0);
+            double ratio = total > 0 ? Math.Min(1.0, (double)used / total) : 0.0;
             int fw = (int)Math.Round(track.Width * ratio);
             if (fw > 0)
                 B1Draw.Fill(g, FillColor, rtl ? track.Right - fw : track.X, track.Y, fw, track.Height);

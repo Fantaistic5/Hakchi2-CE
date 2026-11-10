@@ -302,8 +302,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
                 var sepR = rtl ? new Rectangle(linkBounds.X - dw, linkBounds.Y, dw, linkBounds.Height) : new Rectangle(srcValueBounds.Right, linkBounds.Y, dw, linkBounds.Height);
                 TextRenderer.DrawText(g, " · ", body, sepR, B1Palette.TextFaint, Base | TextFormatFlags.SingleLine | dir);
             }
-            var linkFont = linkHot ? fonts.Get(ShellFonts.Kind.Body, 9f, s) : body;
-            TextRenderer.DrawText(g, Resources.SheetChangeCover, linkFont, linkBounds, B1Palette.Lavender, Base | TextFormatFlags.SingleLine | dir);
+            TextRenderer.DrawText(g, Resources.SheetChangeCover, body, linkBounds, B1Palette.Lavender, Base | TextFormatFlags.SingleLine | dir);
             if (linkHot)
                 B1Draw.Fill(g, B1Palette.Lavender, linkBounds.X, linkBounds.Bottom - B1Draw.Px(2, s), linkBounds.Width, B1Draw.Px(1, s));
 
@@ -332,7 +331,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             if (cache != null && cache.IsMissing(app, r.Size))
             {
                 B1Draw.Fill(g, B1Palette.HatchA, r);
-                var old = g.Clip;
+                var state = g.Save();
                 g.SetClip(r, CombineMode.Intersect);
                 using (var br = new SolidBrush(B1Palette.HatchB))
                 {
@@ -344,7 +343,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
                             new PointF(r.X + c + band - r.Height, r.Bottom), new PointF(r.X + c - r.Height, r.Bottom),
                         });
                 }
-                g.Clip = old;
+                g.Restore(state);
                 using (var p = new Pen(B1Palette.Dashed, B1Draw.Px(1, s)) { DashPattern = new[] { 3f, 3f } })
                     g.DrawRectangle(p, r.X, r.Y, r.Width - 1, r.Height - 1);
                 var f = fonts.Get(ShellFonts.Kind.Small, 8f, s);
