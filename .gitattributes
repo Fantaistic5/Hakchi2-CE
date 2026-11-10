@@ -6,3 +6,6 @@
 *.sln text eol=crlf
 *.xml text eol=lf
 hakchi_gui/data/moon_hashes/* text eol=lf
+
+theme/hmod/** text eol=lf
+theme/fonts/OFL.txt text eol=lf

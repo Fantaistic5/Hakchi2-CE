@@ -272,12 +272,29 @@ def make_sheet(overrides: dict, layout: dict, dot: Image.Image) -> Image.Image:
 
 # ------------------------------------------------------------------ CLI
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def _inside(path: Path, root: Path) -> bool:
+    path, root = Path(path).resolve(), Path(root).resolve()
+    return path == root or root in path.parents
+
+
+def check_out_dir(ref_root: Path, out: Path) -> None:
+    """Refuse une sortie egale a / dans la reference Nintendo, ou dans le depot."""
+    if _inside(out, ref_root):
+        raise SystemExit(f"--out ({out}) ne doit pas etre dans --ref ({ref_root})")
+    if _inside(out, REPO_ROOT):
+        raise SystemExit(f"--out ({out}) ne doit pas etre dans le depot ({REPO_ROOT})")
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--ref", required=True, type=Path, help="copie de /usr/share/ui/snes-eur")
     ap.add_argument("--out", required=True, type=Path, help="dossier de sortie (theme_out)")
     args = ap.parse_args(argv)
     ref_root, out = args.ref, args.out
+    check_out_dir(ref_root, out)
 
     packed, js, overrides = build_atlas(ref_root)
     layout, dot = build_layout(ref_root)

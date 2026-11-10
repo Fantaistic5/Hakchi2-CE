@@ -1,0 +1,5 @@
+#!/bin/sh
+# hakchi supprime deja chaque fichier livre par ce mod. Ici : ne retirer que notre
+# propre dossier (cwd = rootfs). Les liaisons n'existent qu'au demarrage, et la
+# police title de l'utilisateur (font_remount) n'est jamais touchee.
+rm -rf usr/share/snes_usa_b1

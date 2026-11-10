@@ -1,0 +1,43 @@
+#!/bin/sh
+# Theme B1 (SNES USA) : lie nos ressources par-dessus celles de clover-ui.
+# Rien n'est copie ni supprime : a chaque demarrage, mount_bind pose notre
+# fichier sur l'original, seulement si les deux existent (sinon rien ne se
+# passe, par exemple sur une autre console). Execute apres p8025 (font_remount).
+
+snesUsaB1_bind(){
+  [ -f "$1" ] && [ -f "$2" ] || return 1
+  mount_bind "$1" "$2"
+}
+
+# polices : meme choix .fnt / .font que font_remount, selon ce que l'UI possede
+snesUsaB1_fonts(){
+  local name="" ext="" src="" ext2=""
+  for name in s m l copyright; do
+    for ext in font fnt; do
+      src="$1/fonts/$name.$ext"
+      [ -f "$src" ] || continue
+      for ext2 in fnt font; do
+        snesUsaB1_bind "$src" "$2/fonts/$name.$ext2" && break
+      done
+    done
+  done
+}
+
+snesUsaB1_main(){
+  local ours="$rootfs/usr/share/snes_usa_b1/resources"
+  local ui="$mountpoint/usr/share/ui/$sftype-$sfregion/resources"
+  [ -d "$ours" ] && [ -d "$ui" ] || return 0
+
+  local rel=""
+  # tout sauf les polices (traitees a part)
+  (cd "$ours" && find . -type f ! -path './fonts/*' ! -name '*.txt') | while read -r rel; do
+    rel="${rel#./}"
+    snesUsaB1_bind "$ours/$rel" "$ui/$rel"
+  done
+
+  # nos polices passent apres font_remount (p8025) ; title reste a l'utilisateur
+  snesUsaB1_fonts "$ours" "$ui"
+  return 0
+}
+
+snesUsaB1_main
