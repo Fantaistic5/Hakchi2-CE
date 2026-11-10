@@ -90,11 +90,11 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             Fill(g, c, r.Right - t, r.Top + t, t, r.Height - 2 * t);
         }
 
+        private static readonly HashSet<int> paletteArgb = new HashSet<int>(System.Linq.Enumerable.Select(B1Palette.All, p => p.ToArgb()));
+
         public static bool IsPalette(Color c)
         {
-            if (c.A != 255) return false;
-            foreach (var p in B1Palette.All) if (p.ToArgb() == c.ToArgb()) return true;
-            return false;
+            return c.A == 255 && paletteArgb.Contains(c.ToArgb());
         }
 
         /// <summary>Couleur de fond visible derriere un controle (premier ancetre non transparent), toujours de la palette.</summary>
@@ -200,8 +200,9 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             switch (kind)
             {
                 case B1ButtonKind.Primary:
-                    fill = dis ? B1Palette.RowActive : down ? B1Palette.Slate : hot ? B1Palette.Accent : B1Palette.Primary;
-                    border = down ? B1Palette.Accent : fill;
+                    // appuye : toujours plein, un cran plus sombre (filet Rule de 1 px a l interieur du bord, aucune couleur hors palette)
+                    fill = dis ? B1Palette.RowActive : hot && !down ? B1Palette.Accent : B1Palette.Primary;
+                    border = down ? B1Palette.Rule : fill;
                     text = dis ? B1Palette.TextFaint : B1Palette.TextOnPrimary;
                     break;
                 case B1ButtonKind.Quiet:
@@ -223,6 +224,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             Fill(g, backdrop, r);
             Fill(g, fill, r);
             if (hasBorder) Frame(g, border, r, Px(1, s));
+            if (kind == B1ButtonKind.Primary && down && !dis) Frame(g, B1Palette.Rule, Rectangle.Inflate(r, -Px(1, s), -Px(1, s)), Px(1, s));
             if ((st & B1VisualState.Focus) != 0 && !dis) FocusRing(g, r, s);
             return text;
         }

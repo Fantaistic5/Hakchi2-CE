@@ -279,6 +279,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         [DllImport("user32.dll", EntryPoint = "GetCursorPos")] private static extern bool GetCursor(out Point p);
 
         private readonly Control owner;
+        private bool lastHover;
         public NcBorderWindow(Control c) { owner = c; }
 
         internal static void Hook(Control c)
@@ -292,12 +293,25 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             if (owner.IsDisposed || !owner.IsHandleCreated) return;
             try
             {
-                if (m.Msg == WM_NCPAINT || m.Msg == WM_SETFOCUS || m.Msg == WM_KILLFOCUS || m.Msg == ControlNative.WM_MOUSEMOVE || m.Msg == ControlNative.WM_MOUSELEAVE)
+                if (m.Msg == WM_NCPAINT || m.Msg == WM_SETFOCUS || m.Msg == WM_KILLFOCUS)
                     Draw(IntPtr.Zero);
+                else if (m.Msg == ControlNative.WM_MOUSEMOVE || m.Msg == ControlNative.WM_MOUSELEAVE)
+                {
+                    // le cadre ne change qu avec l etat de survol : pas de repeinte a chaque mouvement
+                    bool hover = HoverNow();
+                    if (hover != lastHover) { lastHover = hover; Draw(IntPtr.Zero); }
+                }
                 else if (m.Msg == ControlNative.WM_PRINT && m.WParam != IntPtr.Zero && ((long)m.LParam & PRF_NONCLIENT) != 0)
                     Draw(m.WParam);
             }
             catch (Exception) { }
+        }
+
+        private bool HoverNow()
+        {
+            ControlNative.RECT wr;
+            Point p;
+            return GetWindowRect(Handle, out wr) && GetCursor(out p) && wr.ToRectangle().Contains(p);
         }
 
         private void Draw(IntPtr hdc)
@@ -333,7 +347,15 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
     {
         private readonly ProgressBar bar;
         private Timer timer;
-        public ProgressWindow(ProgressBar b) { bar = b; }
+        public ProgressWindow(ProgressBar b)
+        {
+            bar = b;
+            // l animation (mode Marquee) demarre avec le handle, y compris recree, et s arrete avec lui
+            b.HandleCreated += (s, e) => StartTimer();
+            b.HandleDestroyed += (s, e) => StopTimer();
+            b.Disposed += (s, e) => StopTimer();
+            if (b.IsHandleCreated) StartTimer();
+        }
 
         internal static void Hook(ProgressBar b)
         {
@@ -356,7 +378,6 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
 
         private void DrawInto(IntPtr hdc)
         {
-            EnsureTimer();
             ControlNative.Paint(Handle, hdc, bar.ClientRectangle, Rectangle.Empty, g =>
                 B1Draw.PaintProgress(g, bar.ClientRectangle, B1Draw.Backdrop(bar.Parent ?? bar), bar.Minimum, bar.Maximum, bar.Value,
                     bar.Style == ProgressBarStyle.Marquee, Phase(), B1Dpi.Scale(bar)));
@@ -365,16 +386,28 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         internal static float Phase() { return (Environment.TickCount & 0x7FFFFFFF) % 1400 / 1400f; }
 
         // Sans theme visuel la barre ne s'anime plus : le mode « marquee » est anime ici.
-        private void EnsureTimer()
+        internal bool TimerRunning { get { return timer != null && timer.Enabled; } }
+
+        private void StartTimer()
         {
-            if (timer != null) return;
-            timer = new Timer { Interval = 33 };
-            timer.Tick += (s, e) =>
+            if (timer == null)
             {
-                if (bar.IsDisposed || !bar.IsHandleCreated) { timer.Stop(); return; }
-                if (bar.Style == ProgressBarStyle.Marquee && bar.Visible) bar.Invalidate();
-            };
+                timer = new Timer { Interval = 33 };
+                timer.Tick += (s, e) =>
+                {
+                    if (bar.IsDisposed || !bar.IsHandleCreated) { StopTimer(); return; }
+                    if (bar.Style == ProgressBarStyle.Marquee && bar.Visible) bar.Invalidate();       // les autres styles ne se redessinent pas
+                };
+            }
             timer.Start();
+        }
+
+        private void StopTimer()
+        {
+            if (timer == null) return;
+            timer.Stop();
+            timer.Dispose();
+            timer = null;
         }
     }
 

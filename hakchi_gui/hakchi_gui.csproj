@@ -84,6 +84,10 @@ Gert Driesen for SSH.NET.</Description>
     <Content Include="icon_app.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="hakchi_gui.Tests" />
+  </ItemGroup>
+
   <!-- Theme B1 : Jost (SIL OFL 1.1), instances statiques generees par theme/retroarch/font.py -->
   <ItemGroup>
     <EmbeddedResource Include="Theme\Fonts\Jost-Regular.ttf" LogicalName="com.clusterrr.hakchi_gui.Theme.Fonts.Jost-Regular.ttf" />
