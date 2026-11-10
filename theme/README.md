@@ -20,4 +20,11 @@ Le Python système n'a pas pytest ; utiliser le venv dédié :
 ## Contenu
 
 - `b1/palette.py` : constantes de la palette B1 (tuples RGB) et `ALL`.
+- `b1/art.py` : dessins B1 des sprites (`draw(nom, taille, ref=None)`), classés
+  en `DRAWN` (dessinés ici), `RECOLOR` (forme d'origine, couleurs de la palette),
+  `CLEAR` (neutralisés) et `KEEP` (laissés).
+- `build_theme.py` : atlas repeint, images `layout/asset`, `preview_home.png` et
+  `sprites_sheet.png` :
+
+      P:\HakchiSNESUSA\venv_theme\Scripts\python -m theme.build_theme --ref P:\HakchiSNESUSA\ui_ref --out P:\HakchiSNESUSA\theme_out
 - `docs/superpowers/notes/theme-ressources.md` : carte des ressources clover-ui.
