@@ -545,7 +545,7 @@ def _caption():
 
 def _caption_title():
     c = Canvas(348, 22)
-    c.rect(3, 2, 345, 20, T)
+    c.rect(3, 2, 345, 20, LAV)  # validé utilisateur : lavande, titre noir dessus
     return c.image()
 
 

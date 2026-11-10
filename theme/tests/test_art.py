@@ -248,3 +248,10 @@ def test_ab_violet_xy_lavender():
         img = art.draw(n, art.SIZES[n])
         cols = [p[:3] for p in _pixels(img) if p[3] == 255]
         assert cols.count(P.LAVENDER) > cols.count(P.VIOLET), n
+
+
+def test_title_bar_is_lavender():
+    """Validé utilisateur : barre de titre lavande (le titre reste noir)."""
+    img = art.draw("caption_title.png", art.SIZES["caption_title.png"])
+    opaque = {p[:3] for p in _pixels(img) if p[3] == 255}
+    assert opaque == {P.LAVENDER}
