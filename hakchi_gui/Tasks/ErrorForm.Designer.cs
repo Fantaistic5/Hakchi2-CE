@@ -58,13 +58,13 @@
             // errorLabel
             // 
             resources.ApplyResources(this.errorLabel, "errorLabel");
-            this.errorLabel.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.errorLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(217)))), ((int)(((byte)(119)))), ((int)(((byte)(106)))));
             this.errorLabel.Name = "errorLabel";
             // 
             // richTextBox1
             // 
             resources.ApplyResources(this.richTextBox1, "richTextBox1");
-            this.richTextBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.richTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(37)))), ((int)(((byte)(46)))));
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.richTextBox1.ContextMenuStrip = this.contextMenuStrip1;
             this.richTextBox1.Cursor = System.Windows.Forms.Cursors.Default;

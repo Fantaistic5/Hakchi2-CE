@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui.Tasks
 {
-    public partial class ErrorForm : Form
+    public partial class ErrorForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public ErrorForm()
         {

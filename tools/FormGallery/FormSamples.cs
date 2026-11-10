@@ -26,6 +26,31 @@ namespace FormGallery
                     AddItems(Find<ListBox>(c, "listBoxTemplates"), "Super Nintendo", "Super Famicom", "Generic");
                     break;
                 case "ImagesForm": FillImages(c); break;
+                case "TaskerForm":
+                    SetText(c, "statusLabel", "Ecriture du noyau personnalise...");
+                    SetValue(Find<Control>(c, "progressBarEx1"), 45);
+                    break;
+                case "TaskerTransferForm":
+                    SetText(c, "statusLabel", "Envoi des jeux vers la console...");
+                    SetText(c, "labelFileName", "Super Metroid (USA).sfc");
+                    SetText(c, "labelTimeLeft", "00:01:24");
+                    SetText(c, "labelTransferRate", "1,8 Mo/s");
+                    SetValue(Find<Control>(c, "progressBarEx1"), 62);
+                    break;
+                case "MessageForm":
+                    // construite par MessageForm.Get (Host) ; DrawToBitmap peint les enfants dans l'ordre inverse du plan :
+                    // la bande des boutons (Dock Bottom, au premier plan) passe en dernier dans la collection, la mise en page reste la meme
+                    var strip = Find<Control>(c, "panel1");
+                    if (strip != null) strip.SendToBack();
+                    break;
+                case "SnesPresetEditor":
+                    // meme raison : en vrai les champs (avant dans la collection) recouvrent la fin des etiquettes « 0x », pas l'inverse
+                    foreach (var n in new[] { "textBoxPresetID", "textBoxExtra" }) { var box = Find<Control>(c, n); if (box != null) box.SendToBack(); }
+                    break;
+                case "ErrorForm":
+                    SetText(c, "errorLabel", "La console ne repond pas.");
+                    SetText(c, "richTextBox1", "System.TimeoutException: La console ne repond pas." + Environment.NewLine + "   a hakchi.Shell.Execute(...)");
+                    break;
                 case "TextInfo": Find<TextBox>(c, "textBoxInfo").Text = "Licence GPL v3" + Environment.NewLine + "--------------------------------------------------------------------------------" + Environment.NewLine + "Un exemple de texte long, affiche dans une police a chasse fixe."; break;
             }
         }
@@ -33,6 +58,19 @@ namespace FormGallery
         private static T Find<T>(Control root, string name) where T : Control
         {
             return root.Controls.Find(name, true).OfType<T>().FirstOrDefault();
+        }
+
+        private static void SetText(Control root, string name, string text)
+        {
+            var c = Find<Control>(root, name);
+            if (c != null) c.Text = text;
+        }
+
+        // ProgressODoom.ProgressBarEx (assemblage de hakchi, non reference ici) : propriete Value par reflexion
+        private static void SetValue(Control bar, int value)
+        {
+            var p = bar == null ? null : bar.GetType().GetProperty("Value");
+            if (p != null) p.SetValue(bar, value, null);
         }
 
         private static void AddItems(ListBox l, params string[] items)

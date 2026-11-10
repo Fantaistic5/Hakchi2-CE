@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui.Tasks
 {
-    public partial class MessageForm : Form
+    public partial class MessageForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public enum Button { Undefined, OK, Cancel, Abort, Yes, No, YesToAll }
         public enum DefaultButton { Button1 = 0, Button2 = 1, Button3 = 2 }

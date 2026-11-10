@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui.Tasks
 {
-    public partial class TaskerTransferForm : Form, ITaskerView
+    public partial class TaskerTransferForm : com.clusterrr.hakchi_gui.Theme.B1Form, ITaskerView
     {
         private const int SpeedSampleFreq = 500;
         private const int SpeedSampleNum = 5;

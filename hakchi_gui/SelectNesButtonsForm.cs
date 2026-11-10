@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class SelectNesButtonsForm : Form
+    public partial class SelectNesButtonsForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         [Flags]
         public enum NesButtons

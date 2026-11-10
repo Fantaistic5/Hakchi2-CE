@@ -8,7 +8,7 @@ using static com.clusterrr.hakchi_gui.Tasks.Tasker;
 
 namespace com.clusterrr.hakchi_gui.Tasks
 {
-    public partial class SDFormat : Form
+    public partial class SDFormat : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public class SDFormatResult
         {

@@ -150,6 +150,19 @@ namespace FormGallery
             var ctors = t.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                          .OrderBy(c => c.GetParameters().Length).ToList();
             if (ctors.Count == 0) { reason = "aucun constructeur d'instance"; return null; }
+            if (!DriverCheckIsSafe(t, out reason)) return null;
+            if (t.Name == "MessageForm")
+            {
+                // vrai chemin d'affichage (MessageForm.Get) : textes et boutons Oui / Non / Annuler poses, sans ShowDialog
+                var buttonType = t.GetNestedType("Button");
+                var answers = Array.CreateInstance(buttonType, 3);
+                answers.SetValue(Enum.Parse(buttonType, "Yes"), 0); answers.SetValue(Enum.Parse(buttonType, "No"), 1); answers.SetValue(Enum.Parse(buttonType, "Cancel"), 2);
+                var icon = Asm.GetType(RootNamespace + ".Properties.Resources", true).GetProperty("sign_warning", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic).GetValue(null, null);
+                var get = t.GetMethod("Get", BindingFlags.Public | BindingFlags.Static);
+                var defaultButton = Enum.Parse(t.GetNestedType("DefaultButton"), "Button2");
+                ctorDescription = "MessageForm.Get(titre, message, sign_warning, Oui/Non/Annuler, Button2)";
+                return (Control)get.Invoke(null, new object[] { "Etes-vous sur ?", "Voulez-vous vraiment annuler ? La console pourrait rester dans un etat instable.", icon, answers, defaultButton });
+            }
 
             foreach (var c in ctors)
             {
@@ -165,6 +178,7 @@ namespace FormGallery
                 try
                 {
                     var ctrl = (Control)c.Invoke(args);
+                    StopTimers(ctrl);
                     ctorDescription = sig + (ps.Length > 0 ? " avec valeurs factices" : "");
                     return ctrl;
                 }
@@ -180,6 +194,43 @@ namespace FormGallery
             }
             reason = string.Join(" | ", errors);
             return null;
+        }
+
+        /// <summary>
+        /// WaitingFelForm installe le pilote FEL (installeur avec elevation) a la construction si "pnputil -e" ne le liste pas,
+        /// et WaitingShellForm interroge le meme pnputil (chemin complet Sysnative : la doublure pnputil de Program.Main ne l'intercepte plus).
+        /// On ne construit ces fenetres que si DriverInstalled() repond deja vrai : l'installeur n'est jamais lance.
+        /// </summary>
+        private static bool DriverCheckIsSafe(Type t, out string reason)
+        {
+            reason = null;
+            if (t.Name != "WaitingFelForm" && t.Name != "WaitingShellForm") return true;
+            try
+            {
+                var fel = Asm.GetType(RootNamespace + ".WaitingFelForm", true);
+                if ((bool)fel.GetMethod("DriverInstalled", BindingFlags.Public | BindingFlags.Static).Invoke(null, null)) return true;
+                reason = "pilote FEL absent : la construction lancerait son installeur, fenetre non construite";
+            }
+            catch (Exception ex)
+            {
+                reason = "detection du pilote FEL impossible (" + FirstLine((ex.InnerException ?? ex).Message) + "), fenetre non construite";
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Les fenetres d'attente demarrent un minuteur a la construction (WaitingFelForm : detection USB puis poignee de main FEL).
+        /// On l'arrete avant tout traitement de messages : la galerie ne touche jamais un peripherique USB / FEL ni la console.
+        /// </summary>
+        public static void StopTimers(Control c)
+        {
+            for (var t = c.GetType(); t != null && t != typeof(Form) && t != typeof(Control); t = t.BaseType)
+                foreach (var fi in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
+                    if (typeof(Timer).IsAssignableFrom(fi.FieldType))
+                    {
+                        var timer = fi.GetValue(c) as Timer;
+                        if (timer != null) timer.Enabled = false;
+                    }
         }
 
         private static string FirstLine(string s)

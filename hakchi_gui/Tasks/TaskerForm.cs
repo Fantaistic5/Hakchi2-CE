@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui.Tasks
 {
-    public partial class TaskerForm : Form, ITaskerView
+    public partial class TaskerForm : com.clusterrr.hakchi_gui.Theme.B1Form, ITaskerView
     {
         public Tasker Tasker
         {

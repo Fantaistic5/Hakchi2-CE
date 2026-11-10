@@ -34,9 +34,9 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.progressBarEx1 = new ProgressODoom.ProgressBarEx();
-            this.fruityLoopsBackgroundPainter1 = new ProgressODoom.FruityLoopsBackgroundPainter();
-            this.styledBorderPainter1 = new ProgressODoom.StyledBorderPainter();
-            this.fruityLoopsProgressPainter1 = new ProgressODoom.FruityLoopsProgressPainter();
+            this.fruityLoopsBackgroundPainter1 = new ProgressODoom.PlainBackgroundPainter();
+            this.styledBorderPainter1 = new ProgressODoom.PlainBorderPainter();
+            this.fruityLoopsProgressPainter1 = new ProgressODoom.PlainProgressPainter();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -61,7 +61,7 @@
             resources.ApplyResources(this.progressBarEx1, "progressBarEx1");
             this.progressBarEx1.BackgroundPainter = this.fruityLoopsBackgroundPainter1;
             this.progressBarEx1.BorderPainter = this.styledBorderPainter1;
-            this.progressBarEx1.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.progressBarEx1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(226)))), ((int)(((byte)(234)))));
             this.progressBarEx1.MarqueePercentage = 25;
             this.progressBarEx1.MarqueeSpeed = 30;
             this.progressBarEx1.MarqueeStep = 1;
@@ -76,16 +76,16 @@
             // 
             // fruityLoopsBackgroundPainter1
             // 
-            this.fruityLoopsBackgroundPainter1.FruityType = ProgressODoom.FruityLoopsProgressPainter.FruityLoopsProgressType.DoubleLayer;
+            this.fruityLoopsBackgroundPainter1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(42)))), ((int)(((byte)(52)))));
             this.fruityLoopsBackgroundPainter1.GlossPainter = null;
             // 
             // styledBorderPainter1
             // 
-            this.styledBorderPainter1.Border3D = System.Windows.Forms.Border3DStyle.Flat;
+            this.styledBorderPainter1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(42)))), ((int)(((byte)(52)))));
             // 
             // fruityLoopsProgressPainter1
             // 
-            this.fruityLoopsProgressPainter1.FruityType = ProgressODoom.FruityLoopsProgressPainter.FruityLoopsProgressType.DoubleLayer;
+            this.fruityLoopsProgressPainter1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(91)))), ((int)(((byte)(181)))));
             this.fruityLoopsProgressPainter1.GlossPainter = null;
             this.fruityLoopsProgressPainter1.ProgressBorderPainter = null;
             // 
@@ -115,8 +115,8 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label label1;
         private ProgressODoom.ProgressBarEx progressBarEx1;
-        private ProgressODoom.FruityLoopsBackgroundPainter fruityLoopsBackgroundPainter1;
-        private ProgressODoom.StyledBorderPainter styledBorderPainter1;
-        private ProgressODoom.FruityLoopsProgressPainter fruityLoopsProgressPainter1;
+        private ProgressODoom.PlainBackgroundPainter fruityLoopsBackgroundPainter1;
+        private ProgressODoom.PlainBorderPainter styledBorderPainter1;
+        private ProgressODoom.PlainProgressPainter fruityLoopsProgressPainter1;
     }
 }

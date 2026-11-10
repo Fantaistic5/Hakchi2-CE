@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class SnesPresetEditor : Form
+    public partial class SnesPresetEditor : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         SnesGame game;
         bool wasCompressed;

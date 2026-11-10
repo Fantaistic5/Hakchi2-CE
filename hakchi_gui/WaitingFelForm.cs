@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class WaitingFelForm : Form
+    public partial class WaitingFelForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         bool deviceFound = false;
 

@@ -47,7 +47,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(27)))), ((int)(((byte)(34)))));
             resources.ApplyResources(this.pictureBox1, "pictureBox1");
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.TabStop = false;
@@ -76,7 +76,7 @@
             // panel
             // 
             resources.ApplyResources(this.panel, "panel");
-            this.panel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.panel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(27)))), ((int)(((byte)(34)))));
             this.panel.Controls.Add(this.panel3);
             this.panel.Controls.Add(this.panel2);
             this.panel.Name = "panel";
@@ -90,7 +90,7 @@
             // messageLabel
             // 
             resources.ApplyResources(this.messageLabel, "messageLabel");
-            this.messageLabel.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.messageLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(27)))), ((int)(((byte)(34)))));
             this.messageLabel.Name = "messageLabel";
             // 
             // panel2

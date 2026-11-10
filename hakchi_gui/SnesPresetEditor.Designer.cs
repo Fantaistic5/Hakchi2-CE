@@ -39,6 +39,7 @@
             // labelPresetID
             // 
             resources.ApplyResources(this.labelPresetID, "labelPresetID");
+            this.labelPresetID.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.labelPresetID.Name = "labelPresetID";
             // 
             // textBoxPresetID
@@ -49,6 +50,7 @@
             // labelExtra
             // 
             resources.ApplyResources(this.labelExtra, "labelExtra");
+            this.labelExtra.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.labelExtra.Name = "labelExtra";
             // 
             // textBoxExtra

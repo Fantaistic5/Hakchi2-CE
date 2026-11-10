@@ -34,6 +34,8 @@ namespace FormGallery
             // (absent de la vue WOW64 d'un processus x86) et, si le pilote manque, l'installeur du pilote avec elevation.
             // La galerie se copie sous ce nom a cote d'elle (lancee depuis son dossier, elle passe avant System32) et repond
             // que le pilote est installe : l'installeur n'est donc jamais lance.
+            // Depuis le correctif Sysnative (330d589a), WaitingFelForm appelle pnputil par son chemin complet : la doublure ne
+            // l'intercepte plus. Host.Construct ne construit donc ces fenetres que si DriverInstalled() repond deja vrai.
             if (string.Equals(Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0]), "pnputil", StringComparison.OrdinalIgnoreCase))
             {
                 Console.WriteLine("USB\\VID_1F3A&PID_EFE8");

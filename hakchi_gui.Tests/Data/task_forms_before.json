@@ -1,0 +1,542 @@
+{
+ "_base": "snes-usa/theme-b1",
+ "_logic_base": {
+  "WaitingFelForm": "330d589a"
+ },
+ "forms": {
+  "Tasks.TaskerForm": {
+   "controls": [
+    {
+     "name": "progressBarEx1",
+     "type": "ProgressBarEx",
+     "parent": "$this"
+    },
+    {
+     "name": "statusLabel",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "statusPictureBox",
+     "type": "PictureBox",
+     "parent": "$this"
+    }
+   ],
+   "dialogResults": {},
+   "accept": null,
+   "cancel": null,
+   "logicRev": "snes-usa/theme-b1",
+   "logicSha256": "c358d108be2f7525e4ac091a13ed48bf539e41983bd757e17c5d16af571d3666",
+   "logicLines": 170
+  },
+  "Tasks.TaskerTransferForm": {
+   "controls": [
+    {
+     "name": "label1",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "label2",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "labelFileName",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "labelTimeLeft",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "labelTransferRate",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "progressBarEx1",
+     "type": "ProgressBarEx",
+     "parent": "$this"
+    },
+    {
+     "name": "statusLabel",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "statusPictureBox",
+     "type": "PictureBox",
+     "parent": "$this"
+    }
+   ],
+   "dialogResults": {},
+   "accept": null,
+   "cancel": null,
+   "logicRev": "snes-usa/theme-b1",
+   "logicSha256": "5c7073175789954f92cce041abf2ff5affb7c6f7a2b60c4ed1a879d4cf3709c8",
+   "logicLines": 237
+  },
+  "Tasks.MessageForm": {
+   "controls": [
+    {
+     "name": "panel",
+     "type": "Panel",
+     "parent": "$this"
+    },
+    {
+     "name": "panel1",
+     "type": "Panel",
+     "parent": "$this"
+    },
+    {
+     "name": "panel2",
+     "type": "Panel",
+     "parent": "panel"
+    },
+    {
+     "name": "panel3",
+     "type": "Panel",
+     "parent": "panel"
+    },
+    {
+     "name": "button1",
+     "type": "Button",
+     "parent": "panel1"
+    },
+    {
+     "name": "button2",
+     "type": "Button",
+     "parent": "panel1"
+    },
+    {
+     "name": "button3",
+     "type": "Button",
+     "parent": "panel1"
+    },
+    {
+     "name": "pictureBox1",
+     "type": "PictureBox",
+     "parent": "panel2"
+    },
+    {
+     "name": "messageLabel",
+     "type": "Label",
+     "parent": "panel3"
+    }
+   ],
+   "dialogResults": {
+    "button1": "None",
+    "button2": "None",
+    "button3": "None"
+   },
+   "accept": null,
+   "cancel": null,
+   "logicRev": "snes-usa/theme-b1",
+   "logicSha256": "24b994810acce5a7a957d8ba2928dc043421ccd390b05190a2a16c7ae2ec3bbf",
+   "logicLines": 149
+  },
+  "Tasks.ErrorForm": {
+   "controls": [
+    {
+     "name": "buttonOK",
+     "type": "Button",
+     "parent": "$this"
+    },
+    {
+     "name": "errorLabel",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "panel1",
+     "type": "Panel",
+     "parent": "$this"
+    },
+    {
+     "name": "pictureBox1",
+     "type": "PictureBox",
+     "parent": "$this"
+    },
+    {
+     "name": "richTextBox1",
+     "type": "RichTextBox",
+     "parent": "panel1"
+    }
+   ],
+   "dialogResults": {
+    "buttonOK": "None"
+   },
+   "accept": null,
+   "cancel": null,
+   "logicRev": "snes-usa/theme-b1",
+   "logicSha256": "85e7ebe2215d6a7c8a8eed7ee58ef54de8105160e3b750d164b3d50ba616bac3",
+   "logicLines": 89
+  },
+  "Tasks.SDFormat": {
+   "controls": [
+    {
+     "name": "tableLayoutPanel1",
+     "type": "TableLayoutPanel",
+     "parent": "$this"
+    },
+    {
+     "name": "chkBootable",
+     "type": "CheckBox",
+     "parent": "tableLayoutPanel1"
+    },
+    {
+     "name": "chkCopyNand",
+     "type": "CheckBox",
+     "parent": "tableLayoutPanel1"
+    },
+    {
+     "name": "chkCopySaves",
+     "type": "CheckBox",
+     "parent": "tableLayoutPanel1"
+    },
+    {
+     "name": "chkStoreSaves",
+     "type": "CheckBox",
+     "parent": "tableLayoutPanel1"
+    },
+    {
+     "name": "lblBootable",
+     "type": "Label",
+     "parent": "tableLayoutPanel1"
+    },
+    {
+     "name": "tableLayoutPanel2",
+     "type": "TableLayoutPanel",
+     "parent": "tableLayoutPanel1"
+    },
+    {
+     "name": "btnCancel",
+     "type": "Button",
+     "parent": "tableLayoutPanel2"
+    },
+    {
+     "name": "btnOk",
+     "type": "Button",
+     "parent": "tableLayoutPanel2"
+    }
+   ],
+   "dialogResults": {
+    "btnCancel": "None",
+    "btnOk": "None"
+   },
+   "accept": null,
+   "cancel": null,
+   "logicRev": "snes-usa/theme-b1",
+   "logicSha256": "40bfb1ce30671e06387a1dd7bd907f65c8d0d23c44270f6a5f9f5c1e99798aba",
+   "logicLines": 246
+  },
+  "WaitingFelForm": {
+   "controls": [
+    {
+     "name": "tableLayoutPanelMain",
+     "type": "TableLayoutPanel",
+     "parent": "$this"
+    },
+    {
+     "name": "buttonDriver",
+     "type": "Button",
+     "parent": "tableLayoutPanelDriver"
+    },
+    {
+     "name": "label6",
+     "type": "Label",
+     "parent": "tableLayoutPanelDriver"
+    },
+    {
+     "name": "label1",
+     "type": "Label",
+     "parent": "tableLayoutPanelMain"
+    },
+    {
+     "name": "label2",
+     "type": "Label",
+     "parent": "tableLayoutPanelMain"
+    },
+    {
+     "name": "label3",
+     "type": "Label",
+     "parent": "tableLayoutPanelMain"
+    },
+    {
+     "name": "label4",
+     "type": "Label",
+     "parent": "tableLayoutPanelMain"
+    },
+    {
+     "name": "label5",
+     "type": "Label",
+     "parent": "tableLayoutPanelMain"
+    },
+    {
+     "name": "tableLayoutPanelDriver",
+     "type": "TableLayoutPanel",
+     "parent": "tableLayoutPanelMain"
+    }
+   ],
+   "dialogResults": {
+    "buttonDriver": "None"
+   },
+   "accept": null,
+   "cancel": null,
+   "logicRev": "330d589a",
+   "logicSha256": "24e1a290cf5c1ddef5af3c3f81aba9a488c185bdd9a738ff871f0a4a4cebda60",
+   "logicLines": 217
+  },
+  "WaitingShellForm": {
+   "controls": [
+    {
+     "name": "buttonDriver",
+     "type": "Button",
+     "parent": "$this"
+    },
+    {
+     "name": "label0",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "label1",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "label2",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "labelDriver",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "pictureBox1",
+     "type": "PictureBox",
+     "parent": "$this"
+    }
+   ],
+   "dialogResults": {
+    "buttonDriver": "None"
+   },
+   "accept": null,
+   "cancel": null,
+   "logicRev": "snes-usa/theme-b1",
+   "logicSha256": "1dbf7614f3edfda7620fb412558c5bb298d284e43d994340c0b4553dcf87e778",
+   "logicLines": 90
+  },
+  "WaitingShellCycleForm": {
+   "controls": [
+    {
+     "name": "label1",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "pictureBox1",
+     "type": "PictureBox",
+     "parent": "$this"
+    },
+    {
+     "name": "progressBarEx1",
+     "type": "ProgressBarEx",
+     "parent": "$this"
+    }
+   ],
+   "dialogResults": {},
+   "accept": null,
+   "cancel": null,
+   "logicRev": "snes-usa/theme-b1",
+   "logicSha256": "f01e93ffc9de79bd2ed7e3d52bf89731097574618bfb9f594a73d4322a01e993",
+   "logicLines": 108
+  },
+  "SelectNesButtonsForm": {
+   "controls": [
+    {
+     "name": "buttonOk",
+     "type": "Button",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxA",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxB",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxDown",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxLeft",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxRight",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxSelect",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxStart",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxUp",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "pictureBoxController",
+     "type": "PictureBox",
+     "parent": "$this"
+    }
+   ],
+   "dialogResults": {
+    "buttonOk": "None"
+   },
+   "accept": "buttonOk",
+   "cancel": null,
+   "logicRev": "snes-usa/theme-b1",
+   "logicSha256": "119e5cfde1690598f49768bdc7ab3451c79fb25893e4898df94ffd7d11624813",
+   "logicLines": 66
+  },
+  "SelectSnesButtonsForm": {
+   "controls": [
+    {
+     "name": "buttonOk",
+     "type": "Button",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxA",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxB",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxDown",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxL",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxLeft",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxR",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxRight",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxSelect",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxStart",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxUp",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxX",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "checkBoxY",
+     "type": "CheckBox",
+     "parent": "$this"
+    },
+    {
+     "name": "pictureBoxController",
+     "type": "PictureBox",
+     "parent": "$this"
+    }
+   ],
+   "dialogResults": {
+    "buttonOk": "None"
+   },
+   "accept": "buttonOk",
+   "cancel": null,
+   "logicRev": "snes-usa/theme-b1",
+   "logicSha256": "d479d8d6350df9b2f5c2311944f59ab4eb14c473699c4557c6abebc1959792c3",
+   "logicLines": 78
+  },
+  "SnesPresetEditor": {
+   "controls": [
+    {
+     "name": "buttonOk",
+     "type": "Button",
+     "parent": "$this"
+    },
+    {
+     "name": "labelExtra",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "labelPresetID",
+     "type": "Label",
+     "parent": "$this"
+    },
+    {
+     "name": "textBoxExtra",
+     "type": "Int8HexTextBox",
+     "parent": "$this"
+    },
+    {
+     "name": "textBoxPresetID",
+     "type": "Int16HexTextBox",
+     "parent": "$this"
+    }
+   ],
+   "dialogResults": {
+    "buttonOk": "None"
+   },
+   "accept": "buttonOk",
+   "cancel": null,
+   "logicRev": "snes-usa/theme-b1",
+   "logicSha256": "db5a4bb9d2d12c69ac830725204916c9f1cc5a54b04423694bc8e1455a6446ae",
+   "logicLines": 62
+  }
+ }
+}

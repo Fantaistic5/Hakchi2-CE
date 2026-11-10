@@ -157,8 +157,13 @@ namespace hakchi_gui.Tests.Forms
             return false;
         }
 
-        /// <summary>Pixels du rendu de la galerie hors cadre systeme et hors images : (hors palette, total, pire tuile 32x16).</summary>
-        internal static void MeasurePalette(string name, out int bad, out int total, out int worstTile, Rectangle? only = null)
+        /// <summary>
+        /// Pixels du rendu de la galerie hors cadre systeme et hors images : (hors palette, total, pire tuile 32x16).
+        /// clearTypeSafe : chaque pixel est d'abord moyenne avec ses voisins gauche et droit (canal par canal). Le lissage ClearType
+        /// decale chaque canal d'un sous-pixel et colore les bords des glyphes bien au-dela de la tolerance (fenetres a texte dense) ;
+        /// la moyenne sur 3 pixels annule ce decalage, alors qu'un texte ou un fond d'une couleur etrangere reste hors palette.
+        /// </summary>
+        internal static void MeasurePalette(string name, out int bad, out int total, out int worstTile, Rectangle? only = null, bool clearTypeSafe = false)
         {
             var dir = GalleryDir.Value;
             var png = Path.Combine(dir, name + ".png");
@@ -182,6 +187,11 @@ namespace hakchi_gui.Tests.Forms
                         if (skipped) continue;
                         total++;
                         var c = src.GetPixel(x, y);
+                        if (clearTypeSafe)
+                        {
+                            var l = src.GetPixel(Math.Max(area.Left, x - 1), y); var r = src.GetPixel(Math.Min(area.Right - 1, x + 1), y);
+                            c = Color.FromArgb((l.R + c.R + r.R + 1) / 3, (l.G + c.G + r.G + 1) / 3, (l.B + c.B + r.B + 1) / 3);
+                        }
                         int key = c.ToArgb() & 0xFFFFFF;
                         bool ok;
                         if (!cache.TryGetValue(key, out ok)) { ok = NearPaletteOrBlend(c, PaletteTolerance); cache[key] = ok; }
