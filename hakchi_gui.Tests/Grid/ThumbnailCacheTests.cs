@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
@@ -73,6 +75,7 @@ namespace hakchi_gui.Tests.Grid
             using (var cache = new ThumbnailCache())
             {
                 var app = TestApp.WithCover("Geant", Color.DarkRed, 4000, 5000);
+                cache.Loader = a => a.Image; // passe par TestApp.Image, qui note le thread
                 app.LoadDelay = TimeSpan.FromMilliseconds(300); // en plus du decodage d'un PNG de 20 Mpx
                 int ui = Thread.CurrentThread.ManagedThreadId;
                 int readyThread = 0;
@@ -132,6 +135,92 @@ namespace hakchi_gui.Tests.Grid
                 cache.Forget(a);
                 Assert.False(cache.Contains(a, Cell));
                 Assert.True(cache.Contains(b, Cell));
+            }
+        }
+
+        [StaFact]
+        public void ConcurrencyNeverExceedsCap()
+        {
+            HakchiEnv.Init();
+            using (UiContext())
+            using (var cache = new ThumbnailCache())
+            {
+                Assert.Equal(2, cache.MaxConcurrency);
+                int now = 0, max = 0, done = 0;
+                cache.Loader = a =>
+                {
+                    int n = Interlocked.Increment(ref now);
+                    int m;
+                    while ((m = Volatile.Read(ref max)) < n && Interlocked.CompareExchange(ref max, n, m) != m) { }
+                    Thread.Sleep(25);
+                    Interlocked.Decrement(ref now);
+                    return a.Image;
+                };
+                for (int i = 0; i < 12; i++) cache.Get(TestApp.WithCover("C" + i, Color.Olive), Cell, a => done++);
+                Assert.True(GridFixture.PumpUntil(() => done == 12, 10000));
+                Assert.InRange(max, 1, 2);
+            }
+        }
+
+        [StaFact]
+        public void GetOffUiThreadThrows()
+        {
+            HakchiEnv.Init();
+            using (UiContext())
+            using (var cache = new ThumbnailCache())
+            {
+                var app = TestApp.WithCover("T", Color.Teal);
+                Exception caught = null;
+                var t = new Thread(() => { try { cache.Get(app, Cell, null); } catch (Exception ex) { caught = ex; } });
+                t.Start(); t.Join();
+                Assert.IsType<InvalidOperationException>(caught);
+            }
+        }
+
+        [StaFact]
+        public void LockedCoverIsRetriedNotCachedForever()
+        {
+            HakchiEnv.Init();
+            using (UiContext())
+            using (var cache = new ThumbnailCache())
+            {
+                cache.RetryAfter = TimeSpan.FromMilliseconds(150);
+                var dir = HakchiEnv.NewDir();
+                var path = Path.Combine(dir, "cover.png");
+                using (var bmp = new Bitmap(150, 200)) { using (var g = Graphics.FromImage(bmp)) g.Clear(Color.Gold); bmp.Save(path, System.Drawing.Imaging.ImageFormat.Png); }
+                var app = new TestApp("Verrou", path, true);
+                int ready = 0;
+                using (new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None)) // hakchi en train de reecrire la jaquette
+                {
+                    cache.Get(app, Cell, a => ready++);
+                    Assert.True(GridFixture.PumpUntil(() => ready == 1));
+                    Assert.True(cache.IsMissing(app, Cell));
+                    Assert.Null(cache.Get(app, Cell, a => ready++)); // trop tot : pas de nouvelle lecture
+                    Assert.Equal(0, cache.PendingCount);
+                }
+                Thread.Sleep(200);
+                Assert.Null(cache.Get(app, Cell, a => ready++)); // delai passe : relu
+                Assert.Equal(1, cache.PendingCount);
+                Assert.True(GridFixture.PumpUntil(() => ready == 2));
+                Assert.False(cache.IsMissing(app, Cell));
+                Assert.NotNull(cache.Get(app, Cell, null));
+            }
+        }
+
+        [StaFact]
+        public void AbsentCoverIsNotRetried()
+        {
+            HakchiEnv.Init();
+            using (UiContext())
+            using (var cache = new ThumbnailCache())
+            {
+                cache.RetryAfter = TimeSpan.Zero;
+                var none = new TestApp("Rien", null, true);
+                int ready = 0;
+                cache.Get(none, Cell, a => ready++);
+                Assert.True(GridFixture.PumpUntil(() => ready == 1));
+                cache.Get(none, Cell, a => ready++);
+                Assert.Equal(0, cache.PendingCount); // pas de jaquette : definitif
             }
         }
     }

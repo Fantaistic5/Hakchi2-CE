@@ -267,24 +267,146 @@ namespace hakchi_gui.Tests.Grid
             }
         }
 
+        /// <summary>Remplissage complet comme LoadGamesTask.UpdateListView : groupes et items vides puis remplaces.</summary>
+        private static List<NesApplication> Refill(ListView src, int n, Func<int, bool> isChecked = null)
+        {
+            var apps = GridFixture.Apps(n);
+            var groups = new[] { new ListViewGroup("Nouveaux"), new ListViewGroup("Super Nintendo") };
+            var newItems = apps.Select((a, i) => new ListViewItem(a.ToString()) { Tag = a, Checked = isChecked != null && isChecked(i), Group = groups[i % 2] }).ToArray();
+            src.BeginUpdate();
+            src.Groups.Clear();
+            src.Items.Clear();
+            src.Groups.AddRange(groups);
+            src.Items.AddRange(newItems);
+            src.EndUpdate();
+            return apps;
+        }
+
         [StaFact]
-        public void SourceChangesUpdateGrid()
+        public void SourceRefillAndRemovalUpdateGrid()
         {
             ListView src;
             using (var f = GridFixture.Host(out src, GridFixture.Apps(3)))
             {
                 var g = Grid(f, src);
-                // comme LoadGamesTask.UpdateListView : BeginUpdate, Clear, AddRange, EndUpdate
-                src.BeginUpdate();
-                src.Items.Clear();
-                src.Items.AddRange(GridFixture.Apps(7).Select(a => new ListViewItem(a.ToString()) { Tag = a }).ToArray());
-                src.EndUpdate();
+                var apps = Refill(src, 7);
                 Assert.True(GridFixture.PumpUntil(() => g.VisibleCount == 7));
+                // ordre d'une ListView groupee : le groupe « Nouveaux » (items pairs) puis l'autre
+                Assert.Equal(new[] { 0, 2, 4, 6, 1, 3, 5 }.Select(i => apps[i]), g.VisibleItems.Select(it => it.Tag));
+                Assert.All(g.VisibleItems, it => Assert.Same(src, it.ListView));
                 src.Items.RemoveAt(0);
                 Assert.True(GridFixture.PumpUntil(() => g.VisibleCount == 6));
-                src.Items[0].Checked = true; // coche faite ailleurs (menu, gestionnaire de dossiers) : la grille suit
+                Assert.DoesNotContain(apps[0], g.VisibleItems.Select(it => it.Tag));
+                src.Items[0].Text = "Renomme";
+                Assert.True(GridFixture.PumpUntil(() => g.VisibleItems.Any(it => it.Text == "Renomme")));
+            }
+        }
+
+        [StaFact]
+        public void OnConsoleScopeFollowsCheckChangesMadeElsewhere()
+        {
+            ListView src;
+            using (var f = GridFixture.Host(out src, GridFixture.Apps(5), i => i < 2))
+            {
+                var g = Grid(f, src);
+                g.Filter = new GameFilter { Scope = GameScope.OnConsole };
+                Assert.Equal(2, g.VisibleCount);
+                src.Items[4].Checked = true; // coche faite ailleurs (menu, gestionnaire de dossiers)
+                Assert.True(GridFixture.PumpUntil(() => g.VisibleCount == 3));
+                Assert.Contains(src.Items[4], g.VisibleItems);
+                src.Items[0].Checked = false;
+                Assert.True(GridFixture.PumpUntil(() => g.VisibleCount == 2));
+                Assert.DoesNotContain(src.Items[0], g.VisibleItems);
+                using (var bmp = Render(g)) { } // le rendu suit sans exception
+            }
+        }
+
+        [StaFact]
+        public void StaleAnchorAndFocusAfterRefillAreDropped()
+        {
+            ListView src;
+            using (var f = GridFixture.Host(out src, GridFixture.Apps(8)))
+            {
+                var g = Grid(f, src);
+                Click(g, Center(g, 5));               // ancre et focus sur un item qui va disparaitre
+                Refill(src, 8);
+                // pas de pompage : la relecture en attente doit etre appliquee avant d'agir
+                Click(g, Center(g, 3), Keys.Shift);   // ancre perimee : plage reduite au jeu clique
+                Assert.Single(src.SelectedItems.Cast<ListViewItem>());
+                Assert.Same(g.VisibleItems[3], src.SelectedItems[0]);
+                Key(g, Keys.Right);
+                Assert.Same(g.VisibleItems[4], src.SelectedItems[0]);
+                Assert.All(src.SelectedItems.Cast<ListViewItem>(), it => Assert.Same(src, it.ListView));
+            }
+        }
+
+        [StaFact]
+        public void GameHiddenByFilterIsDeselectedExactlyOnce()
+        {
+            // MainForm.listViewGames_ItemSelectionChanged appelle SaveGameItem a chaque deselection : un seul evenement
+            ListView src;
+            using (var f = GridFixture.Host(out src, GridFixture.Apps(6, i => i != 1), i => i == 1))
+            {
+                var g = Grid(f, src);
+                Click(g, Center(g, 0));
+                Click(g, Center(g, 1), Keys.Control);
+                var log = new List<string>();
+                src.ItemSelectionChanged += (s, e) => log.Add(e.ItemIndex + (e.IsSelected ? "+" : "-"));
+                g.Filter.Collection = GameCollection.NoCover; // seul le jeu 1 reste visible
+                g.Filter.Scope = GameScope.OnConsole;           // toujours visible (coche)
+                g.Filter.SortAz = true;
                 Assert.True(GridFixture.PumpUntil(() => true));
-                Assert.True(src.Items[0].Checked);
+                Assert.Equal(new[] { "0-" }, log);
+                Assert.Equal(new[] { 1 }, src.SelectedIndices.Cast<int>());
+            }
+        }
+
+        [StaFact]
+        public void ResizeDoesNotRedecodeCovers()
+        {
+            HakchiEnv.Init();
+            var apps = Enumerable.Range(0, 12).Select(i => (NesApplication)TestApp.WithCover("R" + i, Color.FromArgb(20 * i, 90, 140))).ToList();
+            ListView src;
+            using (var f = GridFixture.Host(out src, apps))
+            {
+                var g = Grid(f, src);
+                var counts = new System.Collections.Concurrent.ConcurrentDictionary<NesApplication, int>();
+                g.Cache.Loader = a => { counts.AddOrUpdate(a, 1, (k, v) => v + 1); return a.Image; };
+                for (int w = 420; w <= 1700; w += 37)
+                {
+                    g.Width = w;
+                    using (Render(g)) { }
+                    Assert.True(GridFixture.PumpUntil(() => g.AllVisibleThumbnailsReady, 5000), "largeur " + w);
+                }
+                Assert.Equal(12, counts.Count);
+                Assert.All(counts.Values, n => Assert.Equal(1, n)); // une seule lecture par jeu, quelle que soit la largeur
+            }
+        }
+
+        [StaFact]
+        public void DpiChangeKeepsPreviousThumbnailUntilNewOneIsReady()
+        {
+            HakchiEnv.Init();
+            var red = Color.FromArgb(0x7A, 0x2E, 0x28);
+            ListView src;
+            using (var f = GridFixture.Host(out src, new List<NesApplication> { TestApp.WithCover("Rouge", red) }))
+            {
+                var g = Grid(f, src);
+                using (Render(g)) { }
+                Assert.True(GridFixture.PumpUntil(() => g.AllVisibleThumbnailsReady));
+                try
+                {
+                    B1Dpi.Override = 1.5f;
+                    g.Width += 1; // relayout a la nouvelle echelle
+                    Assert.False(g.AllVisibleThumbnailsReady);
+                    using (var bmp = Render(g)) // la vignette 1,5x n'est pas prete : l'ancienne est dessinee, pas l'aplat d'attente
+                    {
+                        var c = g.GetCoverRect(0);
+                        Assert.Equal(red.ToArgb(), bmp.GetPixel(c.X + c.Width / 2, c.Y + c.Height / 2).ToArgb());
+                    }
+                    Assert.True(GridFixture.PumpUntil(() => g.AllVisibleThumbnailsReady));
+                }
+                finally { B1Dpi.Override = 0f; }
             }
         }
 

@@ -3,17 +3,26 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace com.clusterrr.hakchi_gui.Theme.Controls
 {
     /// <summary>
-    /// Vignettes de jaquettes pour la grille. Le decodage (lecture du PNG par l'accesseur existant <c>NesApplication.Image</c>,
-    /// puis mise a la taille de la case) se fait en tache de fond ; le resultat est range et signale sur le thread qui a fait
-    /// la demande (thread UI). Une jaquette absente ou illisible donne une entree « absente », jamais d'exception.
-    /// Eviction LRU au-dela de <c>capacity</c> entrees. Les demandes les plus recentes passent en premier (pile) : ce sont
-    /// les cases a l'ecran apres un defilement.
+    /// Vignettes de jaquettes pour la grille. Le decodage se fait en tache de fond (2 ouvriers au plus : une jaquette pleine
+    /// taille en memoire par ouvrier) ; le resultat est range et signale sur le thread UI qui a cree le cache.
+    /// <para>
+    /// Taille quantifiee : la grille demande une seule taille par echelle DPI (<see cref="BucketSize"/>, la plus grande case) et
+    /// met a l'echelle au dessin ; redimensionner la fenetre ne redecode donc rien. Si la vignette d'une autre taille existe
+    /// (changement de DPI), <see cref="GetAny"/> la rend en attendant la nouvelle.
+    /// </para>
+    /// <para>
+    /// Jaquette absente (l'accesseur de hakchi rend null) : entree « absente » definitive. Echec de lecture (fichier verrouille
+    /// pendant sa reecriture, PNG illisible) : entree « absente » elle aussi, mais retentee au premier Get apres
+    /// <see cref="RetryAfter"/>. Jamais d'exception. Eviction LRU au-dela de <c>capacity</c> entrees.
+    /// </para>
     /// </summary>
     public sealed class ThumbnailCache : IDisposable
     {
@@ -29,7 +38,9 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
 
         private sealed class Entry
         {
-            public Image Image; // null = absente
+            public Image Image;      // null = absente
+            public bool Transient;   // echec de lecture : a retenter
+            public DateTime At;      // derniere tentative
             public LinkedListNode<Key> Node;
         }
 
@@ -41,24 +52,44 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             public bool Stale;
         }
 
+        private sealed class Result { public Image Image; public bool Transient; }
+
         private readonly object gate = new object();
         private readonly int capacity;
+        private readonly int maxWorkers;
+        private readonly int ownerThread;
         private readonly Dictionary<Key, Entry> map = new Dictionary<Key, Entry>();
         private readonly LinkedList<Key> lru = new LinkedList<Key>(); // tete = plus recent
         private readonly Dictionary<Key, Request> pending = new Dictionary<Key, Request>();
         private readonly LinkedList<Request> queue = new LinkedList<Request>();
-        private readonly int maxWorkers = Math.Max(2, Math.Min(8, Environment.ProcessorCount));
         private int workers;
         private bool disposed;
 
-        /// <summary>Lit l'image pleine taille d'un jeu (par defaut l'accesseur de hakchi, qui renvoie null si le fichier manque ou est illisible).</summary>
-        public Func<NesApplication, Image> Loader = app => app.Image;
+        /// <summary>
+        /// Lecteur de remplacement (tests). Null par defaut : le fichier de jaquette que hakchi a calcule (champ iconPath) est
+        /// lu en flux puis libere aussitot la vignette faite ; s'il n'existe pas, l'accesseur <c>NesApplication.Image</c>
+        /// decide (jaquette d'origine en cache, jaquette par defaut du systeme...).
+        /// </summary>
+        public Func<NesApplication, Image> Loader;
 
-        public ThumbnailCache(int capacity = 512)
+        /// <summary>Delai avant de retenter une lecture qui a echoue (2 s).</summary>
+        public TimeSpan RetryAfter = TimeSpan.FromSeconds(2);
+
+        public ThumbnailCache(int capacity = 512, int maxConcurrency = 2)
         {
             this.capacity = Math.Max(1, capacity);
+            maxWorkers = Math.Max(1, maxConcurrency);
+            ownerThread = Thread.CurrentThread.ManagedThreadId;
         }
 
+        /// <summary>Taille unique des vignettes pour une echelle : la plus grande case (160 px a 96 dpi), en 3:4.</summary>
+        public static Size BucketSize(float dpiScale)
+        {
+            int w = B1Dpi.Px(CoverGridLayout.MaxCell, dpiScale > 0 ? dpiScale : 1f);
+            return new Size(w, (int)Math.Round(w * 4 / 3.0, MidpointRounding.AwayFromZero));
+        }
+
+        public int MaxConcurrency { get { return maxWorkers; } }
         public int Count { get { lock (gate) return map.Count; } }
         public int PendingCount { get { lock (gate) return pending.Count; } }
 
@@ -78,13 +109,20 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             }
         }
 
+        private void CheckThread()
+        {
+            if (Thread.CurrentThread.ManagedThreadId != ownerThread)
+                throw new InvalidOperationException("ThumbnailCache.Get doit etre appele depuis le thread UI qui a cree le cache.");
+        }
+
         /// <summary>
-        /// Vignette en cache (a la taille exacte demandee), ou null : soit elle est absente (voir <see cref="IsMissing"/>),
-        /// soit elle se decode en tache de fond et <paramref name="onReady"/> sera rappele sur le thread appelant.
+        /// Vignette en cache a la taille demandee, ou null : soit elle est absente (voir <see cref="IsMissing"/>), soit elle se
+        /// decode en tache de fond et <paramref name="onReady"/> sera rappele sur le thread UI. Thread UI seulement.
         /// L'image renvoyee appartient au cache : a utiliser tout de suite (peinture), sans la garder ni la liberer.
         /// </summary>
         public Image Get(NesApplication app, Size size, Action<NesApplication> onReady)
         {
+            CheckThread();
             if (app == null || size.Width <= 0 || size.Height <= 0) return null;
             var key = new Key(app, size);
             bool start = false;
@@ -92,18 +130,19 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             {
                 if (disposed) return null;
                 Entry e;
+                Request r;
                 if (map.TryGetValue(key, out e))
                 {
                     lru.Remove(e.Node);
                     lru.AddFirst(e.Node);
-                    return e.Image;
+                    bool retry = e.Image == null && e.Transient && DateTime.UtcNow - e.At >= RetryAfter && !pending.ContainsKey(key);
+                    if (!retry) return e.Image;
+                    e.At = DateTime.UtcNow; // l'entree reste « absente » jusqu'au resultat de la nouvelle lecture
                 }
-                Request r;
-                if (pending.TryGetValue(key, out r))
+                else if (pending.TryGetValue(key, out r))
                 {
                     if (onReady != null && !r.Callbacks.Contains(onReady)) r.Callbacks.Add(onReady);
-                    // redemandee : repasse en tete de file
-                    var node = queue.Find(r);
+                    var node = queue.Find(r); // redemandee : repasse en tete de file
                     if (node != null) { queue.Remove(node); queue.AddFirst(node); }
                     return null;
                 }
@@ -114,6 +153,19 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
                 if (workers < maxWorkers) { workers++; start = true; }
             }
             if (start) ThreadPool.QueueUserWorkItem(_ => Work());
+            return null;
+        }
+
+        /// <summary>Une vignette quelconque du jeu deja en cache (autre taille), pour patienter pendant un nouveau decodage.</summary>
+        public Image GetAny(NesApplication app)
+        {
+            CheckThread();
+            if (app == null) return null;
+            lock (gate)
+            {
+                foreach (var kv in map)
+                    if (ReferenceEquals(kv.Key.App, app) && kv.Value.Image != null) return kv.Value.Image;
+            }
             return null;
         }
 
@@ -172,31 +224,49 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
                     r = queue.First.Value;
                     queue.RemoveFirst();
                 }
-                Image thumb = Decode(r.Key);
+                var res = Decode(r.Key);
                 var ctx = r.Context;
                 if (ctx != null)
                 {
-                    try { ctx.Post(_ => Complete(r, thumb), null); }
-                    catch (Exception) { Complete(r, thumb); } // contexte mort (fenetre fermee)
+                    try { ctx.Post(_ => Complete(r, res), null); }
+                    catch (Exception) { Complete(r, res); } // contexte mort (fenetre fermee)
                 }
-                else Complete(r, thumb);
+                else Complete(r, res);
             }
         }
 
-        private Image Decode(Key k)
+        private static readonly FieldInfo iconPathField = typeof(NesMenuElementBase).GetField("iconPath", BindingFlags.Instance | BindingFlags.NonPublic);
+
+        private Result Decode(Key k)
         {
-            Image src = null;
-            try { src = Loader(k.App); }
-            catch (Exception) { src = null; }
-            if (src == null) return null;
-            bool shared = IsShared(k.App, src);
+            var custom = Loader;
             try
             {
-                if (shared) { lock (src) return Scale(src, k.W, k.H); }
-                return Scale(src, k.W, k.H);
+                if (custom == null)
+                {
+                    // chemin calcule par hakchi ; lu en flux, sans la copie pleine taille de Shared.LoadBitmapCopy
+                    var path = iconPathField != null ? iconPathField.GetValue(k.App) as string : null;
+                    if (!string.IsNullOrEmpty(path) && File.Exists(path))
+                    {
+                        using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 65536))
+                        using (var img = Image.FromStream(fs, false, false))
+                            return new Result { Image = Scale(img, k.W, k.H) };
+                    }
+                }
+                var src = custom != null ? custom(k.App) : k.App.Image;
+                if (src == null) return new Result(); // pas de jaquette : definitif
+                bool shared = IsShared(k.App, src);
+                try
+                {
+                    if (shared) { lock (src) return new Result { Image = Scale(src, k.W, k.H) }; }
+                    return new Result { Image = Scale(src, k.W, k.H) };
+                }
+                finally { if (!shared) src.Dispose(); }
             }
-            catch (Exception) { return null; }
-            finally { if (!shared) src.Dispose(); }
+            catch (Exception)
+            {
+                return new Result { Transient = true }; // verrouille, en cours d'ecriture, illisible : a retenter
+            }
         }
 
         /// <summary>Jaquette par defaut d'un systeme : instance partagee par hakchi, a ne jamais liberer.</summary>
@@ -213,8 +283,8 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         }
 
         /// <summary>
-        /// Met la jaquette a la taille de la case. Proportions proches du 3:4 (+-20 %) : elle remplit la case (leger recadrage
-        /// centre). Sinon (affiche paysage, jaquette tres etiree) : elle tient entiere, centree sur RowActive.
+        /// Met la jaquette a la taille de la vignette. Proportions proches du 3:4 (+-20 %) : elle remplit la case (leger
+        /// recadrage centre). Sinon (boite paysage, jaquette tres etiree) : elle tient entiere, centree sur RowActive.
         /// </summary>
         internal static Bitmap Scale(Image src, int w, int h)
         {
@@ -254,7 +324,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             }
         }
 
-        private void Complete(Request r, Image thumb)
+        private void Complete(Request r, Result res)
         {
             List<Action<NesApplication>> callbacks;
             lock (gate)
@@ -263,13 +333,13 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
                 if (pending.TryGetValue(r.Key, out current) && ReferenceEquals(current, r)) pending.Remove(r.Key);
                 if (disposed || r.Stale)
                 {
-                    if (thumb != null) thumb.Dispose();
+                    if (res.Image != null) res.Image.Dispose();
                     if (disposed) return;
                 }
                 else
                 {
                     Remove(r.Key);
-                    var e = new Entry { Image = thumb, Node = new LinkedListNode<Key>(r.Key) };
+                    var e = new Entry { Image = res.Image, Transient = res.Transient, At = DateTime.UtcNow, Node = new LinkedListNode<Key>(r.Key) };
                     map[r.Key] = e;
                     lru.AddFirst(e.Node);
                     while (map.Count > capacity) Remove(lru.Last.Value);

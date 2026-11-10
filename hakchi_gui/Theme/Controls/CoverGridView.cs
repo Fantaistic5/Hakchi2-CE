@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -53,8 +54,15 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             watcher = new SourceWatcher(this);
             onThumbReady = app =>
             {
-                if (IsDisposed || !IsHandleCreated) return;
-                if (InvokeRequired) BeginInvoke(new Action(Invalidate)); else Invalidate();
+                // rappel du cache : en principe sur le thread UI, mais la fenetre peut etre en train de se fermer
+                if (IsDisposed || Disposing || !IsHandleCreated) return;
+                try
+                {
+                    if (InvokeRequired) BeginInvoke(new Action(() => { if (!IsDisposed) Invalidate(); }));
+                    else Invalidate();
+                }
+                catch (ObjectDisposedException) { }
+                catch (InvalidOperationException) { } // handle detruit entre le test et l'appel
             };
             Filter = new GameFilter();
         }
@@ -118,7 +126,17 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             // jamais de relecture pendant que la source est en train d'inserer ou de retirer : toujours apres coup
             if (!IsHandleCreated) { rebuildPending = true; return; }
             rebuildPosted = true;
-            BeginInvoke(new Action(() => { rebuildPosted = false; if (!IsDisposed) Rebuild(); }));
+            try { BeginInvoke(new Action(FlushRebuild)); }
+            catch (InvalidOperationException) { rebuildPosted = false; rebuildPending = true; }
+        }
+
+        /// <summary>Applique tout de suite une relecture en attente : avant chaque clic, touche ou peinture, pour ne jamais agir
+        /// sur des items que la source a deja retires (ancre, focus, liste visible perimes).</summary>
+        private void FlushRebuild()
+        {
+            if (!rebuildPosted || IsDisposed) return;
+            rebuildPosted = false;
+            Rebuild();
         }
 
         /// <summary>Observe les messages qui modifient les items de la source (il n'existe pas d'evenement ListView pour cela).</summary>
@@ -372,7 +390,9 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             return r.Contains(p);
         }
 
-        private Size CoverSize { get { return new Size(layout.CellWidth, layout.CoverHeight); } }
+        /// <summary>Taille des vignettes demandees au cache : une seule par echelle (la plus grande case), mise a l'echelle au
+        /// dessin. Redimensionner la fenetre ne redecode donc rien.</summary>
+        private Size ThumbSize { get { return ThumbnailCache.BucketSize(DpiScale); } }
 
         /// <summary>Vrai quand chaque jeu a l'ecran a sa vignette (ou est connu sans jaquette) : premier rendu complet.</summary>
         [Browsable(false)]
@@ -382,7 +402,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             {
                 int first, last;
                 layout.VisibleRange(scrollY, ClientSize.Height, out first, out last);
-                var size = CoverSize;
+                var size = ThumbSize;
                 for (int i = first; i <= last; i++)
                 {
                     var app = items[i].Tag as NesApplication;
@@ -438,6 +458,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             base.OnMouseDown(e);
             if (!Focused) Focus();
             if (source == null) return;
+            FlushRebuild();
             int i = HitTest(e.Location);
             var mods = CurrentModifiers;
             bool ctrl = (mods & Keys.Control) != 0, shift = (mods & Keys.Shift) != 0;
@@ -508,6 +529,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         {
             base.OnKeyDown(e);
             if (e.Handled || source == null) return;
+            FlushRebuild();
             bool ctrl = e.Control, shift = e.Shift;
             int cols = Math.Max(1, layout.Columns);
             int cur = IndexOf(focusItem);
@@ -603,13 +625,14 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
+            FlushRebuild();
             EnsureFonts();
             B1Draw.Fill(g, B1Draw.IsPalette(BackColor) ? BackColor : B1Palette.Slate, ClientRectangle);
             if (items.Count == 0) return;
             int first, last;
             layout.VisibleRange(scrollY, ClientSize.Height, out first, out last);
             if (last < first) return;
-            var size = CoverSize;
+            var size = ThumbSize;
             int cols = Math.Max(1, layout.Columns);
             // pre-chargement d'une rangee au-dessus et de deux en dessous, demande AVANT les cases visibles :
             // la file de decodage est une pile, les cases visibles passent donc en premier
@@ -638,11 +661,15 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             if (!missing)
             {
                 img = cache.Get(app, size, onThumbReady);
-                if (img == null && cache.IsMissing(app, size)) missing = true;
+                if (img == null)
+                {
+                    if (cache.IsMissing(app, size)) missing = true;
+                    else img = cache.GetAny(app); // vignette d'une autre echelle en attendant la nouvelle
+                }
             }
             g.SmoothingMode = SmoothingMode.None;
             if (missing) PaintMissing(g, cover, s);
-            else if (img != null) g.DrawImageUnscaled(img, cover.Location);
+            else if (img != null) DrawThumb(g, img, cover);
             else B1Draw.Fill(g, B1Palette.RowActive, cover); // en cours de decodage
 
             var sw = GetSwitchRect(index);
@@ -661,6 +688,24 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
                         TextFormatFlags.NoPrefix | TextFormatFlags.NoPadding | TextFormatFlags.Top;
             flags |= RightToLeft == RightToLeft.Yes ? TextFormatFlags.Right | TextFormatFlags.RightToLeft : TextFormatFlags.Left;
             TextRenderer.DrawText(g, item.Text, labelFont, lr, selected || hot ? B1Palette.Text : B1Palette.TextSecondary, flags);
+        }
+
+        private static readonly ImageAttributes thumbAttr = MakeThumbAttr();
+        private static ImageAttributes MakeThumbAttr()
+        {
+            var a = new ImageAttributes();
+            a.SetWrapMode(WrapMode.TileFlipXY); // pas de liseré sur les bords a la mise a l'echelle
+            return a;
+        }
+
+        private static void DrawThumb(Graphics g, Image img, Rectangle r)
+        {
+            if (img.Width == r.Width && img.Height == r.Height) { g.DrawImageUnscaled(img, r.Location); return; }
+            var im = g.InterpolationMode; var po = g.PixelOffsetMode;
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            g.DrawImage(img, r, 0, 0, img.Width, img.Height, GraphicsUnit.Pixel, thumbAttr);
+            g.InterpolationMode = im; g.PixelOffsetMode = po;
         }
 
         /// <summary>Hachures a 135° HatchA/HatchB de 6 px, contour pointille Dashed, « sans jaquette » en Lavender.</summary>

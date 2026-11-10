@@ -117,7 +117,7 @@ namespace FormGallery
                     long visibleReady = sw.ElapsedMilliseconds;
                     int first, last; grid.GridLayout.VisibleRange(0, grid.ClientSize.Height, out first, out last);
                     // tout le reste (defilement jusqu'en bas)
-                    var size = new Size(grid.GridLayout.CellWidth, grid.GridLayout.CoverHeight);
+                    var size = ThumbnailCache.BucketSize(1f);
                     var want = apps.Where(a => !CoverTargets.NeedsCover(a)).ToList();
                     foreach (var a in want) grid.Cache.Get(a, size, null);
                     bool ok2 = Pump(() => grid.Cache.PendingCount == 0, 60000);
