@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Galerie de fenetres hakchi : construit chaque Form / UserControl de hakchi.exe sans console,
+    le rend en PNG (DrawToBitmap) et genere les references machine-lisibles (option dump-baselines).
+    Reference l'assemblage compile par msbuild, pas le projet (voir hakchi_gui.Tests.csproj).
+    Hors de hakchi_gui.sln. x86 car hakchi.exe est compile x86.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>FormGallery</AssemblyName>
+    <PlatformTarget>x86</PlatformTarget>
+    <RootNamespace>FormGallery</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Copie locale : le programme charge hakchi.exe par reflexion depuis son propre dossier. -->
+    <Reference Include="hakchi">
+      <HintPath>..\..\hakchi_gui\bin\Debug\net48\hakchi.exe</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <!-- Satellites de langue : hakchi les cherche dans languages\(culture)\hakchi.resources.dll -->
+    <None Include="..\..\hakchi_gui\bin\Debug\net48\languages\**\*.dll" Link="languages\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <!-- Doublure de pnputil.exe (voir Program.cs) -->
+  <Target Name="CopyPnputilStub" AfterTargets="Build">
+    <Copy SourceFiles="$(TargetPath)" DestinationFiles="$(OutDir)pnputil.exe" />
+  </Target>
+
+</Project>

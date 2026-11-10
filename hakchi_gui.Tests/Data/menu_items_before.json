@@ -1,0 +1,1576 @@
+[
+  {
+    "field": "aboutToolStripMenuItem",
+    "name": "aboutToolStripMenuItem",
+    "textFr": "À propos...",
+    "textInvariant": "About...",
+    "owner": "menuStrip > helpToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.aboutToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "addCustomAppToolStripMenuItem",
+    "name": "addCustomAppToolStripMenuItem",
+    "textFr": "Ajouter &app utilisateur",
+    "textInvariant": "Add custom &app",
+    "owner": "menuStrip > fileToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.addCustomAppToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "addMoreGamesToolStripMenuItem",
+    "name": "addMoreGamesToolStripMenuItem",
+    "textFr": "Ajouter des &jeux supplémentaires",
+    "textInvariant": "Add more &games",
+    "owner": "menuStrip > fileToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "addPrefixToolStripMenuItem",
+    "name": "addPrefixToolStripMenuItem",
+    "textFr": "Ajouter un préfixe",
+    "textInvariant": "Add prefix",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [
+      "MainForm.addPrefixToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "addPresetToolStripMenuItem",
+    "name": "addPresetToolStripMenuItem",
+    "textFr": "Nouvelle liste",
+    "textInvariant": "Add preset",
+    "owner": "menuStrip > fileToolStripMenuItem > presetsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.AddPreset"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "advancedToolStripMenuItem",
+    "name": "advancedToolStripMenuItem",
+    "textFr": "Options avancées",
+    "textInvariant": "Advanced",
+    "owner": "menuStrip > kernelToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "alwaysCopyOriginalGamesToolStripMenuItem",
+    "name": "alwaysCopyOriginalGamesToolStripMenuItem",
+    "textFr": "Toujours copier les jeux originaux",
+    "textInvariant": "Always copy original games",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.alwaysCopyOriginalGamesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "archiveSelectedGamesToolStripMenuItem",
+    "name": "archiveSelectedGamesToolStripMenuItem",
+    "textFr": "Archiver les jeux sélectionnés",
+    "textInvariant": "Archive selected games",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [
+      "MainForm.archiveSelectedGamesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "asIsToolStripMenuItem",
+    "name": "asIsToolStripMenuItem",
+    "textFr": "Tel quel...",
+    "textInvariant": "As-Is...",
+    "owner": "menuStrip > fileToolStripMenuItem > addMoreGamesToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.asIsToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "autoToolStripMenuItem",
+    "name": "autoToolStripMenuItem",
+    "textFr": "Auto",
+    "textInvariant": "Auto",
+    "owner": "menuStrip > settingsToolStripMenuItem > segaUiThemeToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.changeM2Theme"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "autodetectToolStripMenuItem",
+    "name": "autodetectToolStripMenuItem",
+    "textFr": "Autodétecter...",
+    "textInvariant": "Autodetect...",
+    "owner": "menuStrip > fileToolStripMenuItem > addMoreGamesToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.buttonAddGames_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "automaticOriginalToolStripMenuItem",
+    "name": "automaticOriginalToolStripMenuItem",
+    "textFr": "Jeux d’origine à la racine -> Automatiquement dans sous-dossier",
+    "textInvariant": "Original games in root -> Automatic in subfolder",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [
+      "MainForm.pagesModefoldersToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "automaticToolStripMenuItem",
+    "name": "automaticToolStripMenuItem",
+    "textFr": "Automatique",
+    "textInvariant": "Automatic",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [
+      "MainForm.pagesModefoldersToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "backFolderButtonPositionToolStripMenuItem",
+    "name": "backFolderButtonPositionToolStripMenuItem",
+    "textFr": "Position du bouton retour",
+    "textInvariant": "Back folder button position",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "bootImageToolStripMenuItem",
+    "name": "bootImageToolStripMenuItem",
+    "textFr": "Écran d'accueil",
+    "textInvariant": "Boot splash",
+    "owner": "menuStrip > toolsToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "canoeToolStripMenuItem",
+    "name": "canoeToolStripMenuItem",
+    "textFr": "Canoe",
+    "textInvariant": "Canoe",
+    "owner": "menuStrip > settingsToolStripMenuItem > globalCommandLineArgumentsexpertsOnluToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.globalCommandLineArgumentsexpertsOnluToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "centerBoxArtThumbnailToolStripMenuItem",
+    "name": "centerBoxArtThumbnailToolStripMenuItem",
+    "textFr": "Centrer verticalement les miniatures",
+    "textInvariant": "Center box art thumbnail",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.centerBoxArtThumbnailToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "changeBootImageToolStripMenuItem",
+    "name": "changeBootImageToolStripMenuItem",
+    "textFr": "Modifier l'écran d'accueil",
+    "textInvariant": "Change boot splash",
+    "owner": "menuStrip > toolsToolStripMenuItem > bootImageToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.changeBootImageToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "cloverconHackToolStripMenuItem",
+    "name": "cloverconHackToolStripMenuItem",
+    "textFr": "Hacks relatifs aux manettes",
+    "textInvariant": "Controller hacks",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "compressBoxArtToolStripMenuItem",
+    "name": "compressBoxArtToolStripMenuItem",
+    "textFr": "Compresser les images au moment de l'ajout",
+    "textInvariant": "Compress box art when adding",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.compressBoxArtToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "compressGamesToolStripMenuItem",
+    "name": "compressGamesToolStripMenuItem",
+    "textFr": "Compresser les jeux au moment de l’ajout",
+    "textInvariant": "Compress games when adding",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.compressGamesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "compressSelectedGamesToolStripMenuItem",
+    "name": "compressSelectedGamesToolStripMenuItem",
+    "textFr": "Compresser les jeux sélectionnés",
+    "textInvariant": "Compress selected games",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [
+      "MainForm.compressSelectedGamesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "convertSNESROMSToSFROMToolStripMenuItem",
+    "name": "convertSNESROMSToSFROMToolStripMenuItem",
+    "textFr": "Convertir ROMs SNES en SFROM",
+    "textInvariant": "Convert SNES ROMS to SFROM",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.convertSNESROMSToSFROMToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "coreToolStripMenuItem",
+    "name": "coreToolStripMenuItem",
+    "textFr": "Coeur",
+    "textInvariant": "Core",
+    "owner": "menuStrip > viewToolStripMenuItem > sortByToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.sortByToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "coversToolStripMenuItem",
+    "name": "coversToolStripMenuItem",
+    "textFr": "Pochettes",
+    "textInvariant": "Covers",
+    "owner": "menuStrip > toolsToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "customToolStripMenuItem",
+    "name": "customToolStripMenuItem",
+    "textFr": "Custom - Utiliser le gestionnaire de dossiers (Recliquer pour ouvrir)",
+    "textInvariant": "Custom - Use folders manager (Click again to open)",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [
+      "MainForm.pagesModefoldersToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "decompressSelectedGamesToolStripMenuItem",
+    "name": "decompressSelectedGamesToolStripMenuItem",
+    "textFr": "Décompresser les jeux sélectionnés",
+    "textInvariant": "Decompress selected games",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [
+      "MainForm.decompressSelectedGamesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "deletePresetToolStripMenuItem",
+    "name": "deletePresetToolStripMenuItem",
+    "textFr": "Supprimer liste",
+    "textInvariant": "Delete preset",
+    "owner": "menuStrip > fileToolStripMenuItem > presetsToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "deleteSelectedGamesBoxArtToolStripMenuItem",
+    "name": "deleteSelectedGamesBoxArtToolStripMenuItem",
+    "textFr": "Effacer les images pour les jeux sélectionnés",
+    "textInvariant": "Delete box art of selected games",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [
+      "MainForm.deleteSelectedGamesBoxArtToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "deleteSelectedGamesToolStripMenuItem",
+    "name": "deleteSelectedGamesToolStripMenuItem",
+    "textFr": "Supprimer les jeux sélectionnés",
+    "textInvariant": "Delete selected games",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [
+      "MainForm.deleteSelectedGamesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "devForceSshToolStripMenuItem",
+    "name": "devForceSshToolStripMenuItem",
+    "textFr": "Forcer les transferts par SSH",
+    "textInvariant": "Force file transfers over SSH",
+    "owner": "menuStrip > settingsToolStripMenuItem > developerToolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.devForceSshToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "developerToolsToolStripMenuItem",
+    "name": "developerToolsToolStripMenuItem",
+    "textFr": "Outils du développeur",
+    "textInvariant": "Developer tools",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "disableBootImageToolStripMenuItem",
+    "name": "disableBootImageToolStripMenuItem",
+    "textFr": "Désactiver l'écran d'accueil",
+    "textInvariant": "Disable boot splash",
+    "owner": "menuStrip > toolsToolStripMenuItem > bootImageToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.disableBootImageToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "disableHakchi2PopupsToolStripMenuItem",
+    "name": "disableHakchi2PopupsToolStripMenuItem",
+    "textFr": "Désactiver les pop-ups de hakchi2",
+    "textInvariant": "Disable hakchi2 pop-ups",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.disableHakchi2PopupsToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "disablePagefoldersToolStripMenuItem",
+    "name": "disablePagefoldersToolStripMenuItem",
+    "textFr": "Désactiver page/dossiers",
+    "textInvariant": "Disable page/folders",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [
+      "MainForm.pagesModefoldersToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "donateToolStripMenuItem",
+    "name": "donateToolStripMenuItem",
+    "textFr": "Faire un don",
+    "textInvariant": "Donate",
+    "owner": "menuStrip > helpToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.openWebsiteLink"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "downloadBoxArtForSelectedGamesToolStripMenuItem",
+    "name": "downloadBoxArtForSelectedGamesToolStripMenuItem",
+    "textFr": "Télécharger les images pour les jeux sélectionnés",
+    "textInvariant": "Download box art for selected games",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [
+      "MainForm.downloadBoxArtForSelectedGamesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "downloadLatestHakchiToolStripMenuItem",
+    "name": "downloadLatestHakchiToolStripMenuItem",
+    "textFr": "Télécharger la dernière version de Hakchi",
+    "textInvariant": "Download Latest Hakchi",
+    "owner": "menuStrip > settingsToolStripMenuItem > developerToolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.DownloadLatestHakchiToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "dumpNANDBToolStripMenuItem",
+    "name": "dumpNANDBToolStripMenuItem",
+    "textFr": "Sauvegarde du logiciel système décrypté",
+    "textInvariant": "Dump decrypted system software",
+    "owner": "menuStrip > kernelToolStripMenuItem > advancedToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.dumpNANDBToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "dumpNANDCPartitionToolStripMenuItem",
+    "name": "dumpNANDCPartitionToolStripMenuItem",
+    "textFr": "Sauvegarde de la partition données utilisateur",
+    "textInvariant": "Dump user data partition",
+    "owner": "menuStrip > kernelToolStripMenuItem > advancedToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.dumpNANDCPartitionToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "dumpOriginalKernellegacyToolStripMenuItem",
+    "name": "dumpOriginalKernellegacyToolStripMenuItem",
+    "textFr": "Sauvegarde du kernel d'origine (ancien)",
+    "textInvariant": "Dump original kernel (legacy)",
+    "owner": "menuStrip > kernelToolStripMenuItem > advancedToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.dumpOriginalKernellegacyToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "dumpTheWholeNANDToolStripMenuItem",
+    "name": "dumpTheWholeNANDToolStripMenuItem",
+    "textFr": "Extraction complète de la mémoire flash NAND",
+    "textInvariant": "Dump the whole NAND flash",
+    "owner": "menuStrip > kernelToolStripMenuItem > advancedToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.dumpTheWholeNANDToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "editROMHeaderToolStripMenuItem",
+    "name": "editROMHeaderToolStripMenuItem",
+    "textFr": "Éditer l'entête SFROM",
+    "textInvariant": "Edit SFROM header",
+    "owner": "contextMenuStrip > sFROMToolToolStripMenuItem1",
+    "clickHandlers": [
+      "MainForm.editROMHeaderToolStripMenuItem_Click"
+    ],
+    "shortcut": "E, Control, Alt"
+  },
+  {
+    "field": "enableAutofireToolStripMenuItem",
+    "name": "enableAutofireToolStripMenuItem",
+    "textFr": "Utiliser \"Select+A/B\" pour activer l’autofire sur A/B ",
+    "textInvariant": "Use \"Select+A/B\" to enable autofire on A/B ",
+    "owner": "menuStrip > settingsToolStripMenuItem > cloverconHackToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.enableAutofireToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "enableInformationScrapeOnImportToolStripMenuItem",
+    "name": "enableInformationScrapeOnImportToolStripMenuItem",
+    "textFr": "Activer la recherche auto en ligne d'info sur importation",
+    "textInvariant": "Enable automatic information scrape on import",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.enableInformationScrapeOnImportToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "enableSFROMToolToolStripMenuItem",
+    "name": "enableSFROMToolToolStripMenuItem",
+    "textFr": "Activer",
+    "textInvariant": "Enable",
+    "owner": "menuStrip > settingsToolStripMenuItem > sFROMToolToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.enableSFROMToolToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "epilepsyProtectionToolStripMenuItem",
+    "name": "epilepsyProtectionToolStripMenuItem",
+    "textFr": "Désactiver la protection contre l’épilepsie",
+    "textInvariant": "Disable epilepsy protection",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.ToolStripMenuItemArmet_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "europeToolStripMenuItem",
+    "name": "europeToolStripMenuItem",
+    "textFr": "Europe",
+    "textInvariant": "Europe",
+    "owner": "menuStrip > settingsToolStripMenuItem > segaUiThemeToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.changeM2Theme"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "exitToolStripMenuItem",
+    "name": "exitToolStripMenuItem",
+    "textFr": "&Quitter",
+    "textInvariant": "&Exit",
+    "owner": "menuStrip > fileToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.exitToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "explorerToolStripMenuItem",
+    "name": "explorerToolStripMenuItem",
+    "textFr": "Montrer dans l'explorateur Windows",
+    "textInvariant": "Show in Windows Explorer",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [
+      "MainForm.explorerToolStripMenuItem_Click"
+    ],
+    "shortcut": "F4"
+  },
+  {
+    "field": "exportGamesToolStripMenuItem",
+    "name": "exportGamesToolStripMenuItem",
+    "textFr": "E&xporter les jeux...",
+    "textInvariant": "E&xport games...",
+    "owner": "menuStrip > fileToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.buttonExport_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "fAQToolStripMenuItem",
+    "name": "fAQToolStripMenuItem",
+    "textFr": "Questions fréquentes",
+    "textInvariant": "FAQ",
+    "owner": "menuStrip > helpToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.openWebsiteLink"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "factoryResetToolStripMenuItem",
+    "name": "factoryResetToolStripMenuItem",
+    "textFr": "Restoration aux paramètres d'usine ",
+    "textInvariant": "Factory reset ",
+    "owner": "menuStrip > kernelToolStripMenuItem > advancedToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.factoryResetToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "fileToolStripMenuItem",
+    "name": "fileToolStripMenuItem",
+    "textFr": "&Fichier",
+    "textInvariant": "&File",
+    "owner": "menuStrip",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "findMissingCoversToolStripMenuItem",
+    "name": "findMissingCoversToolStripMenuItem",
+    "textFr": "Chercher les jaquettes manquantes...",
+    "textInvariant": "Find missing covers...",
+    "owner": "menuStrip > toolsToolStripMenuItem > coversToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.findMissingCoversToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "flashCustomKernelToolStripMenuItem",
+    "name": "flashCustomKernelToolStripMenuItem",
+    "textFr": "Installer / Réparer",
+    "textInvariant": "Install / Repair",
+    "owner": "menuStrip > kernelToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.flashCustomKernelToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "flashNANDBPartitionToolStripMenuItem",
+    "name": "flashNANDBPartitionToolStripMenuItem",
+    "textFr": "Flasher logiciel système décrypté",
+    "textInvariant": "Flash decrypted system software",
+    "owner": "menuStrip > kernelToolStripMenuItem > advancedToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.flashNANDBPartitionToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "flashNANDCPartitionToolStripMenuItem",
+    "name": "flashNANDCPartitionToolStripMenuItem",
+    "textFr": "Flasher la partition données utilisateur",
+    "textInvariant": "Flash user data partition",
+    "owner": "menuStrip > kernelToolStripMenuItem > advancedToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.flashNANDCPartitionToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "flashUbootToolStripMenuItem",
+    "name": "flashUbootToolStripMenuItem",
+    "textFr": "Installer uboot",
+    "textInvariant": "Flash uboot",
+    "owner": "menuStrip > kernelToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "folderImagesSetToolStripMenuItem",
+    "name": "folderImagesSetToolStripMenuItem",
+    "textFr": "Jeu d'illustrations des dossiers",
+    "textInvariant": "Folder images set",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "foldersOriginalToolStripMenuItem",
+    "name": "foldersOriginalToolStripMenuItem",
+    "textFr": "Jeux d’origine à la racine -> Dossiers, scinder les jeux uniformément",
+    "textInvariant": "Original games in root -> Folders, split games equally",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [
+      "MainForm.pagesModefoldersToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "foldersSplitByFirstLetterOriginalToolStripMenuItem",
+    "name": "foldersSplitByFirstLetterOriginalToolStripMenuItem",
+    "textFr": "Jeux d’origine à la racine -> Dossiers, scinder à partir de la première lettre",
+    "textInvariant": "Original games in root -> Folders, split by first letter",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [
+      "MainForm.pagesModefoldersToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "foldersSplitByFirstLetterToolStripMenuItem",
+    "name": "foldersSplitByFirstLetterToolStripMenuItem",
+    "textFr": "Dossiers, scinder en fonction de la première lettre",
+    "textInvariant": "Folders, split by first letter",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [
+      "MainForm.pagesModefoldersToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "foldersToolStripMenuItem",
+    "name": "foldersToolStripMenuItem",
+    "textFr": "Dossiers, scinder les jeux uniformément",
+    "textInvariant": "Folders, split games equally",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [
+      "MainForm.pagesModefoldersToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "forceClovershellMembootsToolStripMenuItem",
+    "name": "forceClovershellMembootsToolStripMenuItem",
+    "textFr": "Forcer memboots Clovershell",
+    "textInvariant": "Force Clovershell memboots",
+    "owner": "menuStrip > settingsToolStripMenuItem > developerToolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.forceClovershellMembootsToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "forceNetworkMembootsToolStripMenuItem",
+    "name": "forceNetworkMembootsToolStripMenuItem",
+    "textFr": "Forcer memboots mode réseau",
+    "textInvariant": "Force Network memboots",
+    "owner": "menuStrip > settingsToolStripMenuItem > developerToolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.forceNetworkMembootsToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "formatNANDCToolStripMenuItem",
+    "name": "formatNANDCToolStripMenuItem",
+    "textFr": "Formater la partition données utilisateur",
+    "textInvariant": "Format user data partition",
+    "owner": "menuStrip > kernelToolStripMenuItem > advancedToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.formatNANDCToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "formatSDCardToolStripMenuItem",
+    "name": "formatSDCardToolStripMenuItem",
+    "textFr": "Formater carte SD",
+    "textInvariant": "Format SD card",
+    "owner": "menuStrip > toolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.formatSDCardToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "generateModulesReportToolStripMenuItem",
+    "name": "generateModulesReportToolStripMenuItem",
+    "textFr": "Générer rapport de modules",
+    "textInvariant": "Generate modules report",
+    "owner": "menuStrip > modulesToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.generateModulesReportToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "gitHubPageWithActualReleasesToolStripMenuItem",
+    "name": "gitHubPageWithActualReleasesToolStripMenuItem",
+    "textFr": "Page GitHub avec les nouvelles publications",
+    "textInvariant": "GitHub page with actual releases",
+    "owner": "menuStrip > helpToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.openWebsiteLink"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "globalCommandLineArgumentsexpertsOnluToolStripMenuItem",
+    "name": "globalCommandLineArgumentsexpertsOnluToolStripMenuItem",
+    "textFr": "Arguments de ligne de commande globaux (utilisateurs avancés !)",
+    "textInvariant": "Global command-line (Experts!)",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "helpToolStripMenuItem",
+    "name": "helpToolStripMenuItem",
+    "textFr": "&Aide",
+    "textInvariant": "&Help",
+    "owner": "menuStrip",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "importGamesFromMiniToolStripMenuItem",
+    "name": "importGamesFromMiniToolStripMenuItem",
+    "textFr": "Importer les jeux à partir de la mini",
+    "textInvariant": "Import games from mini",
+    "owner": "menuStrip > toolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.importGamesFromMiniToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "installModulesToolStripMenuItem",
+    "name": "installModulesToolStripMenuItem",
+    "textFr": "Installer des modules supplémentaires",
+    "textInvariant": "Install extra modules",
+    "owner": "menuStrip > modulesToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.installModulesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "japanToolStripMenuItem",
+    "name": "japanToolStripMenuItem",
+    "textFr": "Japon",
+    "textInvariant": "Japan",
+    "owner": "menuStrip > settingsToolStripMenuItem > segaUiThemeToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.changeM2Theme"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "joinOurDiscordServerToolStripMenuItem",
+    "name": "joinOurDiscordServerToolStripMenuItem",
+    "textFr": "Joindre notre serveur Discord",
+    "textInvariant": "Join our discord server",
+    "owner": "menuStrip > helpToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.openWebsiteLink"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "kachikachiToolStripMenuItem",
+    "name": "kachikachiToolStripMenuItem",
+    "textFr": "Kachikachi",
+    "textInvariant": "Kachikachi",
+    "owner": "menuStrip > settingsToolStripMenuItem > globalCommandLineArgumentsexpertsOnluToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.globalCommandLineArgumentsexpertsOnluToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "kernelToolStripMenuItem",
+    "name": "kernelToolStripMenuItem",
+    "textFr": "&Kernel",
+    "textInvariant": "&Kernel",
+    "owner": "menuStrip",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "languageToolStripMenuItem",
+    "name": "languageToolStripMenuItem",
+    "textFr": "Langue",
+    "textInvariant": "Language",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "leftmostToolStripMenuItem",
+    "name": "leftmostToolStripMenuItem",
+    "textFr": "À gauche",
+    "textInvariant": "Leftmost",
+    "owner": "foldersContextMenuStrip > backFolderButtonPositionToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.leftmostToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "manageModRepositoriesToolStripMenuItem",
+    "name": "manageModRepositoriesToolStripMenuItem",
+    "textFr": "Gérer les sources de mod",
+    "textInvariant": "Manage mod repositories",
+    "owner": "menuStrip > modulesToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.manageModRepositoriesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "maximumGamesPerFolderToolStripMenuItem",
+    "name": "maximumGamesPerFolderToolStripMenuItem",
+    "textFr": "Nombre de jeux maximum par page/dossier",
+    "textInvariant": "Maximum games per page/folder",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "membootCustomKernelToolStripMenuItem",
+    "name": "membootCustomKernelToolStripMenuItem",
+    "textFr": "Démarrer le kernel custom à partir de la RAM",
+    "textInvariant": "Boot custom kernel from RAM",
+    "owner": "menuStrip > kernelToolStripMenuItem > advancedToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.membootCustomKernelToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "membootOriginalKernelToolStripMenuItem",
+    "name": "membootOriginalKernelToolStripMenuItem",
+    "textFr": "Démarrer le kernel d’origine à partir de la RAM",
+    "textInvariant": "Boot original kernel from RAM",
+    "owner": "menuStrip > kernelToolStripMenuItem > advancedToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.membootOriginalKernelToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "membootRecoveryKernelToolStripMenuItem",
+    "name": "membootRecoveryKernelToolStripMenuItem",
+    "textFr": "Démarrer le kernel de récupération à partir de la RAM",
+    "textInvariant": "Boot recovery kernel from RAM",
+    "owner": "menuStrip > kernelToolStripMenuItem > advancedToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.membootRecoveryKernelToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "messageOfTheDayToolStripMenuItem",
+    "name": "messageOfTheDayToolStripMenuItem",
+    "textFr": "Message important",
+    "textInvariant": "Important message",
+    "owner": "menuStrip > helpToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.messageOfTheDayToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "modulesToolStripMenuItem",
+    "name": "modulesToolStripMenuItem",
+    "textFr": "&Modules",
+    "textInvariant": "&Modules",
+    "owner": "menuStrip",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "nameToolStripMenuItem",
+    "name": "nameToolStripMenuItem",
+    "textFr": "Nom",
+    "textInvariant": "Name",
+    "owner": "menuStrip > viewToolStripMenuItem > sortByToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.sortByToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "normalModeToolStripMenuItem",
+    "name": "normalModeToolStripMenuItem",
+    "textFr": "Mode normal",
+    "textInvariant": "Normal mode",
+    "owner": "menuStrip > kernelToolStripMenuItem > flashUbootToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.flashUbootToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "openFTPInExplorerToolStripMenuItem",
+    "name": "openFTPInExplorerToolStripMenuItem",
+    "textFr": "Ouvrir le client FTP",
+    "textInvariant": "Open FTP client",
+    "owner": "menuStrip > toolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.openFTPInExplorerToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "openTelnetToolStripMenuItem",
+    "name": "openTelnetToolStripMenuItem",
+    "textFr": "Ouvrir le client Telnet",
+    "textInvariant": "Open Telnet client",
+    "owner": "menuStrip > toolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.openTelnetToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "originalGamesToolStripMenuItem",
+    "name": "originalGamesToolStripMenuItem",
+    "textFr": "Jeux d'origine",
+    "textInvariant": "Original games",
+    "owner": "menuStrip > viewToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "pagesOriginalToolStripMenuItem",
+    "name": "pagesOriginalToolStripMenuItem",
+    "textFr": "Jeux d’origine à la racine -> Pages, scinder les jeux uniformément",
+    "textInvariant": "Original games in root -> Pages, split games equally",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [
+      "MainForm.pagesModefoldersToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "pagesToolStripMenuItem",
+    "name": "pagesToolStripMenuItem",
+    "textFr": "Pages, scinder les jeux uniformément",
+    "textInvariant": "Pages, split games equally",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [
+      "MainForm.pagesModefoldersToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "positionAtTheBottomToolStripMenuItem",
+    "name": "positionAtTheBottomToolStripMenuItem",
+    "textFr": "En bas",
+    "textInvariant": "At the bottom",
+    "owner": "menuStrip > viewToolStripMenuItem > originalGamesToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.originalGamesPositionToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "positionAtTheTopToolStripMenuItem",
+    "name": "positionAtTheTopToolStripMenuItem",
+    "textFr": "En haut",
+    "textInvariant": "At the top",
+    "owner": "menuStrip > viewToolStripMenuItem > originalGamesToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.originalGamesPositionToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "positionHiddenToolStripMenuItem",
+    "name": "positionHiddenToolStripMenuItem",
+    "textFr": "Cachés (désélectionnés)",
+    "textInvariant": "Hidden (Unselected)",
+    "owner": "menuStrip > viewToolStripMenuItem > originalGamesToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.originalGamesPositionToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "positionSortedToolStripMenuItem",
+    "name": "positionSortedToolStripMenuItem",
+    "textFr": "Triés",
+    "textInvariant": "Sorted",
+    "owner": "menuStrip > viewToolStripMenuItem > originalGamesToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.originalGamesPositionToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "prepareArtDirectoryToolStripMenuItem",
+    "name": "prepareArtDirectoryToolStripMenuItem",
+    "textFr": "Préparer dossiers pour images",
+    "textInvariant": "Prepare art folders",
+    "owner": "menuStrip > toolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.prepareArtDirectoryToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "presetsToolStripMenuItem",
+    "name": "presetsToolStripMenuItem",
+    "textFr": "Listes prédéfinies",
+    "textInvariant": "Selection presets",
+    "owner": "menuStrip > fileToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "rRockinTheClassicsToolStripMenuItem",
+    "name": "rRockinTheClassicsToolStripMenuItem",
+    "textFr": "/r/RockinTheClassics",
+    "textInvariant": "/r/RockinTheClassics",
+    "owner": "menuStrip > helpToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.openWebsiteLink"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "rebootToolStripMenuItem",
+    "name": "rebootToolStripMenuItem",
+    "textFr": "Redémarrer",
+    "textInvariant": "Reboot",
+    "owner": "menuStrip > toolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.rebootToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "regionToolStripMenuItem",
+    "name": "regionToolStripMenuItem",
+    "textFr": "Region",
+    "textInvariant": "Region",
+    "owner": "menuStrip > viewToolStripMenuItem > sortByToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.sortByToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "reloadGamesToolStripMenuItem",
+    "name": "reloadGamesToolStripMenuItem",
+    "textFr": "&Recharger",
+    "textInvariant": "&Reload",
+    "owner": "menuStrip > fileToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.reloadGamesToolStripMenuItem_Click"
+    ],
+    "shortcut": "F5"
+  },
+  {
+    "field": "removePrefixToolStripMenuItem",
+    "name": "removePrefixToolStripMenuItem",
+    "textFr": "Retirer un préfixe",
+    "textInvariant": "Remove prefix",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [
+      "MainForm.removePrefixToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "repairGamesToolStripMenuItem",
+    "name": "repairGamesToolStripMenuItem",
+    "textFr": "Réparer les jeux",
+    "textInvariant": "Repair games",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [
+      "MainForm.repairGamesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "resetDefaultBootImageToolStripMenuItem",
+    "name": "resetDefaultBootImageToolStripMenuItem",
+    "textFr": "Remettre par défaut",
+    "textInvariant": "Reset to default",
+    "owner": "menuStrip > toolsToolStripMenuItem > bootImageToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.resetDefaultBootImageToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "resetOriginalGamesToolStripMenuItem",
+    "name": "resetOriginalGamesToolStripMenuItem",
+    "textFr": "Restaurer les jeux d'&origine",
+    "textInvariant": "Restore &original games",
+    "owner": "menuStrip > fileToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.resetOriginalGamesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "resetROMHeaderToolStripMenuItem",
+    "name": "resetROMHeaderToolStripMenuItem",
+    "textFr": "Réinitialiser l'entête SFROM pour les jeux sélectionnés",
+    "textInvariant": "Reset SFROM header for selected games",
+    "owner": "contextMenuStrip > sFROMToolToolStripMenuItem1",
+    "clickHandlers": [
+      "MainForm.resetROMHeaderToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "resetToolStripMenuItem",
+    "name": "resetToolStripMenuItem",
+    "textFr": "Réinitialiser",
+    "textInvariant": "Reset",
+    "owner": "menuStrip > kernelToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.resetToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "resetUsingCombinationOfButtonsToolStripMenuItem",
+    "name": "resetUsingCombinationOfButtonsToolStripMenuItem",
+    "textFr": "Utiliser une combinaison de boutons pour retourner au menu",
+    "textInvariant": "Use button combination to reset",
+    "owner": "menuStrip > settingsToolStripMenuItem > cloverconHackToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.cloverconHackToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "retroarchToolStripMenuItem",
+    "name": "retroarchToolStripMenuItem",
+    "textFr": "Retroarch",
+    "textInvariant": "Retroarch",
+    "owner": "menuStrip > settingsToolStripMenuItem > globalCommandLineArgumentsexpertsOnluToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.globalCommandLineArgumentsexpertsOnluToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "rightmostToolStripMenuItem",
+    "name": "rightmostToolStripMenuItem",
+    "textFr": "À droite",
+    "textInvariant": "Rightmost",
+    "owner": "foldersContextMenuStrip > backFolderButtonPositionToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.rightmostToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "sDModeToolStripMenuItem",
+    "name": "sDModeToolStripMenuItem",
+    "textFr": "Mode SD",
+    "textInvariant": "SD mode",
+    "owner": "menuStrip > kernelToolStripMenuItem > flashUbootToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.flashUbootToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "sFROMToolToolStripMenuItem",
+    "name": "sFROMToolToolStripMenuItem",
+    "textFr": "SFROM Tool",
+    "textInvariant": "SFROM tool",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "sFROMToolToolStripMenuItem1",
+    "name": "sFROMToolToolStripMenuItem1",
+    "textFr": "Outil SFROM Tool",
+    "textInvariant": "SFROM Tool",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "saveDmesgOutputToolStripMenuItem",
+    "name": "saveDmesgOutputToolStripMenuItem",
+    "textFr": "Sauvegarder le résultat de 'dmesg'",
+    "textInvariant": "Save dmesg output",
+    "owner": "menuStrip > toolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.saveDmesgOutputToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "saveSettingsToNESMiniNowToolStripMenuItem",
+    "name": "saveSettingsToNESMiniNowToolStripMenuItem",
+    "textFr": "Sauvegarder les paramètres vers la mini maintenant",
+    "textInvariant": "Save settings to mini now",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.saveSettingsToNESMiniNowToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "saveStateManagerToolStripMenuItem",
+    "name": "saveStateManagerToolStripMenuItem",
+    "textFr": "Gestionnaire des sauvegardes d’état",
+    "textInvariant": "Save-State Manager",
+    "owner": "menuStrip > toolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.saveStateManagerToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "scanForNewBoxArtForSelectedGamesToolStripMenuItem",
+    "name": "scanForNewBoxArtForSelectedGamesToolStripMenuItem",
+    "textFr": "Rechercher de nouvelles images pour les jeux sélectionnés",
+    "textInvariant": "Scan for new box art for selected games",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [
+      "MainForm.scanForNewBoxArtForSelectedGamesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "scrapeSelectedGamesToolStripMenuItem",
+    "name": "scrapeSelectedGamesToolStripMenuItem",
+    "textFr": "Rechercher les bases de données en ligne",
+    "textInvariant": "Scrape selected games",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [
+      "MainForm.scrapeSelectedGamesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "searchToolStripMenuItem",
+    "name": "searchToolStripMenuItem",
+    "textFr": "Rechercher",
+    "textInvariant": "&Search",
+    "owner": "menuStrip > fileToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.searchToolStripMenuItem_Click"
+    ],
+    "shortcut": "F3"
+  },
+  {
+    "field": "segaUiThemeToolStripMenuItem",
+    "name": "segaUiThemeToolStripMenuItem",
+    "textFr": "Thème IU SEGA",
+    "textInvariant": "SEGA UI Theme",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "selectButtonCombinationToolStripMenuItem",
+    "name": "selectButtonCombinationToolStripMenuItem",
+    "textFr": "Définir la combinaison du bouton Reset",
+    "textInvariant": "Select reset button combination",
+    "owner": "menuStrip > settingsToolStripMenuItem > cloverconHackToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.selectButtonCombinationToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "selectEmulationCoreToolStripMenuItem",
+    "name": "selectEmulationCoreToolStripMenuItem",
+    "textFr": "Sélectionner le coeur d'émulation...",
+    "textInvariant": "Select emulation core...",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [
+      "MainForm.selectEmulationCoreToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "separateGamesForMultibootToolStripMenuItem",
+    "name": "separateGamesForMultibootToolStripMenuItem",
+    "textFr": "Séparer les collections de jeux pour multiboot",
+    "textInvariant": "Separate games for multiboot",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.separateGamesForMultibootToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "separateGamesStorageToolStripMenuItem",
+    "name": "separateGamesStorageToolStripMenuItem",
+    "textFr": "Séparer les dossiers de jeux",
+    "textInvariant": "Separate games storage",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.separateGamesStorageToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "setRegionToolStripMenuItem",
+    "name": "setRegionToolStripMenuItem",
+    "textFr": "Set Region",
+    "textInvariant": "Set Region",
+    "owner": "contextMenuStrip",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "settingsToolStripMenuItem",
+    "name": "settingsToolStripMenuItem",
+    "textFr": "&Paramètres",
+    "textInvariant": "&Settings",
+    "owner": "menuStrip",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "showGamesWithoutBoxArtToolStripMenuItem",
+    "name": "showGamesWithoutBoxArtToolStripMenuItem",
+    "textFr": "Regrouper les jeux sans image",
+    "textInvariant": "Group games w/o box art",
+    "owner": "menuStrip > viewToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.showGamesWithoutBoxArtToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "sortByToolStripMenuItem",
+    "name": "sortByToolStripMenuItem",
+    "textFr": "Trier par",
+    "textInvariant": "Sort by",
+    "owner": "menuStrip > viewToolStripMenuItem",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "switchRunningFirmwareToolStripMenuItem",
+    "name": "switchRunningFirmwareToolStripMenuItem",
+    "textFr": "Changer de firmware",
+    "textInvariant": "Switch running firmware",
+    "owner": "menuStrip > toolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.switchRunningFirmwareToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "syncStructureForAllGamesCollectionsToolStripMenuItem",
+    "name": "syncStructureForAllGamesCollectionsToolStripMenuItem",
+    "textFr": "Synchroniser les réglages pour toutes les collections",
+    "textInvariant": "Sync structure settings for all games collections",
+    "owner": "foldersContextMenuStrip",
+    "clickHandlers": [
+      "MainForm.syncStructureForAllGamesCollectionsToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "synchronizeToolStripMenuItem",
+    "name": "synchronizeToolStripMenuItem",
+    "textFr": "Synchroniser",
+    "textInvariant": "S&ynchronize",
+    "owner": "menuStrip > fileToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.buttonStart_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "systemToolStripMenuItem",
+    "name": "systemToolStripMenuItem",
+    "textFr": "Console",
+    "textInvariant": "Console",
+    "owner": "menuStrip > viewToolStripMenuItem > sortByToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.sortByToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "takeScreenshotToolStripMenuItem",
+    "name": "takeScreenshotToolStripMenuItem",
+    "textFr": "Faire une capture d’écran",
+    "textInvariant": "Take screenshot",
+    "owner": "menuStrip > toolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.takeScreenshotToolStripMenuItem_Click"
+    ],
+    "shortcut": "F8"
+  },
+  {
+    "field": "technicalInformationToolStripMenuItem",
+    "name": "technicalInformationToolStripMenuItem",
+    "textFr": "Information technique...",
+    "textInvariant": "Technical Information...",
+    "owner": "menuStrip > helpToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.technicalInformationToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "toolFlashTheWholeNANDStripMenuItem",
+    "name": "toolFlashTheWholeNANDStripMenuItem",
+    "textFr": "Flasher la NAND tout entière (Experts seulement!)",
+    "textInvariant": "Flash the whole NAND (experts only!)",
+    "owner": "menuStrip > kernelToolStripMenuItem > advancedToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.toolFlashTheWholeNANDStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "toolsToolStripMenuItem",
+    "name": "toolsToolStripMenuItem",
+    "textFr": "Ou&tils",
+    "textInvariant": "&Tools",
+    "owner": "menuStrip",
+    "clickHandlers": [],
+    "shortcut": ""
+  },
+  {
+    "field": "uninstallModulesToolStripMenuItem",
+    "name": "uninstallModulesToolStripMenuItem",
+    "textFr": "Désinstaller les modules supplémentaires",
+    "textInvariant": "Uninstall extra modules",
+    "owner": "menuStrip > modulesToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.uninstallModulesToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "uninstallToolStripMenuItem",
+    "name": "uninstallToolStripMenuItem",
+    "textFr": "Désinstaller les modules supplémentaires",
+    "textInvariant": "Uninstall",
+    "owner": "menuStrip > kernelToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.uninstallToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "unitedStatesToolStripMenuItem",
+    "name": "unitedStatesToolStripMenuItem",
+    "textFr": "États-Unis",
+    "textInvariant": "United States",
+    "owner": "menuStrip > settingsToolStripMenuItem > segaUiThemeToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.changeM2Theme"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "upABStartOnSecondControllerToolStripMenuItem",
+    "name": "upABStartOnSecondControllerToolStripMenuItem",
+    "textFr": "\"Haut+A+B = Start\" sur la manette 2",
+    "textInvariant": "\"Up+A+B = Start\" on 2nd controller",
+    "owner": "menuStrip > settingsToolStripMenuItem > cloverconHackToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.upABStartOnSecondControllerToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "uploadTotmpforTestingToolStripMenuItem",
+    "name": "uploadTotmpforTestingToolStripMenuItem",
+    "textFr": "Envoyer vers /tmp (pour tests)",
+    "textInvariant": "Upload to /tmp (for testing)",
+    "owner": "menuStrip > settingsToolStripMenuItem > developerToolsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.uploadTotmpforTestingToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "useLinkedSyncToolStripMenuItem",
+    "name": "useLinkedSyncToolStripMenuItem",
+    "textFr": "Utiliser la synchro liée",
+    "textInvariant": "Use linked sync",
+    "owner": "menuStrip > settingsToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.useLinkedSyncToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "usePCMPatchWhenAvailableToolStripMenuItem",
+    "name": "usePCMPatchWhenAvailableToolStripMenuItem",
+    "textFr": "Utiliser patch PCM quand dispo",
+    "textInvariant": "Use PCM patch when available",
+    "owner": "menuStrip > settingsToolStripMenuItem > sFROMToolToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.usePCMPatchWhenAvailableToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "useXYOnClassicControllerAsAutofireABToolStripMenuItem",
+    "name": "useXYOnClassicControllerAsAutofireABToolStripMenuItem",
+    "textFr": "Utiliser X/Y sur la Manette Classique comme autofire A/B",
+    "textInvariant": "Use X/Y on Classic Controller as autofire A/B",
+    "owner": "menuStrip > settingsToolStripMenuItem > cloverconHackToolStripMenuItem",
+    "clickHandlers": [
+      "MainForm.useXYOnClassicControllerAsAutofireABToolStripMenuItem_Click"
+    ],
+    "shortcut": ""
+  },
+  {
+    "field": "viewToolStripMenuItem",
+    "name": "viewToolStripMenuItem",
+    "textFr": "&Vue",
+    "textInvariant": "&View",
+    "owner": "menuStrip",
+    "clickHandlers": [],
+    "shortcut": ""
+  }
+]

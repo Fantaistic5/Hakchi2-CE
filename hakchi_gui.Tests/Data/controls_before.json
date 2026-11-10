@@ -1,0 +1,3834 @@
+{
+  "AboutBox": {
+    "type": "com.clusterrr.hakchi_gui.AboutBox",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "tableLayoutPanel",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "AboutBox"
+      },
+      {
+        "name": "logoPictureBox",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "tableLayoutPanel"
+      },
+      {
+        "name": "labelProductName",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel"
+      },
+      {
+        "name": "labelVersion",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel"
+      },
+      {
+        "name": "labelCopyright",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel"
+      },
+      {
+        "name": "labelCompanyName",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel"
+      },
+      {
+        "name": "textBoxDescription",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanel"
+      },
+      {
+        "name": "labelGitCommit",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel"
+      },
+      {
+        "name": "tableLayoutPanel1",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanel"
+      },
+      {
+        "name": "okButton",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "licenseInfo",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "buttonCommitsSinceTag",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "labelGitTag",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "BrowserReadmeControl": {
+    "type": "com.clusterrr.hakchi_gui.Hmod.Controls.BrowserReadmeControl",
+    "kind": "UserControl",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "wbReadme",
+        "type": "System.Windows.Forms.WebBrowser",
+        "parent": "BrowserReadmeControl"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "CoverBatchForm": {
+    "type": "com.clusterrr.hakchi_gui.CoverBatchForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "listViewResults",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "CoverBatchForm"
+      },
+      {
+        "name": "panelAlternatives",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "CoverBatchForm"
+      },
+      {
+        "name": "flowAlternatives",
+        "type": "System.Windows.Forms.FlowLayoutPanel",
+        "parent": "panelAlternatives"
+      },
+      {
+        "name": "labelAlternatives",
+        "type": "System.Windows.Forms.Label",
+        "parent": "panelAlternatives"
+      },
+      {
+        "name": "panelBottom",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "CoverBatchForm"
+      },
+      {
+        "name": "labelSummary",
+        "type": "System.Windows.Forms.Label",
+        "parent": "panelBottom"
+      },
+      {
+        "name": "buttonApply",
+        "type": "System.Windows.Forms.Button",
+        "parent": "panelBottom"
+      },
+      {
+        "name": "buttonClose",
+        "type": "System.Windows.Forms.Button",
+        "parent": "panelBottom"
+      },
+      {
+        "name": "panelTop",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "CoverBatchForm"
+      },
+      {
+        "name": "checkBoxIncludeExisting",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "panelTop"
+      },
+      {
+        "name": "buttonSearch",
+        "type": "System.Windows.Forms.Button",
+        "parent": "panelTop"
+      },
+      {
+        "name": "buttonCancel",
+        "type": "System.Windows.Forms.Button",
+        "parent": "panelTop"
+      },
+      {
+        "name": "progressBar",
+        "type": "System.Windows.Forms.ProgressBar",
+        "parent": "panelTop"
+      },
+      {
+        "name": "labelStatus",
+        "type": "System.Windows.Forms.Label",
+        "parent": "panelTop"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "_thumbs",
+        "type": "System.Windows.Forms.ImageList",
+        "parent": ""
+      },
+      {
+        "name": "_tip",
+        "type": "System.Windows.Forms.ToolTip",
+        "parent": ""
+      },
+      {
+        "name": "columnGame",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "columnMatch",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "columnSource",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "columnState",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      }
+    ]
+  },
+  "DumperForm": {
+    "type": "com.clusterrr.hakchi_gui.DumperForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [],
+    "toolStripItems": [],
+    "components": []
+  },
+  "ErrorForm": {
+    "type": "com.clusterrr.hakchi_gui.Tasks.ErrorForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "panel1",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "ErrorForm"
+      },
+      {
+        "name": "richTextBox1",
+        "type": "System.Windows.Forms.RichTextBox",
+        "parent": "panel1"
+      },
+      {
+        "name": "errorLabel",
+        "type": "System.Windows.Forms.Label",
+        "parent": "ErrorForm"
+      },
+      {
+        "name": "pictureBox1",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "ErrorForm"
+      },
+      {
+        "name": "buttonOK",
+        "type": "System.Windows.Forms.Button",
+        "parent": "ErrorForm"
+      }
+    ],
+    "toolStripItems": [
+      {
+        "name": "copyToClipboardToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip1"
+      }
+    ],
+    "components": [
+      {
+        "name": "contextMenuStrip1",
+        "type": "System.Windows.Forms.ContextMenuStrip",
+        "parent": ""
+      }
+    ]
+  },
+  "ExportGamesDialog": {
+    "type": "com.clusterrr.hakchi_gui.ExportGamesDialog",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "checkCreateSavesFolder",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "ExportGamesDialog"
+      },
+      {
+        "name": "checkLinked",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "ExportGamesDialog"
+      },
+      {
+        "name": "comboDriveLetters",
+        "type": "System.Windows.Forms.ComboBox",
+        "parent": "ExportGamesDialog"
+      },
+      {
+        "name": "tableLayoutPanel1",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "ExportGamesDialog"
+      },
+      {
+        "name": "btnOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "btnCancel",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "lblSelectDrive",
+        "type": "System.Windows.Forms.Label",
+        "parent": "ExportGamesDialog"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "FoldersManagerForm": {
+    "type": "com.clusterrr.hakchi_gui.FoldersManagerForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "splitContainer",
+        "type": "System.Windows.Forms.SplitContainer",
+        "parent": "FoldersManagerForm"
+      },
+      {
+        "name": "treeView",
+        "type": "System.Windows.Forms.TreeView",
+        "parent": "splitContainer"
+      },
+      {
+        "name": "buttonNewFolder",
+        "type": "System.Windows.Forms.Button",
+        "parent": "splitContainer"
+      },
+      {
+        "name": "comboBoxPosition",
+        "type": "System.Windows.Forms.ComboBox",
+        "parent": "splitContainer"
+      },
+      {
+        "name": "labelPosition1",
+        "type": "System.Windows.Forms.Label",
+        "parent": "splitContainer"
+      },
+      {
+        "name": "listViewContent",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "splitContainer"
+      },
+      {
+        "name": "groupBoxSplitModes",
+        "type": "System.Windows.Forms.GroupBox",
+        "parent": "splitContainer"
+      },
+      {
+        "name": "tableLayoutPanelSplit",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "groupBoxSplitModes"
+      },
+      {
+        "name": "buttonFoldersApp",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelSplit"
+      },
+      {
+        "name": "buttonNoFolders",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelSplit"
+      },
+      {
+        "name": "buttonFoldersLetters",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelSplit"
+      },
+      {
+        "name": "buttonNoFoldersOriginal",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelSplit"
+      },
+      {
+        "name": "buttonFoldersEqually",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelSplit"
+      },
+      {
+        "name": "buttonFoldersGenre",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelSplit"
+      },
+      {
+        "name": "buttonFoldersRegion",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelSplit"
+      },
+      {
+        "name": "groupBoxArt",
+        "type": "System.Windows.Forms.GroupBox",
+        "parent": "splitContainer"
+      },
+      {
+        "name": "pictureBoxArt",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "groupBoxArt"
+      },
+      {
+        "name": "panel1",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "FoldersManagerForm"
+      },
+      {
+        "name": "menuStrip1",
+        "type": "System.Windows.Forms.MenuStrip",
+        "parent": "FoldersManagerForm"
+      },
+      {
+        "name": "panel2",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "FoldersManagerForm"
+      },
+      {
+        "name": "tableLayoutPanel1",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "panel2"
+      },
+      {
+        "name": "labelElementCount",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "buttonCancel",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "checkBoxAddHome",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "buttonOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "labelPosition2",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "comboBoxBackPosition",
+        "type": "System.Windows.Forms.ComboBox",
+        "parent": "tableLayoutPanel1"
+      }
+    ],
+    "toolStripItems": [
+      {
+        "name": "cutToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "deleteToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "exitToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "fileToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "menuStrip1"
+      },
+      {
+        "name": "newFolderToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "newToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "openToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "pasteToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "renameToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "saveAsToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "saveToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItemSep",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "toolStripSeparator",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "toolStripSeparator1",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "fileToolStripMenuItem"
+      }
+    ],
+    "components": [
+      {
+        "name": "contextMenuStrip",
+        "type": "System.Windows.Forms.ContextMenuStrip",
+        "parent": ""
+      },
+      {
+        "name": "imageList",
+        "type": "System.Windows.Forms.ImageList",
+        "parent": ""
+      },
+      {
+        "name": "toolTip1",
+        "type": "System.Windows.Forms.ToolTip",
+        "parent": ""
+      }
+    ]
+  },
+  "GameGenieCodeAddModForm": {
+    "type": "com.clusterrr.hakchi_gui.GameGenieCodeAddModForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "buttonCancel",
+        "type": "System.Windows.Forms.Button",
+        "parent": "GameGenieCodeAddModForm"
+      },
+      {
+        "name": "buttonOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "GameGenieCodeAddModForm"
+      },
+      {
+        "name": "label2",
+        "type": "System.Windows.Forms.Label",
+        "parent": "GameGenieCodeAddModForm"
+      },
+      {
+        "name": "label1",
+        "type": "System.Windows.Forms.Label",
+        "parent": "GameGenieCodeAddModForm"
+      },
+      {
+        "name": "textBoxDescription",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "GameGenieCodeAddModForm"
+      },
+      {
+        "name": "textBoxCode",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "GameGenieCodeAddModForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "GameGenieCodeForm": {
+    "type": "com.clusterrr.hakchi_gui.GameGenieCodeForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "buttonAdd",
+        "type": "System.Windows.Forms.Button",
+        "parent": "GameGenieCodeForm"
+      },
+      {
+        "name": "buttonImport",
+        "type": "System.Windows.Forms.Button",
+        "parent": "GameGenieCodeForm"
+      },
+      {
+        "name": "buttonCancel",
+        "type": "System.Windows.Forms.Button",
+        "parent": "GameGenieCodeForm"
+      },
+      {
+        "name": "buttonOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "GameGenieCodeForm"
+      },
+      {
+        "name": "checkedListBoxGameCode",
+        "type": "System.Windows.Forms.CheckedListBox",
+        "parent": "GameGenieCodeForm"
+      }
+    ],
+    "toolStripItems": [
+      {
+        "name": "addToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "editToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "removeToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      }
+    ],
+    "components": [
+      {
+        "name": "contextMenuStrip",
+        "type": "System.Windows.Forms.ContextMenuStrip",
+        "parent": ""
+      },
+      {
+        "name": "ofdXmlFile",
+        "type": "System.Windows.Forms.OpenFileDialog",
+        "parent": ""
+      }
+    ]
+  },
+  "GameImporterForm": {
+    "type": "com.clusterrr.hakchi_gui.GameImporterForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "tableLayoutPanelMain",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "GameImporterForm"
+      },
+      {
+        "name": "listViewGames",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "tableLayoutPanelButtons",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "buttonImport",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelButtons"
+      },
+      {
+        "name": "labelStatus",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelButtons"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "columnHeaderLocation",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "columnHeaderSize",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "columnHeaderTitle",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      }
+    ]
+  },
+  "ImageGoogler": {
+    "type": "com.clusterrr.hakchi_gui.Controls.ImageGoogler",
+    "kind": "UserControl",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "listView",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "ImageGoogler"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "imageList",
+        "type": "System.Windows.Forms.ImageList",
+        "parent": ""
+      }
+    ]
+  },
+  "ImageGooglerForm": {
+    "type": "com.clusterrr.hakchi_gui.ImageGooglerForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "imageGoogler",
+        "type": "com.clusterrr.hakchi_gui.Controls.ImageGoogler",
+        "parent": "ImageGooglerForm"
+      },
+      {
+        "name": "listView",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "imageGoogler"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "ImagesForm": {
+    "type": "com.clusterrr.hakchi_gui.ImagesForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "pictureBox4",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "ImagesForm"
+      },
+      {
+        "name": "pictureBox3",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "ImagesForm"
+      },
+      {
+        "name": "pictureBox2",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "ImagesForm"
+      },
+      {
+        "name": "pictureBox1",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "ImagesForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "LicenseInfo": {
+    "type": "com.clusterrr.hakchi_gui.LicenseInfo",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "panel1",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "TextInfo"
+      },
+      {
+        "name": "textBoxInfo",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "panel1"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "MainForm": {
+    "type": "com.clusterrr.hakchi_gui.MainForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "tableLayoutPanelMain",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "MainForm"
+      },
+      {
+        "name": "groupBoxButtons",
+        "type": "System.Windows.Forms.GroupBox",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "tableLayoutPanelArtButtons",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "groupBoxButtons"
+      },
+      {
+        "name": "buttonGoogle",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelArtButtons"
+      },
+      {
+        "name": "buttonBrowseImage",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelArtButtons"
+      },
+      {
+        "name": "buttonDefaultCover",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelArtButtons"
+      },
+      {
+        "name": "buttonSpine",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelArtButtons"
+      },
+      {
+        "name": "groupBoxCurrentGamesCollection",
+        "type": "System.Windows.Forms.GroupBox",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "tableLayoutPanel3",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "groupBoxCurrentGamesCollection"
+      },
+      {
+        "name": "structureButton",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "gamesConsoleComboBox",
+        "type": "System.Windows.Forms.ComboBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "listViewGames",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "buttonStart",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "groupBoxArtSega",
+        "type": "System.Windows.Forms.GroupBox",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "panel3",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "groupBoxArtSega"
+      },
+      {
+        "name": "pictureBoxM2Spine",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "panel3"
+      },
+      {
+        "name": "pictureBoxM2Front",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "panel3"
+      },
+      {
+        "name": "buttonExport",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "groupBoxArtNintendo",
+        "type": "System.Windows.Forms.GroupBox",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "panel2",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "groupBoxArtNintendo"
+      },
+      {
+        "name": "pictureBoxArt",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "panel2"
+      },
+      {
+        "name": "pictureBoxThumbnail",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "panel2"
+      },
+      {
+        "name": "buttonAddGames",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "groupBoxGameInfo",
+        "type": "System.Windows.Forms.GroupBox",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "tableLayoutPanelGameInfo",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "groupBoxGameInfo"
+      },
+      {
+        "name": "label10",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "panel1",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "textBoxDescription",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "panel1"
+      },
+      {
+        "name": "textBoxArguments",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelCommandLine",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "numericUpDownSaveCount",
+        "type": "System.Windows.Forms.NumericUpDown",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "maxPlayersComboBox",
+        "type": "System.Windows.Forms.ComboBox",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "tableLayoutPanelGameID",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelID",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameID"
+      },
+      {
+        "name": "label9",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameID"
+      },
+      {
+        "name": "tableLayoutPanelGameGenie",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "buttonShowGameGenieDatabase",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelGameGenie"
+      },
+      {
+        "name": "textBoxGameGenie",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanelGameGenie"
+      },
+      {
+        "name": "labelMaxPlayers",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "textBoxPublisher",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelSaveCount",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelGameGenie",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "textBoxSortName",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "checkBoxCompressed",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "textBoxName",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelCompress",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelPublisher",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "maskedTextBoxReleaseDate",
+        "type": "System.Windows.Forms.MaskedTextBox",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelSortName",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelDescription",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelReleaseDate",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelName",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelGenre",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "comboBoxGenre",
+        "type": "System.Windows.Forms.ComboBox",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelCountry",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "comboBoxCountry",
+        "type": "System.Windows.Forms.ComboBox",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelSize",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "labelCopyright",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "textBoxCopyright",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanelGameInfo"
+      },
+      {
+        "name": "tableLayoutPanelStatusBar",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "toolStripStatusConnectionIcon",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "tableLayoutPanelStatusBar"
+      },
+      {
+        "name": "tableLayoutPanelStatusBarInner",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanelStatusBar"
+      },
+      {
+        "name": "toolStripStatusLabelShell",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelStatusBarInner"
+      },
+      {
+        "name": "toolStripStatusLabelSelected",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelStatusBarInner"
+      },
+      {
+        "name": "toolStripStatusLabelSize",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelStatusBarInner"
+      },
+      {
+        "name": "toolStripProgressBar",
+        "type": "System.Windows.Forms.ProgressBar",
+        "parent": "tableLayoutPanelStatusBarInner"
+      },
+      {
+        "name": "menuStrip",
+        "type": "System.Windows.Forms.MenuStrip",
+        "parent": "MainForm"
+      }
+    ],
+    "toolStripItems": [
+      {
+        "name": "aboutToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "helpToolStripMenuItem"
+      },
+      {
+        "name": "addCustomAppToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "addMoreGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "addPrefixToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "addPresetToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "presetsToolStripMenuItem"
+      },
+      {
+        "name": "advancedToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "kernelToolStripMenuItem"
+      },
+      {
+        "name": "alwaysCopyOriginalGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "archiveSelectedGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "asIsToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "addMoreGamesToolStripMenuItem"
+      },
+      {
+        "name": "autoToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "segaUiThemeToolStripMenuItem"
+      },
+      {
+        "name": "autodetectToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "addMoreGamesToolStripMenuItem"
+      },
+      {
+        "name": "automaticOriginalToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "automaticToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "backFolderButtonPositionToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "bluetoothToolStripMenuItem",
+        "type": "com.clusterrr.hakchi_gui.Wireless.Bluetooth.BluetoothMenuItem",
+        "parent": "menuStrip"
+      },
+      {
+        "name": "bootImageToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "canoeToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "globalCommandLineArgumentsexpertsOnluToolStripMenuItem"
+      },
+      {
+        "name": "centerBoxArtThumbnailToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "changeBootImageToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "bootImageToolStripMenuItem"
+      },
+      {
+        "name": "cloverconHackToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "compressBoxArtToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "compressGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "compressSelectedGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "convertSNESROMSToSFROMToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "coreToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "sortByToolStripMenuItem"
+      },
+      {
+        "name": "coversToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "customToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "decompressSelectedGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "deletePresetToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "presetsToolStripMenuItem"
+      },
+      {
+        "name": "deleteSelectedGamesBoxArtToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "deleteSelectedGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "devForceSshToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "developerToolsToolStripMenuItem"
+      },
+      {
+        "name": "developerToolsToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "disableBootImageToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "bootImageToolStripMenuItem"
+      },
+      {
+        "name": "disableHakchi2PopupsToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "disablePagefoldersToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "donateToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "helpToolStripMenuItem"
+      },
+      {
+        "name": "downloadBoxArtForSelectedGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "downloadLatestHakchiToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "developerToolsToolStripMenuItem"
+      },
+      {
+        "name": "dumpNANDBToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "dumpNANDCPartitionToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "dumpOriginalKernellegacyToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "dumpTheWholeNANDToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "editROMHeaderToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "sFROMToolToolStripMenuItem1"
+      },
+      {
+        "name": "enableAutofireToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "cloverconHackToolStripMenuItem"
+      },
+      {
+        "name": "enableInformationScrapeOnImportToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "enableSFROMToolToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "sFROMToolToolStripMenuItem"
+      },
+      {
+        "name": "epilepsyProtectionToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "europeToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "segaUiThemeToolStripMenuItem"
+      },
+      {
+        "name": "exitToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "explorerToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "exportGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "fAQToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "helpToolStripMenuItem"
+      },
+      {
+        "name": "factoryResetToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "fileToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "menuStrip"
+      },
+      {
+        "name": "findMissingCoversToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "coversToolStripMenuItem"
+      },
+      {
+        "name": "flashCustomKernelToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "kernelToolStripMenuItem"
+      },
+      {
+        "name": "flashNANDBPartitionToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "flashNANDCPartitionToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "flashUbootToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "kernelToolStripMenuItem"
+      },
+      {
+        "name": "folderImagesSetToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "foldersOriginalToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "foldersSplitByFirstLetterOriginalToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "foldersSplitByFirstLetterToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "foldersToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "forceClovershellMembootsToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "developerToolsToolStripMenuItem"
+      },
+      {
+        "name": "forceNetworkMembootsToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "developerToolsToolStripMenuItem"
+      },
+      {
+        "name": "formatNANDCToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "formatSDCardToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "generateModulesReportToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "modulesToolStripMenuItem"
+      },
+      {
+        "name": "gitHubPageWithActualReleasesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "helpToolStripMenuItem"
+      },
+      {
+        "name": "globalCommandLineArgumentsexpertsOnluToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "helpToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "menuStrip"
+      },
+      {
+        "name": "importGamesFromMiniToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "installModulesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "modulesToolStripMenuItem"
+      },
+      {
+        "name": "japanToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "segaUiThemeToolStripMenuItem"
+      },
+      {
+        "name": "joinOurDiscordServerToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "helpToolStripMenuItem"
+      },
+      {
+        "name": "kachikachiToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "globalCommandLineArgumentsexpertsOnluToolStripMenuItem"
+      },
+      {
+        "name": "kernelToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "menuStrip"
+      },
+      {
+        "name": "languageToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "leftmostToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "backFolderButtonPositionToolStripMenuItem"
+      },
+      {
+        "name": "manageModRepositoriesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "modulesToolStripMenuItem"
+      },
+      {
+        "name": "maximumGamesPerFolderToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "membootCustomKernelToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "membootOriginalKernelToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "membootRecoveryKernelToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "messageOfTheDayToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "helpToolStripMenuItem"
+      },
+      {
+        "name": "modRepoEndSeparator",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "modulesToolStripMenuItem"
+      },
+      {
+        "name": "modRepoStartSeparator",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "modulesToolStripMenuItem"
+      },
+      {
+        "name": "modulesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "menuStrip"
+      },
+      {
+        "name": "nameToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "sortByToolStripMenuItem"
+      },
+      {
+        "name": "normalModeToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "flashUbootToolStripMenuItem"
+      },
+      {
+        "name": "openFTPInExplorerToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "openTelnetToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "originalGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "viewToolStripMenuItem"
+      },
+      {
+        "name": "pagesOriginalToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "pagesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "positionAtTheBottomToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "originalGamesToolStripMenuItem"
+      },
+      {
+        "name": "positionAtTheTopToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "originalGamesToolStripMenuItem"
+      },
+      {
+        "name": "positionHiddenToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "originalGamesToolStripMenuItem"
+      },
+      {
+        "name": "positionSortedToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "originalGamesToolStripMenuItem"
+      },
+      {
+        "name": "prepareArtDirectoryToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "presetsToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "rRockinTheClassicsToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "helpToolStripMenuItem"
+      },
+      {
+        "name": "rebootToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "regionToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "sortByToolStripMenuItem"
+      },
+      {
+        "name": "reloadGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "removePrefixToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "repairGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "resetDefaultBootImageToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "bootImageToolStripMenuItem"
+      },
+      {
+        "name": "resetOriginalGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "resetROMHeaderToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "sFROMToolToolStripMenuItem1"
+      },
+      {
+        "name": "resetToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "kernelToolStripMenuItem"
+      },
+      {
+        "name": "resetUsingCombinationOfButtonsToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "cloverconHackToolStripMenuItem"
+      },
+      {
+        "name": "retroarchToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "globalCommandLineArgumentsexpertsOnluToolStripMenuItem"
+      },
+      {
+        "name": "rightmostToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "backFolderButtonPositionToolStripMenuItem"
+      },
+      {
+        "name": "sDModeToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "flashUbootToolStripMenuItem"
+      },
+      {
+        "name": "sFROMToolToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "sFROMToolToolStripMenuItem1",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "saveDmesgOutputToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "saveSettingsToNESMiniNowToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "saveStateManagerToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "scanForNewBoxArtForSelectedGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "scrapeSelectedGamesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "searchToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "segaUiThemeToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "selectButtonCombinationToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "cloverconHackToolStripMenuItem"
+      },
+      {
+        "name": "selectEmulationCoreToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "separateGamesForMultibootToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "separateGamesStorageToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "setRegionToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "settingsToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "menuStrip"
+      },
+      {
+        "name": "showGamesWithoutBoxArtToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "viewToolStripMenuItem"
+      },
+      {
+        "name": "sortByToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "viewToolStripMenuItem"
+      },
+      {
+        "name": "switchRunningFirmwareToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "syncStructureForAllGamesCollectionsToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "synchronizeToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "systemToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "sortByToolStripMenuItem"
+      },
+      {
+        "name": "takeScreenshotToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "technicalInformationToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "helpToolStripMenuItem"
+      },
+      {
+        "name": "toolFlashTheWholeNANDStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem1",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem10",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem11",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "kernelToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem12",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem13",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "fileToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem14",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "toolStripMenuItem15",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "toolStripMenuItem16",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem17",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "toolStripMenuItem18",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem19",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "toolStripMenuItem2",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "presetsToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem20",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "toolStripMenuItem22",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "helpToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem23",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "developerToolsToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem24",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem25",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem3",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "toolStripMenuItem4",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "foldersContextMenuStrip"
+      },
+      {
+        "name": "toolStripMenuItem5",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem6",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem8",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "toolsToolStripMenuItem"
+      },
+      {
+        "name": "toolStripMenuItem9",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "sFROMToolToolStripMenuItem1"
+      },
+      {
+        "name": "toolStripSeparator1",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "advancedToolStripMenuItem"
+      },
+      {
+        "name": "toolStripSeparator2",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "toolStripSeparator3",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "toolsToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "menuStrip"
+      },
+      {
+        "name": "uninstallModulesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "modulesToolStripMenuItem"
+      },
+      {
+        "name": "uninstallToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "kernelToolStripMenuItem"
+      },
+      {
+        "name": "unitedStatesToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "segaUiThemeToolStripMenuItem"
+      },
+      {
+        "name": "upABStartOnSecondControllerToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "cloverconHackToolStripMenuItem"
+      },
+      {
+        "name": "uploadTotmpforTestingToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "developerToolsToolStripMenuItem"
+      },
+      {
+        "name": "useLinkedSyncToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "settingsToolStripMenuItem"
+      },
+      {
+        "name": "usePCMPatchWhenAvailableToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "sFROMToolToolStripMenuItem"
+      },
+      {
+        "name": "useXYOnClassicControllerAsAutofireABToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "cloverconHackToolStripMenuItem"
+      },
+      {
+        "name": "viewToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "menuStrip"
+      }
+    ],
+    "components": [
+      {
+        "name": "contextMenuStrip",
+        "type": "System.Windows.Forms.ContextMenuStrip",
+        "parent": ""
+      },
+      {
+        "name": "foldersContextMenuStrip",
+        "type": "System.Windows.Forms.ContextMenuStrip",
+        "parent": ""
+      },
+      {
+        "name": "gameName",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "label1",
+        "type": "System.Windows.Forms.Label",
+        "parent": ""
+      },
+      {
+        "name": "label2",
+        "type": "System.Windows.Forms.Label",
+        "parent": ""
+      },
+      {
+        "name": "label3",
+        "type": "System.Windows.Forms.Label",
+        "parent": ""
+      },
+      {
+        "name": "openDumpFileDialog",
+        "type": "System.Windows.Forms.OpenFileDialog",
+        "parent": ""
+      },
+      {
+        "name": "openFileDialogImage",
+        "type": "System.Windows.Forms.OpenFileDialog",
+        "parent": ""
+      },
+      {
+        "name": "openFileDialogNes",
+        "type": "System.Windows.Forms.OpenFileDialog",
+        "parent": ""
+      },
+      {
+        "name": "progressBar1",
+        "type": "System.Windows.Forms.ProgressBar",
+        "parent": ""
+      },
+      {
+        "name": "saveDumpFileDialog",
+        "type": "System.Windows.Forms.SaveFileDialog",
+        "parent": ""
+      },
+      {
+        "name": "timerCalculateGames",
+        "type": "System.Windows.Forms.Timer",
+        "parent": ""
+      },
+      {
+        "name": "timerConnectionCheck",
+        "type": "System.Windows.Forms.Timer",
+        "parent": ""
+      },
+      {
+        "name": "timerShowSelected",
+        "type": "System.Windows.Forms.Timer",
+        "parent": ""
+      },
+      {
+        "name": "timerUpdate",
+        "type": "System.Windows.Forms.Timer",
+        "parent": ""
+      }
+    ]
+  },
+  "MessageForm": {
+    "type": "com.clusterrr.hakchi_gui.Tasks.MessageForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "panel1",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "MessageForm"
+      },
+      {
+        "name": "button3",
+        "type": "System.Windows.Forms.Button",
+        "parent": "panel1"
+      },
+      {
+        "name": "button1",
+        "type": "System.Windows.Forms.Button",
+        "parent": "panel1"
+      },
+      {
+        "name": "button2",
+        "type": "System.Windows.Forms.Button",
+        "parent": "panel1"
+      },
+      {
+        "name": "panel",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "MessageForm"
+      },
+      {
+        "name": "panel3",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "panel"
+      },
+      {
+        "name": "messageLabel",
+        "type": "System.Windows.Forms.Label",
+        "parent": "panel3"
+      },
+      {
+        "name": "panel2",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "panel"
+      },
+      {
+        "name": "pictureBox1",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "panel2"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "ModHubForm": {
+    "type": "com.clusterrr.hakchi_gui.ModHub.ModHubForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "tabControl1",
+        "type": "System.Windows.Forms.TabControl",
+        "parent": "ModHubForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "ModHubTabControl": {
+    "type": "com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl",
+    "kind": "UserControl",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "tableLayoutPanel1",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "ModHubTabControl"
+      },
+      {
+        "name": "modList",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "modReadme",
+        "type": "com.clusterrr.hakchi_gui.Hmod.Controls.ReadmeControl",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "BrowserReadmeControl",
+        "type": "com.clusterrr.hakchi_gui.Hmod.Controls.BrowserReadmeControl",
+        "parent": "modReadme"
+      },
+      {
+        "name": "wbReadme",
+        "type": "System.Windows.Forms.WebBrowser",
+        "parent": "BrowserReadmeControl"
+      },
+      {
+        "name": "panel1",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "modDownloadButton",
+        "type": "System.Windows.Forms.Button",
+        "parent": "panel1"
+      },
+      {
+        "name": "modDownloadInstallButton",
+        "type": "System.Windows.Forms.Button",
+        "parent": "panel1"
+      },
+      {
+        "name": "modInfo",
+        "type": "com.clusterrr.hakchi_gui.ModHub.Controls.ModInfoControl",
+        "parent": "panel1"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "columnHeader1",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      }
+    ]
+  },
+  "ModInfoControl": {
+    "type": "com.clusterrr.hakchi_gui.ModHub.Controls.ModInfoControl",
+    "kind": "UserControl",
+    "constructed": true,
+    "controls": [],
+    "toolStripItems": [],
+    "components": []
+  },
+  "Motd": {
+    "type": "com.clusterrr.hakchi_gui.Motd",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "panel1",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "Motd"
+      },
+      {
+        "name": "button1",
+        "type": "System.Windows.Forms.Button",
+        "parent": "Motd"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "NewCustomGameForm": {
+    "type": "com.clusterrr.hakchi_gui.NewCustomGameForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "label2",
+        "type": "System.Windows.Forms.Label",
+        "parent": "NewCustomGameForm"
+      },
+      {
+        "name": "button2",
+        "type": "System.Windows.Forms.Button",
+        "parent": "NewCustomGameForm"
+      },
+      {
+        "name": "button1",
+        "type": "System.Windows.Forms.Button",
+        "parent": "NewCustomGameForm"
+      },
+      {
+        "name": "checkBox1",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "NewCustomGameForm"
+      },
+      {
+        "name": "maskedTextBox1",
+        "type": "System.Windows.Forms.MaskedTextBox",
+        "parent": "NewCustomGameForm"
+      },
+      {
+        "name": "textBox1",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "NewCustomGameForm"
+      },
+      {
+        "name": "label1",
+        "type": "System.Windows.Forms.Label",
+        "parent": "NewCustomGameForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "ReadmeControl": {
+    "type": "com.clusterrr.hakchi_gui.Hmod.Controls.ReadmeControl",
+    "kind": "UserControl",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "BrowserReadmeControl",
+        "type": "com.clusterrr.hakchi_gui.Hmod.Controls.BrowserReadmeControl",
+        "parent": "ReadmeControl"
+      },
+      {
+        "name": "wbReadme",
+        "type": "System.Windows.Forms.WebBrowser",
+        "parent": "BrowserReadmeControl"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "RepoManagementForm": {
+    "type": "com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "tableLayoutPanel3",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "RepoManagementForm"
+      },
+      {
+        "name": "groupBox1",
+        "type": "System.Windows.Forms.GroupBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "addRepoButton",
+        "type": "System.Windows.Forms.Button",
+        "parent": "groupBox1"
+      },
+      {
+        "name": "tableLayoutPanel1",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "groupBox1"
+      },
+      {
+        "name": "label1",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "label2",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "repoName",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "repoURL",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "tableLayoutPanel2",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "panel1",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "tableLayoutPanel2"
+      },
+      {
+        "name": "editButton",
+        "type": "System.Windows.Forms.Button",
+        "parent": "panel1"
+      },
+      {
+        "name": "moveDownButton",
+        "type": "System.Windows.Forms.Button",
+        "parent": "panel1"
+      },
+      {
+        "name": "moveUpButton",
+        "type": "System.Windows.Forms.Button",
+        "parent": "panel1"
+      },
+      {
+        "name": "deleteButton",
+        "type": "System.Windows.Forms.Button",
+        "parent": "panel1"
+      },
+      {
+        "name": "repoList",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "tableLayoutPanel2"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "columnHeader1",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "columnHeader2",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      }
+    ]
+  },
+  "SDFormat": {
+    "type": "com.clusterrr.hakchi_gui.Tasks.SDFormat",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "tableLayoutPanel1",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "SDFormat"
+      },
+      {
+        "name": "chkBootable",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "lblBootable",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "chkStoreSaves",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "tableLayoutPanel2",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "btnOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel2"
+      },
+      {
+        "name": "btnCancel",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel2"
+      },
+      {
+        "name": "chkCopySaves",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "chkCopyNand",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanel1"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "SaveStateManager": {
+    "type": "com.clusterrr.hakchi_gui.SaveStateManager",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "listViewSaves",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "SaveStateManager"
+      },
+      {
+        "name": "statusStrip",
+        "type": "System.Windows.Forms.StatusStrip",
+        "parent": "SaveStateManager"
+      },
+      {
+        "name": "labelLoading",
+        "type": "System.Windows.Forms.Label",
+        "parent": "SaveStateManager"
+      },
+      {
+        "name": "tableLayoutPanel1",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "SaveStateManager"
+      },
+      {
+        "name": "buttonImport",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "buttonDelete",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "buttonExport",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "buttonOpenWithFTP",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel1"
+      }
+    ],
+    "toolStripItems": [
+      {
+        "name": "deleteToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "exportToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "importToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "contextMenuStrip"
+      },
+      {
+        "name": "toolStripStatusLabelSize",
+        "type": "System.Windows.Forms.ToolStripStatusLabel",
+        "parent": "statusStrip"
+      }
+    ],
+    "components": [
+      {
+        "name": "colCode",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "colFlags",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "colName",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "colSize",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "contextMenuStrip",
+        "type": "System.Windows.Forms.ContextMenuStrip",
+        "parent": ""
+      },
+      {
+        "name": "openFileDialog",
+        "type": "System.Windows.Forms.OpenFileDialog",
+        "parent": ""
+      },
+      {
+        "name": "saveFileDialog",
+        "type": "System.Windows.Forms.SaveFileDialog",
+        "parent": ""
+      }
+    ]
+  },
+  "ScraperForm": {
+    "type": "com.clusterrr.hakchi_gui.ScraperForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "linkLabelPoweredBy",
+        "type": "System.Windows.Forms.LinkLabel",
+        "parent": "ScraperForm"
+      },
+      {
+        "name": "tableLayoutPanel1",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "ScraperForm"
+      },
+      {
+        "name": "listViewGames",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "tableLayoutPanel2",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "tableLayoutPanel3",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanel2"
+      },
+      {
+        "name": "textBoxDescription",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "maxPlayersComboBox",
+        "type": "System.Windows.Forms.ComboBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "comboBoxGenre",
+        "type": "System.Windows.Forms.ComboBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "maskedTextBoxReleaseDate",
+        "type": "System.Windows.Forms.MaskedTextBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "label1",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "label3",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "label4",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "label5",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "label6",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "label7",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "label8",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "label9",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "textBoxName",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "textBoxPublisher",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "textBoxDeveloper",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "textBoxCopyright",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "checkBoxName",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "checkBoxPublisher",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "checkBoxDeveloper",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "checkBoxReleaseDate",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "checkBoxCopyright",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "checkBoxGenre",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "checkBoxPlayerCount",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "checkBoxDescription",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "tableLayoutPanel3"
+      },
+      {
+        "name": "panel1",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "tableLayoutPanel2"
+      },
+      {
+        "name": "panelArt",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "panel1"
+      },
+      {
+        "name": "pictureBoxM2Spine",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "panelArt"
+      },
+      {
+        "name": "pictureBoxM2Front",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "panelArt"
+      },
+      {
+        "name": "comboBoxSpineTemplates",
+        "type": "System.Windows.Forms.ComboBox",
+        "parent": "panelArt"
+      },
+      {
+        "name": "checkBoxSpine",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "panel1"
+      },
+      {
+        "name": "checkBoxFront",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "panel1"
+      },
+      {
+        "name": "tableLayoutPanel4",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanel2"
+      },
+      {
+        "name": "tableLayoutPanel6",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanel4"
+      },
+      {
+        "name": "textBoxSearchTerm",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanel6"
+      },
+      {
+        "name": "buttonSearch",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel6"
+      },
+      {
+        "name": "tableLayoutPanel5",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanel4"
+      },
+      {
+        "name": "buttonScraperPrevious",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel5"
+      },
+      {
+        "name": "buttonScraperNext",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel5"
+      },
+      {
+        "name": "listViewScraperResults",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "tableLayoutPanel4"
+      },
+      {
+        "name": "buttonOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "comboBoxScrapers",
+        "type": "System.Windows.Forms.ComboBox",
+        "parent": "tableLayoutPanel1"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "gameName",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "scraperGameName",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      }
+    ]
+  },
+  "ScreenshotForm": {
+    "type": "com.clusterrr.hakchi_gui.ScreenshotForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "screenshotPictureBox",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "ScreenshotForm"
+      }
+    ],
+    "toolStripItems": [
+      {
+        "name": "copyImageToClipboardToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "screenshotContextMenuStrip"
+      },
+      {
+        "name": "openInDefaultViewerToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "screenshotContextMenuStrip"
+      },
+      {
+        "name": "saveImageToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "screenshotContextMenuStrip"
+      },
+      {
+        "name": "startStopLiveViewToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "screenshotContextMenuStrip"
+      },
+      {
+        "name": "takeScreenshotToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "screenshotContextMenuStrip"
+      },
+      {
+        "name": "takeUnattendedScreenshotToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "screenshotContextMenuStrip"
+      },
+      {
+        "name": "toolStripMenuItem1",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "screenshotContextMenuStrip"
+      },
+      {
+        "name": "toolStripSeparator1",
+        "type": "System.Windows.Forms.ToolStripSeparator",
+        "parent": "screenshotContextMenuStrip"
+      },
+      {
+        "name": "updateScreenshotToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "screenshotContextMenuStrip"
+      }
+    ],
+    "components": [
+      {
+        "name": "saveImageFileDialog",
+        "type": "System.Windows.Forms.SaveFileDialog",
+        "parent": ""
+      },
+      {
+        "name": "screenshotContextMenuStrip",
+        "type": "System.Windows.Forms.ContextMenuStrip",
+        "parent": ""
+      }
+    ]
+  },
+  "SearchForm": {
+    "type": "com.clusterrr.hakchi_gui.SearchForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "textBoxSearch",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "SearchForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "SelectCoreDialog": {
+    "type": "com.clusterrr.hakchi_gui.SelectCoreDialog",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "showAllSystemsCheckBox",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectCoreDialog"
+      },
+      {
+        "name": "resetCheckBox",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectCoreDialog"
+      },
+      {
+        "name": "buttonApply",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectCoreDialog"
+      },
+      {
+        "name": "label4",
+        "type": "System.Windows.Forms.Label",
+        "parent": "SelectCoreDialog"
+      },
+      {
+        "name": "commandTextBox",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "SelectCoreDialog"
+      },
+      {
+        "name": "label3",
+        "type": "System.Windows.Forms.Label",
+        "parent": "SelectCoreDialog"
+      },
+      {
+        "name": "listBoxCore",
+        "type": "System.Windows.Forms.ListBox",
+        "parent": "SelectCoreDialog"
+      },
+      {
+        "name": "label2",
+        "type": "System.Windows.Forms.Label",
+        "parent": "SelectCoreDialog"
+      },
+      {
+        "name": "listBoxSystem",
+        "type": "System.Windows.Forms.ListBox",
+        "parent": "SelectCoreDialog"
+      },
+      {
+        "name": "listViewGames",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "SelectCoreDialog"
+      },
+      {
+        "name": "label1",
+        "type": "System.Windows.Forms.Label",
+        "parent": "SelectCoreDialog"
+      },
+      {
+        "name": "buttonClose",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectCoreDialog"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "coreColumnHeader",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "extColumnHeader",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "nameColumnHeader",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "systemColumnHeader",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      }
+    ]
+  },
+  "SelectCoverDialog": {
+    "type": "com.clusterrr.hakchi_gui.SelectCoverDialog",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "buttonAccept",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectCoverDialog"
+      },
+      {
+        "name": "label2",
+        "type": "System.Windows.Forms.Label",
+        "parent": "SelectCoverDialog"
+      },
+      {
+        "name": "buttonImFeelingLucky",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectCoverDialog"
+      },
+      {
+        "name": "buttonSetDefault",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectCoverDialog"
+      },
+      {
+        "name": "buttonDiscard",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectCoverDialog"
+      },
+      {
+        "name": "listViewImages",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "SelectCoverDialog"
+      },
+      {
+        "name": "label1",
+        "type": "System.Windows.Forms.Label",
+        "parent": "SelectCoverDialog"
+      },
+      {
+        "name": "listViewGames",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "SelectCoverDialog"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "coverColumnHeader",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "extColumnHeader",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "filenameColumnHeader",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "imageList",
+        "type": "System.Windows.Forms.ImageList",
+        "parent": ""
+      },
+      {
+        "name": "nameColumnHeader",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "systemColumnHeader",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      }
+    ]
+  },
+  "SelectFileForm": {
+    "type": "com.clusterrr.hakchi_gui.SelectFileForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "buttonArchive",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectFileForm"
+      },
+      {
+        "name": "buttonOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectFileForm"
+      },
+      {
+        "name": "listBoxFiles",
+        "type": "System.Windows.Forms.ListBox",
+        "parent": "SelectFileForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "SelectFirmwareDialog": {
+    "type": "com.clusterrr.hakchi_gui.SelectFirmwareDialog",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "buttonCancel",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectFirmwareDialog"
+      },
+      {
+        "name": "buttonOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectFirmwareDialog"
+      },
+      {
+        "name": "listBoxFirmwares",
+        "type": "System.Windows.Forms.ListBox",
+        "parent": "SelectFirmwareDialog"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "SelectForm": {
+    "type": "com.clusterrr.hakchi_gui.Hmod.SelectForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "splitContainer1",
+        "type": "System.Windows.Forms.SplitContainer",
+        "parent": "SelectForm"
+      },
+      {
+        "name": "listViewHmods",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "splitContainer1"
+      },
+      {
+        "name": "readmeControl1",
+        "type": "com.clusterrr.hakchi_gui.Hmod.Controls.ReadmeControl",
+        "parent": "splitContainer1"
+      },
+      {
+        "name": "BrowserReadmeControl",
+        "type": "com.clusterrr.hakchi_gui.Hmod.Controls.BrowserReadmeControl",
+        "parent": "readmeControl1"
+      },
+      {
+        "name": "wbReadme",
+        "type": "System.Windows.Forms.WebBrowser",
+        "parent": "BrowserReadmeControl"
+      },
+      {
+        "name": "buttonOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectForm"
+      }
+    ],
+    "toolStripItems": [
+      {
+        "name": "categoryToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "groupByToolStripMenuItem"
+      },
+      {
+        "name": "creatorToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "groupByToolStripMenuItem"
+      },
+      {
+        "name": "deleteModFromDiskToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "modListMenuStrip"
+      },
+      {
+        "name": "emulatedSystemToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "groupByToolStripMenuItem"
+      },
+      {
+        "name": "groupByToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "modListMenuStrip"
+      },
+      {
+        "name": "showModInExplorerToolStripMenuItem",
+        "type": "System.Windows.Forms.ToolStripMenuItem",
+        "parent": "modListMenuStrip"
+      }
+    ],
+    "components": [
+      {
+        "name": "hmodName",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "modListMenuStrip",
+        "type": "System.Windows.Forms.ContextMenuStrip",
+        "parent": ""
+      }
+    ]
+  },
+  "SelectIconForm": {
+    "type": "com.clusterrr.hakchi_gui.SelectIconForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "pictureBoxArt",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "SelectIconForm"
+      },
+      {
+        "name": "buttonOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectIconForm"
+      },
+      {
+        "name": "listBox",
+        "type": "System.Windows.Forms.ListBox",
+        "parent": "SelectIconForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "SelectNesButtonsForm": {
+    "type": "com.clusterrr.hakchi_gui.SelectNesButtonsForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "checkBoxUp",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectNesButtonsForm"
+      },
+      {
+        "name": "checkBoxDown",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectNesButtonsForm"
+      },
+      {
+        "name": "checkBoxA",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectNesButtonsForm"
+      },
+      {
+        "name": "checkBoxLeft",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectNesButtonsForm"
+      },
+      {
+        "name": "checkBoxB",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectNesButtonsForm"
+      },
+      {
+        "name": "checkBoxRight",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectNesButtonsForm"
+      },
+      {
+        "name": "checkBoxStart",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectNesButtonsForm"
+      },
+      {
+        "name": "checkBoxSelect",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectNesButtonsForm"
+      },
+      {
+        "name": "buttonOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectNesButtonsForm"
+      },
+      {
+        "name": "pictureBoxController",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "SelectNesButtonsForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "SelectSnesButtonsForm": {
+    "type": "com.clusterrr.hakchi_gui.SelectSnesButtonsForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "checkBoxR",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectSnesButtonsForm"
+      },
+      {
+        "name": "checkBoxL",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectSnesButtonsForm"
+      },
+      {
+        "name": "checkBoxX",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectSnesButtonsForm"
+      },
+      {
+        "name": "checkBoxY",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectSnesButtonsForm"
+      },
+      {
+        "name": "checkBoxUp",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectSnesButtonsForm"
+      },
+      {
+        "name": "checkBoxDown",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectSnesButtonsForm"
+      },
+      {
+        "name": "checkBoxA",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectSnesButtonsForm"
+      },
+      {
+        "name": "checkBoxLeft",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectSnesButtonsForm"
+      },
+      {
+        "name": "checkBoxB",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectSnesButtonsForm"
+      },
+      {
+        "name": "checkBoxRight",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectSnesButtonsForm"
+      },
+      {
+        "name": "checkBoxStart",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectSnesButtonsForm"
+      },
+      {
+        "name": "checkBoxSelect",
+        "type": "System.Windows.Forms.CheckBox",
+        "parent": "SelectSnesButtonsForm"
+      },
+      {
+        "name": "buttonOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectSnesButtonsForm"
+      },
+      {
+        "name": "pictureBoxController",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "SelectSnesButtonsForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "SelectSystemDialog": {
+    "type": "com.clusterrr.hakchi_gui.SelectSystemDialog",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "buttonUncheckAll",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectSystemDialog"
+      },
+      {
+        "name": "buttonCheckAll",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectSystemDialog"
+      },
+      {
+        "name": "buttonCancel",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectSystemDialog"
+      },
+      {
+        "name": "buttonPrepare",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SelectSystemDialog"
+      },
+      {
+        "name": "label1",
+        "type": "System.Windows.Forms.Label",
+        "parent": "SelectSystemDialog"
+      },
+      {
+        "name": "checkedListBox",
+        "type": "System.Windows.Forms.CheckedListBox",
+        "parent": "SelectSystemDialog"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "SettingsForm": {
+    "type": "com.clusterrr.hakchi_gui.SettingsForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "groupBox1",
+        "type": "System.Windows.Forms.GroupBox",
+        "parent": "SettingsForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "SnesPresetEditor": {
+    "type": "com.clusterrr.hakchi_gui.SnesPresetEditor",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "buttonOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SnesPresetEditor"
+      },
+      {
+        "name": "textBoxExtra",
+        "type": "com.clusterrr.hakchi_gui.Int8HexTextBox",
+        "parent": "SnesPresetEditor"
+      },
+      {
+        "name": "labelExtra",
+        "type": "System.Windows.Forms.Label",
+        "parent": "SnesPresetEditor"
+      },
+      {
+        "name": "textBoxPresetID",
+        "type": "com.clusterrr.hakchi_gui.Int16HexTextBox",
+        "parent": "SnesPresetEditor"
+      },
+      {
+        "name": "labelPresetID",
+        "type": "System.Windows.Forms.Label",
+        "parent": "SnesPresetEditor"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "SpineForm": {
+    "type": "com.clusterrr.hakchi_gui.SpineForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "listBoxTemplates",
+        "type": "System.Windows.Forms.ListBox",
+        "parent": "SpineForm"
+      },
+      {
+        "name": "buttonLoadLogo",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SpineForm"
+      },
+      {
+        "name": "buttonOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "SpineForm"
+      },
+      {
+        "name": "pictureBoxSpine",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "SpineForm"
+      },
+      {
+        "name": "imageGoogler1",
+        "type": "com.clusterrr.hakchi_gui.Controls.ImageGoogler",
+        "parent": "SpineForm"
+      },
+      {
+        "name": "listView",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "imageGoogler1"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "StringInputForm": {
+    "type": "com.clusterrr.hakchi_gui.StringInputForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "tableLayoutPanel1",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "StringInputForm"
+      },
+      {
+        "name": "labelComments",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "buttonOK",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanel1"
+      },
+      {
+        "name": "textBox",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "tableLayoutPanel1"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "TaskerForm": {
+    "type": "com.clusterrr.hakchi_gui.Tasks.TaskerForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "statusPictureBox",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "TaskerForm"
+      },
+      {
+        "name": "progressBarEx1",
+        "type": "ProgressODoom.ProgressBarEx",
+        "parent": "TaskerForm"
+      },
+      {
+        "name": "statusLabel",
+        "type": "System.Windows.Forms.Label",
+        "parent": "TaskerForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "fruityLoopsBackgroundPainter1",
+        "type": "ProgressODoom.FruityLoopsBackgroundPainter",
+        "parent": ""
+      },
+      {
+        "name": "fruityLoopsProgressPainter1",
+        "type": "ProgressODoom.FruityLoopsProgressPainter",
+        "parent": ""
+      },
+      {
+        "name": "styledBorderPainter1",
+        "type": "ProgressODoom.StyledBorderPainter",
+        "parent": ""
+      }
+    ]
+  },
+  "TaskerTransferForm": {
+    "type": "com.clusterrr.hakchi_gui.Tasks.TaskerTransferForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "labelTransferRate",
+        "type": "System.Windows.Forms.Label",
+        "parent": "TaskerTransferForm"
+      },
+      {
+        "name": "labelTimeLeft",
+        "type": "System.Windows.Forms.Label",
+        "parent": "TaskerTransferForm"
+      },
+      {
+        "name": "labelFileName",
+        "type": "System.Windows.Forms.Label",
+        "parent": "TaskerTransferForm"
+      },
+      {
+        "name": "label2",
+        "type": "System.Windows.Forms.Label",
+        "parent": "TaskerTransferForm"
+      },
+      {
+        "name": "label1",
+        "type": "System.Windows.Forms.Label",
+        "parent": "TaskerTransferForm"
+      },
+      {
+        "name": "statusPictureBox",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "TaskerTransferForm"
+      },
+      {
+        "name": "progressBarEx1",
+        "type": "ProgressODoom.ProgressBarEx",
+        "parent": "TaskerTransferForm"
+      },
+      {
+        "name": "statusLabel",
+        "type": "System.Windows.Forms.Label",
+        "parent": "TaskerTransferForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "fruityLoopsBackgroundPainter1",
+        "type": "ProgressODoom.FruityLoopsBackgroundPainter",
+        "parent": ""
+      },
+      {
+        "name": "fruityLoopsProgressPainter1",
+        "type": "ProgressODoom.FruityLoopsProgressPainter",
+        "parent": ""
+      },
+      {
+        "name": "styledBorderPainter1",
+        "type": "ProgressODoom.StyledBorderPainter",
+        "parent": ""
+      }
+    ]
+  },
+  "TechInfo": {
+    "type": "com.clusterrr.hakchi_gui.TechInfo",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "label1",
+        "type": "System.Windows.Forms.Label",
+        "parent": "TechInfo"
+      },
+      {
+        "name": "logContentsRichTextBox",
+        "type": "System.Windows.Forms.RichTextBox",
+        "parent": "TechInfo"
+      },
+      {
+        "name": "buttonSave",
+        "type": "System.Windows.Forms.Button",
+        "parent": "TechInfo"
+      },
+      {
+        "name": "buttonOk",
+        "type": "System.Windows.Forms.Button",
+        "parent": "TechInfo"
+      },
+      {
+        "name": "listView1",
+        "type": "System.Windows.Forms.ListView",
+        "parent": "TechInfo"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "columnName",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "columnValue",
+        "type": "System.Windows.Forms.ColumnHeader",
+        "parent": ""
+      },
+      {
+        "name": "saveFileDialog1",
+        "type": "System.Windows.Forms.SaveFileDialog",
+        "parent": ""
+      }
+    ]
+  },
+  "TextInfo": {
+    "type": "com.clusterrr.hakchi_gui.TextInfo",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "panel1",
+        "type": "System.Windows.Forms.Panel",
+        "parent": "TextInfo"
+      },
+      {
+        "name": "textBoxInfo",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "panel1"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "TextReadmeControl": {
+    "type": "com.clusterrr.hakchi_gui.Hmod.Controls.TextReadmeControl",
+    "kind": "UserControl",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "tbReadme",
+        "type": "System.Windows.Forms.TextBox",
+        "parent": "TextReadmeControl"
+      }
+    ],
+    "toolStripItems": [],
+    "components": []
+  },
+  "WaitingFelForm": {
+    "type": "com.clusterrr.hakchi_gui.WaitingFelForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "tableLayoutPanelMain",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "WaitingFelForm"
+      },
+      {
+        "name": "tableLayoutPanelDriver",
+        "type": "System.Windows.Forms.TableLayoutPanel",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "label6",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelDriver"
+      },
+      {
+        "name": "buttonDriver",
+        "type": "System.Windows.Forms.Button",
+        "parent": "tableLayoutPanelDriver"
+      },
+      {
+        "name": "label5",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "label1",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "label4",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "label2",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelMain"
+      },
+      {
+        "name": "label3",
+        "type": "System.Windows.Forms.Label",
+        "parent": "tableLayoutPanelMain"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "timer",
+        "type": "System.Windows.Forms.Timer",
+        "parent": ""
+      }
+    ]
+  },
+  "WaitingShellCycleForm": {
+    "type": "com.clusterrr.hakchi_gui.WaitingShellCycleForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "progressBarEx1",
+        "type": "ProgressODoom.ProgressBarEx",
+        "parent": "WaitingShellCycleForm"
+      },
+      {
+        "name": "label1",
+        "type": "System.Windows.Forms.Label",
+        "parent": "WaitingShellCycleForm"
+      },
+      {
+        "name": "pictureBox1",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "WaitingShellCycleForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "fruityLoopsBackgroundPainter1",
+        "type": "ProgressODoom.FruityLoopsBackgroundPainter",
+        "parent": ""
+      },
+      {
+        "name": "fruityLoopsProgressPainter1",
+        "type": "ProgressODoom.FruityLoopsProgressPainter",
+        "parent": ""
+      },
+      {
+        "name": "styledBorderPainter1",
+        "type": "ProgressODoom.StyledBorderPainter",
+        "parent": ""
+      },
+      {
+        "name": "timer1",
+        "type": "System.Windows.Forms.Timer",
+        "parent": ""
+      }
+    ]
+  },
+  "WaitingShellForm": {
+    "type": "com.clusterrr.hakchi_gui.WaitingShellForm",
+    "kind": "Form",
+    "constructed": true,
+    "controls": [
+      {
+        "name": "pictureBox1",
+        "type": "System.Windows.Forms.PictureBox",
+        "parent": "WaitingShellForm"
+      },
+      {
+        "name": "buttonDriver",
+        "type": "System.Windows.Forms.Button",
+        "parent": "WaitingShellForm"
+      },
+      {
+        "name": "labelDriver",
+        "type": "System.Windows.Forms.Label",
+        "parent": "WaitingShellForm"
+      },
+      {
+        "name": "label2",
+        "type": "System.Windows.Forms.Label",
+        "parent": "WaitingShellForm"
+      },
+      {
+        "name": "label1",
+        "type": "System.Windows.Forms.Label",
+        "parent": "WaitingShellForm"
+      },
+      {
+        "name": "label0",
+        "type": "System.Windows.Forms.Label",
+        "parent": "WaitingShellForm"
+      }
+    ],
+    "toolStripItems": [],
+    "components": [
+      {
+        "name": "timer",
+        "type": "System.Windows.Forms.Timer",
+        "parent": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Projet de tests de l'interface PC (net48). Volontairement hors de hakchi_gui.sln.
+    Il reference l'assemblage deja compile par msbuild (hakchi_gui\bin\Debug\net48\hakchi.exe),
+    pas le projet : hakchi_gui + sous-modules ne se compilent pas sous `dotnet build`.
+    Ordre : 1) msbuild hakchi_gui.sln (script de build de la session)  2) dotnet test hakchi_gui.Tests
+  -->
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <RootNamespace>hakchi_gui.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="hakchi">
+      <HintPath>..\hakchi_gui\bin\Debug\net48\hakchi.exe</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <None Include="Data\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <!-- Construit la galerie avant les tests : le test GalleryRendersAtLeast30Forms la lance. -->
+  <Target Name="BuildFormGallery" BeforeTargets="CoreCompile">
+    <PropertyGroup>
+      <DotnetExe Condition="'$(DOTNET_HOST_PATH)' != ''">$(DOTNET_HOST_PATH)</DotnetExe>
+      <DotnetExe Condition="'$(DotnetExe)' == ''">dotnet</DotnetExe>
+    </PropertyGroup>
+    <Exec Command="&quot;$(DotnetExe)&quot; build &quot;$(MSBuildThisFileDirectory)..\tools\FormGallery\FormGallery.csproj&quot; -c Debug -v q --nologo" />
+  </Target>
+
+</Project>
