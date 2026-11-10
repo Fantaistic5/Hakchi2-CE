@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using com.clusterrr.hakchi_gui.Theme.Controls;
 
 namespace com.clusterrr.hakchi_gui.Theme
 {
@@ -25,7 +26,6 @@ namespace com.clusterrr.hakchi_gui.Theme
     public static class B1Skin
     {
         private static readonly ConditionalWeakTable<Control, object> skipped = new ConditionalWeakTable<Control, object>();
-        private static readonly ConditionalWeakTable<Control, object> primary = new ConditionalWeakTable<Control, object>();
         [ThreadStatic] private static bool managerRendererSet;      // ToolStripManager.Renderer est propre au thread UI
         private static readonly ConditionalWeakTable<ToolStripItem, object> openingHooked = new ConditionalWeakTable<ToolStripItem, object>();
         private static readonly B1ToolStripRenderer renderer = new B1ToolStripRenderer();
@@ -40,11 +40,28 @@ namespace com.clusterrr.hakchi_gui.Theme
             if (c != null && !skipped.TryGetValue(c, out o)) skipped.Add(c, new object());
         }
 
+        private sealed class KindBox { public B1ButtonKind Kind; }
+        private static readonly ConditionalWeakTable<ButtonBase, KindBox> kinds = new ConditionalWeakTable<ButtonBase, KindBox>();
+
         /// <summary>Force le style « bouton primaire » (sinon : le AcceptButton de la fenetre est primaire, les autres secondaires).</summary>
-        public static void MarkPrimary(Button b)
+        public static void MarkPrimary(Button b) { SetKind(b, B1ButtonKind.Primary); }
+
+        /// <summary>Choisit le style d'un bouton standard : Primary, Secondary, Quiet ou Danger (flash, effacement). Sans appel : Primary pour le AcceptButton, sinon Secondary.</summary>
+        public static void SetKind(ButtonBase b, B1ButtonKind kind)
         {
-            object o;
-            if (b != null && !primary.TryGetValue(b, out o)) primary.Add(b, new object());
+            if (b == null) return;
+            KindBox box;
+            if (kinds.TryGetValue(b, out box)) box.Kind = kind; else kinds.Add(b, new KindBox { Kind = kind });
+            b.Invalidate();
+        }
+
+        internal static B1ButtonKind KindOf(ButtonBase b)
+        {
+            KindBox box;
+            if (kinds.TryGetValue(b, out box)) return box.Kind;
+            var button = b as Button;
+            var form = b.FindForm();
+            return button != null && form != null && ReferenceEquals(form.AcceptButton, button) ? B1ButtonKind.Primary : B1ButtonKind.Secondary;
         }
 
         internal static void ForgetFonts()
@@ -163,6 +180,14 @@ namespace com.clusterrr.hakchi_gui.Theme
             var strip = c as ToolStrip;
             if (strip != null) { StyleStrip(strip); return; }
 
+            // controles B1 dessines sur mesure : ils se peignent eux-memes, seules les couleurs de base sont harmonisees
+            if (c is B1Button || c is B1CheckBox || c is B1Chip || c is B1ComboBox || c is B1GroupBox || c is B1TabControl || c is B1ProgressBar)
+            {
+                c.BackColor = BackKeepTransparent(c.BackColor, B1Palette.Slate);
+                c.ForeColor = Fore(c.ForeColor, B1Palette.Text);
+                return;
+            }
+
             var button = c as Button;
             if (button != null) { StyleButton(button, owner); return; }
 
@@ -202,16 +227,18 @@ namespace com.clusterrr.hakchi_gui.Theme
                 if (text.BorderStyle == BorderStyle.Fixed3D)
                     // le cadre RichEdit reste en relief clair meme en FixedSingle : sans cadre, le fond RowActive suffit
                     text.BorderStyle = text is RichTextBox ? BorderStyle.None : BorderStyle.FixedSingle;
+                if (text.Multiline || text is RichTextBox) DarkScrollBars(text);
+                if (text.BorderStyle == BorderStyle.FixedSingle) NcBorderWindow.Hook(text);
                 return;
             }
 
             var combo = c as ComboBox;
             if (combo != null)
             {
-                combo.FlatStyle = FlatStyle.Standard;     // Flat dessine un bouton clair ; Standard + DarkMode_CFD donne un combo sombre natif
+                combo.FlatStyle = FlatStyle.Standard;
                 combo.BackColor = Back(combo.BackColor, B1Palette.RowActive);
                 combo.ForeColor = Fore(combo.ForeColor, B1Palette.Text);
-                NativeTheme.WithHandle(combo, "b1combo", h => NativeTheme.SetTheme(h, "DarkMode_CFD", "Combobox"));
+                ComboPaint.HookStock(combo);              // champ, fleche et lignes de la liste dessines par le theme
                 return;
             }
 
@@ -221,8 +248,7 @@ namespace com.clusterrr.hakchi_gui.Theme
                 updown.BackColor = Back(updown.BackColor, B1Palette.RowActive);
                 updown.ForeColor = Fore(updown.ForeColor, B1Palette.Text);
                 if (updown.BorderStyle == BorderStyle.Fixed3D) updown.BorderStyle = BorderStyle.FixedSingle;
-                foreach (Control inner in updown.Controls)         // UpDownButtons : fleches natives sombres
-                    if (!(inner is TextBox)) NativeTheme.WithHandle(inner, "b1spin", h => NativeTheme.SetTheme(h, "DarkMode_Explorer", null));
+                SpinWindow.Hook(updown);                           // fleches et bordure dessinees par le theme
                 return;
             }
 
@@ -232,6 +258,9 @@ namespace com.clusterrr.hakchi_gui.Theme
                 listBox.BackColor = Back(listBox.BackColor, B1Palette.RowActive);
                 listBox.ForeColor = Fore(listBox.ForeColor, B1Palette.Text);
                 if (listBox.BorderStyle == BorderStyle.Fixed3D) listBox.BorderStyle = BorderStyle.FixedSingle;
+                ListPaint.HookListBox(listBox);
+                DarkScrollBars(listBox);
+                NcBorderWindow.Hook(listBox);
                 return;
             }
 
@@ -241,6 +270,10 @@ namespace com.clusterrr.hakchi_gui.Theme
                 listView.BackColor = Back(listView.BackColor, B1Palette.Slate);
                 listView.ForeColor = Fore(listView.ForeColor, B1Palette.Text);
                 if (listView.BorderStyle == BorderStyle.Fixed3D) listView.BorderStyle = BorderStyle.FixedSingle;
+                DarkScrollBars(listView);
+                NcBorderWindow.Hook(listView);
+                ListViewWindow.Hook(listView);             // lignes : selection RowActive + barre d'accent
+                HeaderWindow.Hook(listView);               // en-tete de colonnes
                 return;
             }
 
@@ -251,6 +284,9 @@ namespace com.clusterrr.hakchi_gui.Theme
                 tree.ForeColor = Fore(tree.ForeColor, B1Palette.Text);
                 tree.LineColor = Back(tree.LineColor, B1Palette.Dashed);
                 if (tree.BorderStyle == BorderStyle.Fixed3D) tree.BorderStyle = BorderStyle.FixedSingle;
+                DarkScrollBars(tree);
+                NcBorderWindow.Hook(tree);
+                ListPaint.HookTree(tree);
                 return;
             }
 
@@ -273,6 +309,7 @@ namespace com.clusterrr.hakchi_gui.Theme
                 progress.ForeColor = Back(progress.ForeColor, B1Palette.Accent);
                 // sans theme visuel, la barre honore BackColor / ForeColor (sinon : vert systeme)
                 NativeTheme.WithHandle(progress, "b1progress", h => NativeTheme.SetTheme(h, "", ""));
+                ProgressWindow.Hook(progress);                 // piste Rule / remplissage Accent de 6 px
                 return;
             }
 
@@ -282,6 +319,7 @@ namespace com.clusterrr.hakchi_gui.Theme
                 picture.BackColor = BackKeepTransparent(picture.BackColor, B1Palette.Slate);
                 picture.ForeColor = Fore(picture.ForeColor, B1Palette.Text);
                 if (picture.BorderStyle == BorderStyle.Fixed3D) picture.BorderStyle = BorderStyle.FixedSingle;
+                if (picture.BorderStyle == BorderStyle.FixedSingle) NcBorderWindow.Hook(picture);
                 return;
             }
 
@@ -297,10 +335,18 @@ namespace com.clusterrr.hakchi_gui.Theme
 
             var panel = c as Panel;
             if (panel != null && panel.BorderStyle == BorderStyle.Fixed3D) panel.BorderStyle = BorderStyle.FixedSingle;
+            if (panel != null && panel.BorderStyle == BorderStyle.FixedSingle) NcBorderWindow.Hook(panel);
+            if (panel != null && panel.AutoScroll) DarkScrollBars(panel);
 
             // Form, UserControl, Panel, TableLayoutPanel, FlowLayoutPanel, SplitContainer, autres : fond et texte du theme
             c.BackColor = Back(c.BackColor, B1Palette.Slate);
             c.ForeColor = Fore(c.ForeColor, B1Palette.Text);
+        }
+
+        /// <summary>Barres de defilement sombres (theme Windows « DarkMode_Explorer », Windows 10 1809 et plus ; sans effet avant).</summary>
+        private static void DarkScrollBars(Control c)
+        {
+            NativeTheme.WithHandle(c, "b1scroll", h => NativeTheme.SetTheme(h, "DarkMode_Explorer", null));
         }
 
         private static void StyleLabel(Label l)
@@ -308,21 +354,12 @@ namespace com.clusterrr.hakchi_gui.Theme
             l.BackColor = BackKeepTransparent(l.BackColor, B1Palette.Slate);
             l.ForeColor = Fore(l.ForeColor, B1Palette.Text);
             if (l.BorderStyle == BorderStyle.Fixed3D) l.BorderStyle = BorderStyle.FixedSingle;
-        }
-
-        private static bool IsPrimary(ButtonBase b, Form owner)
-        {
-            object o;
-            if (primary.TryGetValue(b, out o)) return true;
-            var button = b as Button;
-            if (button == null) return false;
-            var form = owner ?? button.FindForm();
-            return form != null && ReferenceEquals(form.AcceptButton, button);
+            if (l.BorderStyle == BorderStyle.FixedSingle) NcBorderWindow.Hook(l);
         }
 
         private static void StyleButton(ButtonBase b, Form owner)
         {
-            bool prim = IsPrimary(b, owner);
+            bool prim = KindOf(b) == B1ButtonKind.Primary || (b is Button && owner != null && ReferenceEquals(owner.AcceptButton, b));
             b.FlatStyle = FlatStyle.Flat;
             b.UseVisualStyleBackColor = false;
             b.BackColor = prim ? B1Palette.Primary : Back(b.BackColor, B1Palette.RowActive);
@@ -331,45 +368,9 @@ namespace com.clusterrr.hakchi_gui.Theme
             fa.BorderSize = 1;
             fa.BorderColor = prim ? B1Palette.Accent : B1Palette.Dashed;
             fa.MouseOverBackColor = prim ? B1Palette.Accent : B1Palette.Rule;
-            fa.MouseDownBackColor = prim ? B1Palette.Slate : B1Palette.Slate;
+            fa.MouseDownBackColor = B1Palette.Slate;
             fa.CheckedBackColor = B1Palette.Primary;
-            HookDisabledPaint(b);
-        }
-
-        // Un bouton Flat desactive dessine son texte en gris tres sombre (illisible sur fond sombre) : on repeint
-        // le bouton entier en TextFaint apres le dessin par defaut.
-        private static readonly ConditionalWeakTable<Control, object> disabledHooked = new ConditionalWeakTable<Control, object>();
-
-        private static void HookDisabledPaint(ButtonBase b)
-        {
-            object o;
-            if (disabledHooked.TryGetValue(b, out o)) return;
-            disabledHooked.Add(b, new object());
-            b.Paint += DisabledPaint;
-        }
-
-        private static void DisabledPaint(object sender, PaintEventArgs e)
-        {
-            var b = (ButtonBase)sender;
-            if (b.Enabled || b.Image != null) return;
-            var r = b.ClientRectangle;
-            var g = e.Graphics;
-            using (var back = new SolidBrush(B1Palette.Slate)) g.FillRectangle(back, r);
-            using (var rule = new Pen(B1Palette.Rule)) g.DrawRectangle(rule, 0, 0, r.Width - 1, r.Height - 1);
-            var flags = TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine;
-            switch (b.TextAlign)
-            {
-                case ContentAlignment.TopLeft: case ContentAlignment.MiddleLeft: case ContentAlignment.BottomLeft: flags |= TextFormatFlags.Left; break;
-                case ContentAlignment.TopRight: case ContentAlignment.MiddleRight: case ContentAlignment.BottomRight: flags |= TextFormatFlags.Right; break;
-                default: flags |= TextFormatFlags.HorizontalCenter; break;
-            }
-            switch (b.TextAlign)
-            {
-                case ContentAlignment.TopLeft: case ContentAlignment.TopCenter: case ContentAlignment.TopRight: flags |= TextFormatFlags.Top; break;
-                case ContentAlignment.BottomLeft: case ContentAlignment.BottomCenter: case ContentAlignment.BottomRight: flags |= TextFormatFlags.Bottom; break;
-                default: flags |= TextFormatFlags.VerticalCenter; break;
-            }
-            TextRenderer.DrawText(g, b.Text, b.Font, Rectangle.Inflate(r, -3, -1), B1Palette.TextFaint, flags);
+            HookPaint(b);
         }
 
         private static void StyleToggle(ButtonBase b)
@@ -384,48 +385,44 @@ namespace com.clusterrr.hakchi_gui.Theme
             fa.MouseOverBackColor = B1Palette.Rule;
             fa.MouseDownBackColor = B1Palette.Slate;
             fa.CheckedBackColor = B1Palette.Primary;
-            HookDisabledToggle(b);
+            HookPaint(b);
         }
 
-        // Meme probleme pour une case / un bouton radio desactive : texte et case gris tres sombre. On repeint.
-        private static readonly ConditionalWeakTable<Control, object> disabledToggleHooked = new ConditionalWeakTable<Control, object>();
+        // Boutons, cases et radios standard : le dessin de Windows (focus pointille, glyphe gris, texte desactive illisible)
+        // est entierement recouvert, dans la meme peinture, par celui des controles B1 (B1Draw).
+        private static readonly ConditionalWeakTable<Control, object> paintHooked = new ConditionalWeakTable<Control, object>();
 
-        private static void HookDisabledToggle(ButtonBase b)
+        private static void HookPaint(ButtonBase b)
         {
             object o;
-            if (disabledToggleHooked.TryGetValue(b, out o)) return;
-            disabledToggleHooked.Add(b, new object());
-            b.Paint += DisabledTogglePaint;
+            if (paintHooked.TryGetValue(b, out o)) return;
+            paintHooked.Add(b, new object());
+            b.Paint += StockPaint;
+            b.MouseEnter += InvalidateOnEvent; b.MouseLeave += InvalidateOnEvent;
+            b.GotFocus += InvalidateOnEvent; b.LostFocus += InvalidateOnEvent;
+            b.MouseDown += InvalidateOnMouse; b.MouseUp += InvalidateOnMouse;
         }
 
-        private static void DisabledTogglePaint(object sender, PaintEventArgs e)
+        private static void InvalidateOnEvent(object sender, EventArgs e) { ((Control)sender).Invalidate(); }
+        private static void InvalidateOnMouse(object sender, MouseEventArgs e) { ((Control)sender).Invalidate(); }
+
+        private static void StockPaint(object sender, PaintEventArgs e)
         {
             var b = (ButtonBase)sender;
-            if (b.Enabled || b.Image != null || b.RightToLeft == RightToLeft.Yes) return;
+            var st = B1Draw.StockState(b);
+            B1VisualState forced;
+            bool preview = B1Preview.TryGet(b, out forced);
             var cb = b as CheckBox;
             var rb = b as RadioButton;
-            if ((cb != null && cb.CheckAlign != ContentAlignment.MiddleLeft) || (rb != null && rb.CheckAlign != ContentAlignment.MiddleLeft)) return;
-            var g = e.Graphics;
-            var r = b.ClientRectangle;
-            var bg = b.BackColor == Color.Transparent && b.Parent != null ? b.Parent.BackColor : b.BackColor;
-            if (!IsPalette(bg)) bg = B1Palette.Slate;
-            using (var back = new SolidBrush(bg)) g.FillRectangle(back, r);
-            int size = 13, y = r.Top + (r.Height - size) / 2;
-            using (var pen = new Pen(B1Palette.Rule))
+            if (!preview)
             {
-                if (rb != null) g.DrawEllipse(pen, r.Left + 1, y, size - 1, size - 1);
-                else g.DrawRectangle(pen, r.Left + 1, y, size - 1, size - 1);
+                if (cb != null) { if (cb.CheckState == CheckState.Checked) st |= B1VisualState.Checked; else if (cb.CheckState == CheckState.Indeterminate) st |= B1VisualState.Indeterminate; }
+                else if (rb != null && rb.Checked) st |= B1VisualState.Checked;
             }
-            bool on = cb != null ? cb.CheckState != CheckState.Unchecked : rb.Checked;
-            if (on)
-            {
-                var mark = B1Palette.TextFaint;
-                if (rb != null) using (var br = new SolidBrush(mark)) g.FillEllipse(br, r.Left + 5, y + 4, 5, 5);
-                else using (var pen = new Pen(mark, 2f)) g.DrawLines(pen, new[] { new Point(r.Left + 4, y + 7), new Point(r.Left + 6, y + 9), new Point(r.Left + 10, y + 4) });
-            }
-            var flags = TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine;
-            if (!b.UseMnemonic) flags |= TextFormatFlags.NoPrefix;
-            TextRenderer.DrawText(g, b.Text, b.Font, new Rectangle(r.Left + 16, r.Top, Math.Max(0, r.Width - 16), r.Height), B1Palette.TextFaint, flags);
+            if (cb != null && cb.Appearance == Appearance.Normal) B1Draw.PaintToggle(e.Graphics, b, st, false, cb.CheckAlign);
+            else if (rb != null && rb.Appearance == Appearance.Normal) B1Draw.PaintToggle(e.Graphics, b, st, true, rb.CheckAlign);
+            else if (cb != null || rb != null) B1Draw.PaintChip(e.Graphics, b, st);
+            else B1Draw.PaintButton(e.Graphics, b, KindOf(b), st);
         }
 
         // --- onglets --------------------------------------------------------------------------------------

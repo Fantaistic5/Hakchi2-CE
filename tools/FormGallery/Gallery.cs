@@ -42,6 +42,7 @@ namespace FormGallery
             CultureInfo.DefaultThreadCurrentUICulture = culture;
 
             if (string.Equals(o.Only, ThemeSample.Name, StringComparison.OrdinalIgnoreCase)) return RunThemeSample(o);
+            if (string.Equals(o.Only, ControlsBoard.Name, StringComparison.OrdinalIgnoreCase)) return RunControlsBoard(o);
 
             var entries = new List<Entry>();
             var types = Host.UiTypes().Where(t => o.Only == null || string.Equals(t.Name, o.Only, StringComparison.OrdinalIgnoreCase)).ToList();
@@ -107,6 +108,58 @@ namespace FormGallery
             return 0;
         }
 
+        /// <summary>--only Controls : planche des controles B1 a 96 et 144 dpi (controls_96.png, controls_144.png, controls.png = les deux cote a cote).</summary>
+        private static int RunControlsBoard(Options o)
+        {
+            var oo = new Options { Out = o.Out, Dpi = 96, Culture = o.Culture };      // l'echelle est celle de B1Dpi, pas de la police
+            var bitmaps = new List<Bitmap>();
+            try
+            {
+                foreach (var dpi in new[] { 96, 144 })
+                {
+                    float s = dpi / 96f;
+                    com.clusterrr.hakchi_gui.Theme.Controls.B1Dpi.Override = s;
+                    var f = ControlsBoard.Build(s);
+                    try
+                    {
+                        ControlsBoard.Skin(f);
+                        var png = Path.Combine(o.Out, ControlsBoard.Name + "_" + dpi + ".png");
+                        var e = new Entry { Name = ControlsBoard.Name, Dpi = dpi.ToString(CultureInfo.InvariantCulture) };
+                        // jamais affichee : une fenetre visible est plafonnee a la hauteur de l ecran, pas une capture
+                        f.StartPosition = FormStartPosition.Manual; f.Location = new Point(-30000, -30000);
+                        var want = (Size)f.Tag; int bw = want.Width, bh = want.Height;      // avant la creation du handle : la fenetre serait plafonnee
+                        CreateHandles(f);
+                        f.PerformLayout();
+                        using (var bmp = new Bitmap(bw, bh, PixelFormat.Format32bppArgb))
+                        {
+                            using (var g = Graphics.FromImage(bmp))
+                            {
+                                g.Clear(f.BackColor);
+                                for (int i = f.Controls.Count - 1; i >= 0; i--)      // les controles un par un : la fenetre est plafonnee a la hauteur de l ecran
+                                {
+                                    var c = f.Controls[i];
+                                    if (c.Width <= 0 || c.Height <= 0) continue;
+                                    using (var tmp = new Bitmap(c.Width, c.Height, PixelFormat.Format32bppArgb))
+                                    {
+                                        c.DrawToBitmap(tmp, new Rectangle(0, 0, c.Width, c.Height));
+                                        g.DrawImageUnscaled(tmp, c.Location);
+                                    }
+                                }
+                            }
+                            bmp.Save(png, ImageFormat.Png);
+                            e.Width = bw; e.Height = bh;
+                        }
+                        Console.WriteLine("OK    " + ControlsBoard.Name + " " + dpi + " dpi " + e.Width + "x" + e.Height + " fonte Jost : " + com.clusterrr.hakchi_gui.Theme.B1Fonts.JostLoaded);
+                        using (var fs = File.OpenRead(png)) using (var img = Image.FromStream(fs)) bitmaps.Add(new Bitmap(img));
+                    }
+                    finally { try { f.Dispose(); } catch { } com.clusterrr.hakchi_gui.Theme.Controls.B1Dpi.Override = 0f; }
+                }
+                using (var both = ControlsBoard.Compose(bitmaps[0], bitmaps[1])) both.Save(Path.Combine(o.Out, "controls.png"), ImageFormat.Png);
+            }
+            finally { foreach (var b in bitmaps) b.Dispose(); }
+            return 0;
+        }
+
         [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         private const int SW_SHOWNOACTIVATE = 4;
 
@@ -132,7 +185,7 @@ namespace FormGallery
         /// elle peint toute sa mise en page (menus, listes...) mais n'execute aucune logique applicative
         /// (connexion console, mise a jour, chargement des jeux). Elle est donc rendue dans son etat "vide" de conception.
         /// </summary>
-        private static void Render(Control c, Options o, string png, Entry e)
+        internal static void Render(Control c, Options o, string png, Entry e)
         {
             Form host = c as Form;
             Form wrapper = null;

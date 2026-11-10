@@ -39,16 +39,9 @@ namespace com.clusterrr.hakchi_gui.Theme
             if (root == null) return;
             if (HasScrollBars(root))
             {
-                var theme = root is ListView ? "DarkMode_ItemsView" : "DarkMode_Explorer";      // ItemsView assombrit aussi l entete des colonnes
-                NativeTheme.WithHandle(root, "darkscroll", h =>
-                {
-                    NativeTheme.SetTheme(h, theme, null);
-                    if (root is ListView)
-                    {
-                        var header = NativeTheme.ListViewHeader(h);
-                        if (header != IntPtr.Zero) NativeTheme.SetTheme(header, "DarkMode_ItemsView", null);
-                    }
-                });
+                // « DarkMode_Explorer » partout : « ItemsView » dessine une selection grise (626262) hors palette ; l'entete des
+                // colonnes et les lignes d'un ListView sont dessinees par le theme B1 (HeaderWindow, ListViewWindow)
+                NativeTheme.WithHandle(root, "darkscroll", h => NativeTheme.SetTheme(h, "DarkMode_Explorer", null));
             }
             foreach (Control c in root.Controls) ThemeScrollBars(c);
         }
