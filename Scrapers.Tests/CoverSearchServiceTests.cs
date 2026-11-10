@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using TeamShinkansen.Scrapers.Covers;
+using TeamShinkansen.Scrapers.Enums;
+using TeamShinkansen.Scrapers.Interfaces;
 using Xunit;
 
 namespace Scrapers.Tests
@@ -116,6 +118,75 @@ namespace Scrapers.Tests
         {
             var r = await new TheGamesDbCoverSource("").FindAsync(Q("G"), CancellationToken.None);
             Assert.Empty(r);
+        }
+
+        private sealed class FakeImg : IScraperImage
+        {
+            public ArtType Type { get; set; }
+            public string Url { get; set; }
+            public string Description { get { return null; } }
+        }
+
+        private sealed class FakeData : IScraperData
+        {
+            public string ID { get { return "1"; } }
+            public string Name { get; set; }
+            public string Description { get { return null; } }
+            public string[] Publishers { get { return null; } }
+            public string[] Developers { get { return null; } }
+            public string Platform { get; set; }
+            public DateTime ReleaseDate { get { return DateTime.MinValue; } }
+            public string Copyright { get { return null; } }
+            public IScraperGenre[] Genres { get { return null; } }
+            public int PlayerCount { get { return 1; } }
+            public IScraperImage[] Images { get; set; }
+        }
+
+        private static IScraperData D(string platform, string url)
+        {
+            return new FakeData { Name = "G", Platform = platform, Images = new IScraperImage[] {
+                new FakeImg { Type = ArtType.Front, Url = url }, new FakeImg { Type = ArtType.Back, Url = url + "b" } } };
+        }
+
+        [Fact]
+        public async Task PlatformMapRejectsWrongPlatform()
+        {
+            var data = new[] { D("Sony Playstation 2", "ps2"), D("Sony Playstation", "ps1") };
+            var src = new TheGamesDbCoverSource("k", t => Task.FromResult<IEnumerable<IScraperData>>(data));
+            var r = await src.FindAsync(new GameQuery { Title = "G", System = "Sony - PlayStation" }, CancellationToken.None);
+            Assert.Equal(new[] { "ps1" }, r.Select(c => c.Url).ToArray());
+            Assert.All(r, c => Assert.Equal(MatchKind.Title, c.Match));
+
+            var only = new[] { D("Sega 32X", "x") };
+            var src2 = new TheGamesDbCoverSource("k", t => Task.FromResult<IEnumerable<IScraperData>>(only));
+            Assert.Empty(await src2.FindAsync(new GameQuery { Title = "G", System = "Nintendo - Super Nintendo Entertainment System" }, CancellationToken.None));
+            Assert.Empty(await src2.FindAsync(new GameQuery { Title = "G", System = "Unknown - Thing" }, CancellationToken.None));
+
+            var arc = new[] { D("Arcade", "arc") };
+            var src3 = new TheGamesDbCoverSource("k", t => Task.FromResult<IEnumerable<IScraperData>>(arc));
+            Assert.Single(await src3.FindAsync(new GameQuery { Title = "G", System = "", Core = "km_fbneo" }, CancellationToken.None));
+            Assert.Single(await src3.FindAsync(new GameQuery { Title = "G", System = "CP System II" }, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task TheGamesDbCallsAreSerialized()
+        {
+            int active = 0, max = 0;
+            var src = new TheGamesDbCoverSource("k", async t =>
+            {
+                int a = Interlocked.Increment(ref active);
+                int m;
+                while ((m = max) < a && Interlocked.CompareExchange(ref max, a, m) != m) { }
+                await Task.Delay(50);
+                Interlocked.Decrement(ref active);
+                return new[] { D("Super Nintendo (SNES)", "u" + t) };
+            });
+            var q = new GameQuery { Title = "A", System = "Nintendo - Super Nintendo Entertainment System" };
+            var q2 = new GameQuery { Title = "B", System = "Nintendo - Super Nintendo Entertainment System" };
+            var res = await Task.WhenAll(src.FindAsync(q, CancellationToken.None), src.FindAsync(q2, CancellationToken.None));
+            Assert.Equal(1, max);
+            Assert.Equal("uA", res[0][0].Url);
+            Assert.Equal("uB", res[1][0].Url);
         }
     }
 }
