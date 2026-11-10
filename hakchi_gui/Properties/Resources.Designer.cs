@@ -2750,6 +2750,150 @@ namespace com.clusterrr.hakchi_gui.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Systems.
+        /// </summary>
+        internal static string NavSystemsHeader {
+            get {
+                return ResourceManager.GetString("NavSystemsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Collections.
+        /// </summary>
+        internal static string NavCollectionsHeader {
+            get {
+                return ResourceManager.GetString("NavCollectionsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        internal static string NavAll {
+            get {
+                return ResourceManager.GetString("NavAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No cover.
+        /// </summary>
+        internal static string NavNoCover {
+            get {
+                return ResourceManager.GetString("NavNoCover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Favorites.
+        /// </summary>
+        internal static string NavFavorites {
+            get {
+                return ResourceManager.GetString("NavFavorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No console.
+        /// </summary>
+        internal static string ConsoleBadgeOffline {
+            get {
+                return ResourceManager.GetString("ConsoleBadgeOffline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cover source:.
+        /// </summary>
+        internal static string SheetCoverSource {
+            get {
+                return ResourceManager.GetString("SheetCoverSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to unknown.
+        /// </summary>
+        internal static string SheetCoverSourceUnknown {
+            get {
+                return ResourceManager.GetString("SheetCoverSourceUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to change.
+        /// </summary>
+        internal static string SheetChangeCover {
+            get {
+                return ResourceManager.GetString("SheetChangeCover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Players.
+        /// </summary>
+        internal static string SheetPlayers {
+            get {
+                return ResourceManager.GetString("SheetPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Publisher.
+        /// </summary>
+        internal static string SheetPublisher {
+            get {
+                return ResourceManager.GetString("SheetPublisher", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Genre.
+        /// </summary>
+        internal static string SheetGenre {
+            get {
+                return ResourceManager.GetString("SheetGenre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Core.
+        /// </summary>
+        internal static string SheetCore {
+            get {
+                return ResourceManager.GetString("SheetCore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Console.
+        /// </summary>
+        internal static string StorageBarCaption {
+            get {
+                return ResourceManager.GetString("StorageBarCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MB.
+        /// </summary>
+        internal static string StorageUnitMB {
+            get {
+                return ResourceManager.GetString("StorageUnitMB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GB.
+        /// </summary>
+        internal static string StorageUnitGB {
+            get {
+                return ResourceManager.GetString("StorageUnitGB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to no cover.
         /// </summary>
         internal static string CoverGridNoCover {

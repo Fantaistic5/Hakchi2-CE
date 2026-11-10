@@ -1719,4 +1719,52 @@ Are you sure?</value>
   <data name="CoverGridNoCover" xml:space="preserve">
     <value>no cover</value>
   </data>
+  <data name="NavSystemsHeader" xml:space="preserve">
+    <value>Systems</value>
+  </data>
+  <data name="NavCollectionsHeader" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="NavAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="NavNoCover" xml:space="preserve">
+    <value>No cover</value>
+  </data>
+  <data name="NavFavorites" xml:space="preserve">
+    <value>Favorites</value>
+  </data>
+  <data name="ConsoleBadgeOffline" xml:space="preserve">
+    <value>No console</value>
+  </data>
+  <data name="SheetCoverSource" xml:space="preserve">
+    <value>Cover source:</value>
+  </data>
+  <data name="SheetCoverSourceUnknown" xml:space="preserve">
+    <value>unknown</value>
+  </data>
+  <data name="SheetChangeCover" xml:space="preserve">
+    <value>change</value>
+  </data>
+  <data name="SheetPlayers" xml:space="preserve">
+    <value>Players</value>
+  </data>
+  <data name="SheetPublisher" xml:space="preserve">
+    <value>Publisher</value>
+  </data>
+  <data name="SheetGenre" xml:space="preserve">
+    <value>Genre</value>
+  </data>
+  <data name="SheetCore" xml:space="preserve">
+    <value>Core</value>
+  </data>
+  <data name="StorageBarCaption" xml:space="preserve">
+    <value>Console</value>
+  </data>
+  <data name="StorageUnitMB" xml:space="preserve">
+    <value>MB</value>
+  </data>
+  <data name="StorageUnitGB" xml:space="preserve">
+    <value>GB</value>
+  </data>
 </root>

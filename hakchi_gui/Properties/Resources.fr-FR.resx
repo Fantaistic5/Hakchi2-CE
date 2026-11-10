@@ -1306,4 +1306,52 @@ Il y a une faible chance de pertes de données, donc s.v.p. assurez-vous d'avoir
   <data name="CoverGridNoCover" xml:space="preserve">
     <value>sans jaquette</value>
   </data>
+  <data name="NavSystemsHeader" xml:space="preserve">
+    <value>Systèmes</value>
+  </data>
+  <data name="NavCollectionsHeader" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="NavAll" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="NavNoCover" xml:space="preserve">
+    <value>Sans jaquette</value>
+  </data>
+  <data name="NavFavorites" xml:space="preserve">
+    <value>Favoris</value>
+  </data>
+  <data name="ConsoleBadgeOffline" xml:space="preserve">
+    <value>Aucune console</value>
+  </data>
+  <data name="SheetCoverSource" xml:space="preserve">
+    <value>Source de la pochette :</value>
+  </data>
+  <data name="SheetCoverSourceUnknown" xml:space="preserve">
+    <value>inconnue</value>
+  </data>
+  <data name="SheetChangeCover" xml:space="preserve">
+    <value>changer</value>
+  </data>
+  <data name="SheetPlayers" xml:space="preserve">
+    <value>Joueurs</value>
+  </data>
+  <data name="SheetPublisher" xml:space="preserve">
+    <value>Éditeur</value>
+  </data>
+  <data name="SheetGenre" xml:space="preserve">
+    <value>Genre</value>
+  </data>
+  <data name="SheetCore" xml:space="preserve">
+    <value>Core</value>
+  </data>
+  <data name="StorageBarCaption" xml:space="preserve">
+    <value>Console</value>
+  </data>
+  <data name="StorageUnitMB" xml:space="preserve">
+    <value>Mo</value>
+  </data>
+  <data name="StorageUnitGB" xml:space="preserve">
+    <value>Go</value>
+  </data>
 </root>

@@ -27,7 +27,7 @@ namespace FormGallery
 
         [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-        private static List<NesApplication> LoadGames(int count)
+        internal static List<NesApplication> LoadGames(int count)
         {
             var dir = Host.SamplesSource;
             var dirs = Directory.GetDirectories(dir).OrderBy(d => d, StringComparer.Ordinal).ToList();
