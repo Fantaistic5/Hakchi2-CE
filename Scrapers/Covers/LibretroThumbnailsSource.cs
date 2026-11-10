@@ -20,8 +20,8 @@ namespace TeamShinkansen.Scrapers.Covers
 
         private readonly HttpCache _http;
         private readonly Func<string, string> _datUrlForSystem;
-        private readonly ConcurrentDictionary<string, LibretroDatIndex> _indexes =
-            new ConcurrentDictionary<string, LibretroDatIndex>();
+        private readonly ConcurrentDictionary<string, Lazy<Task<LibretroDatIndex>>> _indexes =
+            new ConcurrentDictionary<string, Lazy<Task<LibretroDatIndex>>>();
 
         public LibretroThumbnailsSource(HttpCache http, Func<string, string> datUrlForSystem)
         {
@@ -97,18 +97,38 @@ namespace TeamShinkansen.Scrapers.Covers
             return LibretroNames.NormalizeTitle((s ?? string.Empty).Replace('_', ' '));
         }
 
+        // Un seul chargement par système (single-flight) ; une entrée échouée ou vide est retirée pour permettre un nouvel essai.
         private async Task<LibretroDatIndex> GetIndexAsync(string sys, CancellationToken ct)
         {
+            var lazy = _indexes.GetOrAdd(sys, k => new Lazy<Task<LibretroDatIndex>>(() => LoadIndexAsync(k, ct)));
             LibretroDatIndex idx;
-            if (_indexes.TryGetValue(sys, out idx)) return idx;
+            try
+            {
+                idx = await lazy.Value.ConfigureAwait(false);
+            }
+            catch
+            {
+                Evict(sys, lazy);
+                throw;
+            }
+            if (idx == null) Evict(sys, lazy);
+            return idx;
+        }
+
+        private void Evict(string sys, Lazy<Task<LibretroDatIndex>> lazy)
+        {
+            ((ICollection<KeyValuePair<string, Lazy<Task<LibretroDatIndex>>>>)_indexes)
+                .Remove(new KeyValuePair<string, Lazy<Task<LibretroDatIndex>>>(sys, lazy));
+        }
+
+        private async Task<LibretroDatIndex> LoadIndexAsync(string sys, CancellationToken ct)
+        {
             string url = _datUrlForSystem(sys);
             if (string.IsNullOrEmpty(url)) return null;
             string text = await _http.GetTextAsync(url, ct).ConfigureAwait(false);
             if (text == null) return null;
             using (var reader = new StringReader(text))
-                idx = LibretroDatIndex.Parse(reader);
-            _indexes[sys] = idx;
-            return idx;
+                return LibretroDatIndex.Parse(reader);
         }
 
         private async Task<CoverCandidate> CheckAsync(string sys, string gameName, MatchKind kind, CancellationToken ct)

@@ -26,16 +26,22 @@ namespace Scrapers.Tests
             public readonly Dictionary<string, string> Texts = new Dictionary<string, string>();
             public readonly HashSet<string> Existing = new HashSet<string>();
             public int Requests;
-            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
+            public int DatGets;
+            public int DatDelayMs;
+            public int FailDatTimes;
+            protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)
             {
                 Interlocked.Increment(ref Requests);
                 string url = request.RequestUri.AbsoluteUri;
                 if (request.Method == HttpMethod.Head)
-                    return Task.FromResult(new HttpResponseMessage(Existing.Contains(url) ? HttpStatusCode.OK : HttpStatusCode.NotFound));
+                    return new HttpResponseMessage(Existing.Contains(url) ? HttpStatusCode.OK : HttpStatusCode.NotFound);
+                int n = Interlocked.Increment(ref DatGets);
+                if (DatDelayMs > 0) await Task.Delay(DatDelayMs, ct);
+                if (n <= FailDatTimes) throw new HttpRequestException("boom");
                 string body;
                 if (Texts.TryGetValue(url, out body))
-                    return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(body) });
-                return Task.FromResult(new HttpResponseMessage(HttpStatusCode.NotFound));
+                    return new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(body) };
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
         }
 
@@ -123,6 +129,32 @@ namespace Scrapers.Tests
             var second = await Make(h).FindAsync(q, CancellationToken.None); // nouvelle instance: cache disque
             Assert.Single(second);
             Assert.Equal(after, h.Requests);
+        }
+
+        [Fact]
+        public async Task ConcurrentQueriesLoadDatOnce()
+        {
+            var h = new FakeHandler { DatDelayMs = 200 };
+            h.Texts[DatUrl(Snes)] = Fixture("snes-sample.dat");
+            var src = Make(h);
+            var q = new GameQuery { System = Snes, Crc32 = 0xB19ED489 };
+            var tasks = Enumerable.Range(0, 8).Select(_ => Task.Run(() => src.FindAsync(q, CancellationToken.None))).ToArray();
+            await Task.WhenAll(tasks);
+            Assert.Equal(1, h.DatGets);
+        }
+
+        [Fact]
+        public async Task FailedDatLoadIsRetried()
+        {
+            var h = new FakeHandler { FailDatTimes = 1 };
+            h.Texts[DatUrl(Snes)] = Fixture("snes-sample.dat");
+            h.Existing.Add(Box(Snes, "Super Mario World (USA)"));
+            var src = Make(h);
+            var q = new GameQuery { System = Snes, Crc32 = 0xB19ED489 };
+            await Assert.ThrowsAsync<HttpRequestException>(() => src.FindAsync(q, CancellationToken.None));
+            var res = await src.FindAsync(q, CancellationToken.None);
+            Assert.Single(res);
+            Assert.Equal(2, h.DatGets);
         }
 
         [Fact]
