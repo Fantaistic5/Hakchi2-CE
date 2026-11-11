@@ -94,7 +94,7 @@ namespace hakchi_gui.Tests.Shell
         /// MainForm sans ses gestionnaires Load/Shown/Closing, hors ecran, affichee sans activation (les controles ont un etat visible),
         /// avec ces jeux dans listViewGames. Un garde-fou ferme toute boite de dialogue modale qui bloquerait le test.
         /// </summary>
-        public static MainForm Create(IList<NesApplication> apps, int dpi = 96, Size? size = null)
+        public static MainForm Create(IList<NesApplication> apps, int dpi = 96, Size? size = null, bool rtl = false)
         {
             Init();
             SynchronizationContext.SetSynchronizationContext(new WindowsFormsSynchronizationContext());
@@ -106,6 +106,7 @@ namespace hakchi_gui.Tests.Shell
             f.StartPosition = FormStartPosition.Manual;
             f.Location = new Point(-30000, -30000);
             f.ShowInTaskbar = false;
+            if (rtl) { f.RightToLeft = RightToLeft.Yes; f.RightToLeftLayout = true; }     // miroir force (les resx ar-SA ne l'activent pas)
             if (dpi != 96) f.Font = new Font(f.Font.FontFamily, f.Font.Size * dpi / 96f, f.Font.Style, f.Font.Unit);   // AutoScaleMode.Font
             if (apps != null && apps.Count > 0)
             {
@@ -726,7 +727,7 @@ namespace hakchi_gui.Tests.Shell
         }
 
         /// <summary>Aucun controle visible ne chevauche un frere visible ; dans la coque, chacun tient dans son parent.</summary>
-        private static void Check(Control parent, List<string> problems)
+        internal static void Check(Control parent, List<string> problems)
         {
             var kids = parent.Controls.Cast<Control>().Where(MainFormEnv.OwnVisible).ToList();
             bool scrolls = parent is ScrollableControl && ((ScrollableControl)parent).AutoScroll;

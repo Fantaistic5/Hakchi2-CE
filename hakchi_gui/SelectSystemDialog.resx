@@ -122,7 +122,7 @@
     <value>16, 38</value>
   </data>
   <data name="checkedListBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>370, 346</value>
+    <value>350, 346</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="checkedListBox.TabIndex" type="System.Int32, mscorlib">
@@ -168,10 +168,10 @@
     <value>4</value>
   </data>
   <data name="buttonPrepare.Location" type="System.Drawing.Point, System.Drawing">
-    <value>394, 356</value>
+    <value>374, 356</value>
   </data>
   <data name="buttonPrepare.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 28</value>
+    <value>124, 28</value>
   </data>
   <data name="buttonPrepare.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -192,10 +192,10 @@
     <value>3</value>
   </data>
   <data name="buttonCancel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>394, 322</value>
+    <value>374, 322</value>
   </data>
   <data name="buttonCancel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 28</value>
+    <value>124, 28</value>
   </data>
   <data name="buttonCancel.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -216,10 +216,10 @@
     <value>2</value>
   </data>
   <data name="buttonCheckAll.Location" type="System.Drawing.Point, System.Drawing">
-    <value>394, 38</value>
+    <value>374, 38</value>
   </data>
   <data name="buttonCheckAll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 28</value>
+    <value>124, 28</value>
   </data>
   <data name="buttonCheckAll.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -240,10 +240,10 @@
     <value>1</value>
   </data>
   <data name="buttonUncheckAll.Location" type="System.Drawing.Point, System.Drawing">
-    <value>394, 72</value>
+    <value>374, 72</value>
   </data>
   <data name="buttonUncheckAll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 28</value>
+    <value>124, 28</value>
   </data>
   <data name="buttonUncheckAll.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
