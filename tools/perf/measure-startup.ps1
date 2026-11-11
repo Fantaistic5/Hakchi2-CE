@@ -1,4 +1,10 @@
-param([int]$Runs = 3, [string]$Exe = 'P:\HakchiSNESUSA\app\hakchi_new.exe', [int]$MaxMs = 25000, [int]$StableMs = 2500,
+# ATTENTION : ce script LANCE hakchi (la copie de test) plusieurs fois et le ferme par PID. hakchi cherche la console
+# au demarrage : la console SNES/NES Mini doit etre DEBRANCHEE (aucune synchronisation, aucun flash ne doit etre possible).
+# Refuse de tourner sans le switch -ConsoleUnplugged, qui confirme que la console est debranchee.
+# Copie de test : -Exe(s), sinon %HAKCHI_SAMPLES% (par defaut P:\HakchiSNESUSA\app).
+param([int]$Runs = 3, [string]$Exe = (Join-Path $(if ($env:HAKCHI_SAMPLES) { $env:HAKCHI_SAMPLES } else { 'P:\HakchiSNESUSA\app' }) 'hakchi_new.exe'), [int]$MaxMs = 25000, [int]$StableMs = 2500,
+      # confirme que la console est debranchee (obligatoire)
+      [switch]$ConsoleUnplugged,
       # Interface B1 : listViewGames est cachee derriere la grille de jaquettes. -HiddenLists compte aussi les ListView cachees (C).
       [switch]$HiddenLists,
       # Interface B1 : « grille complete » = derniere modification des pixels de la grille (controle Name = "grid"),
@@ -8,6 +14,11 @@ param([int]$Runs = 3, [string]$Exe = 'P:\HakchiSNESUSA\app\hakchi_new.exe', [int
       [string]$SaveLastFrame = '',
       # diagnostic : enregistre chaque etat different de la grille (<dossier>\run<N>_<ms>.png)
       [string]$SaveChanges = '')
+
+if (-not $ConsoleUnplugged) {
+    Write-Output 'ABANDON : ce script lance hakchi. Debranchez la console, puis relancez avec -ConsoleUnplugged.'
+    exit 2
+}
 
 Add-Type -TypeDefinition @'
 using System;
@@ -108,8 +119,9 @@ $appDir = Split-Path $Exe
 $libCount = (Get-ChildItem -Directory (Join-Path $appDir 'games') | Where-Object { Get-ChildItem $_.FullName -Filter *.desktop -ErrorAction SilentlyContinue }).Count
 Write-Output "Bibliotheque (dossiers de jeux avec .desktop) : $libCount"
 
-$existing = Get-Process -Name (Split-Path $Exe -LeafBase) -ErrorAction SilentlyContinue
-if ($existing) { Write-Output "ABANDON : $((Split-Path $Exe -LeafBase)) tourne deja (PID $($existing.Id -join ','))"; exit 3 }
+$exeName = [IO.Path]::GetFileNameWithoutExtension($Exe)     # Split-Path -LeafBase n'existe qu'en PowerShell 7
+$existing = Get-Process -Name $exeName -ErrorAction SilentlyContinue
+if ($existing) { Write-Output "ABANDON : $exeName tourne deja (PID $($existing.Id -join ','))"; exit 3 }
 
 function Save-Frame([string]$path) {
     Add-Type -AssemblyName System.Drawing

@@ -1,6 +1,7 @@
 # Mesure de ce que l'utilisateur voit au demarrage, sans passer par le thread UI de hakchi.
 # Capture de la fenetre principale par GetWindowDC + BitBlt (surface DWM de la fenetre : ne bloque pas, meme si le thread UI
-# est occupe, et ne depend pas des fenetres qui la recouvrent), toutes les ~15 ms, depuis ce processus. Aucun message envoye.
+# est occupe, et ne depend pas des fenetres qui la recouvrent), toutes les ~30 ms (15 ms d'attente + capture), depuis ce
+# processus. Aucun message envoye.
 #
 #  B          fenetre principale visible (titre « hakchi CE... »)
 #  C_visible  premiers jeux affiches :
@@ -10,9 +11,22 @@
 #             - interface B1 : pixels « jaquette » (saturation >= 60) >= 97 % de leur nombre final, cases presentes ;
 #             - interface d'origine : pas de jaquettes, la liste est complete des qu'elle s'affiche (Full = C_visible).
 #
-# Usage : measure-visible.ps1 -Exes a.exe,b.exe -Rounds 10 [-SaveDir <dossier>]  (lancements alternes, fermeture par PID)
-param([string[]]$Exes = @('P:\HakchiSNESUSA\app\hakchi_mtx.exe', 'P:\HakchiSNESUSA\app\hakchi_new.exe'),
-      [int]$Rounds = 10, [int]$MaxMs = 20000, [int]$AfterMs = 3500, [string]$SaveDir = '')
+# Usage : measure-visible.ps1 -ConsoleUnplugged -Exes a.exe,b.exe -Rounds 10 [-SaveDir <dossier>]
+#         (lancements alternes, fermeture par PID)
+#
+# ATTENTION : ce script LANCE hakchi (la copie de test) plusieurs fois et le ferme par PID. hakchi cherche la console
+# au demarrage : la console SNES/NES Mini doit etre DEBRANCHEE (aucune synchronisation, aucun flash ne doit etre possible).
+# Refuse de tourner sans le switch -ConsoleUnplugged, qui confirme que la console est debranchee.
+# Copie de test : -Exe(s), sinon %HAKCHI_SAMPLES% (par defaut P:\HakchiSNESUSA\app).
+param([string[]]$Exes = @((Join-Path $(if ($env:HAKCHI_SAMPLES) { $env:HAKCHI_SAMPLES } else { 'P:\HakchiSNESUSA\app' }) 'hakchi_mtx.exe'), (Join-Path $(if ($env:HAKCHI_SAMPLES) { $env:HAKCHI_SAMPLES } else { 'P:\HakchiSNESUSA\app' }) 'hakchi_new.exe')),
+      [int]$Rounds = 10, [int]$MaxMs = 20000, [int]$AfterMs = 3500, [string]$SaveDir = '',
+      # confirme que la console est debranchee (obligatoire)
+      [switch]$ConsoleUnplugged)
+
+if (-not $ConsoleUnplugged) {
+    Write-Output 'ABANDON : ce script lance hakchi. Debranchez la console, puis relancez avec -ConsoleUnplugged.'
+    exit 2
+}
 
 Add-Type -TypeDefinition @'
 using System;

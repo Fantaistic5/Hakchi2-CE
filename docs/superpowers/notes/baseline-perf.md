@@ -29,7 +29,7 @@ Le compteur ne bouge plus apres le premier instant non nul : le chargement de la
 - Binaire : `P:\HakchiSNESUSA\app\hakchi_new.exe` (copie de test, patchee pour le mutex), version `3.9.3-1fa4523a`, interface d'origine (avant la Task 1).
 - Meme methode que ci-dessus : demarrage du processus, interrogation toutes les 40 ms, `LVM_GETITEMCOUNT` sur les `SysListView32` visibles de la fenetre « hakchi CE », fermeture par PID (`Stop-Process -Id`). Console non connectee, rien de clique. Aucun hakchi n'etait lance au depart.
 - Bibliotheque : 195 dossiers de jeux. Le compteur de la liste vaut 216 (195 jeux + groupes / dossiers), comme dans la serie precedente.
-- Script : `tools/perf/measure-startup.ps1` (`-Runs 3`, filtrer la sortie avec `Select-String "^run"`).
+- Script : `tools/perf/measure-startup.ps1` (`-ConsoleUnplugged -Runs 3`, filtrer la sortie avec `Select-String "^run"`). Les deux scripts de mesure lancent hakchi : ils refusent de tourner sans `-ConsoleUnplugged` (console debranchee).
 
 | Mesure | Run 1 | Run 2 | Run 3 | Mediane |
 |---|---|---|---|---|
