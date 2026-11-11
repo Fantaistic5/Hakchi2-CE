@@ -44,6 +44,8 @@ namespace com.clusterrr.hakchi_gui
         private bool fittingCombos;
         internal const int DescriptionMinHeight = 120;      // px a 96 dpi
         internal static readonly Size ShellMinimumSize = new Size(1024, 640);
+        /// <summary>Taille de depart souhaitee, ramenee a la zone de travail de l'ecran (<see cref="FitStartBounds"/>).</summary>
+        internal static readonly Size ShellDefaultSize = new Size(1280, 800);
 
         private float ShellScale { get { return B1Dpi.Scale(this); } }
 
@@ -190,10 +192,25 @@ namespace com.clusterrr.hakchi_gui
 
             ActiveControl = grid;       // focus initial sur la grille, pas sur la premiere puce
             MinimumSize = ShellMinimumSize;
-            if (Width < 1280 || Height < 800) Size = new Size(1280, 800);
+            Bounds = FitStartBounds(Bounds, ShellDefaultSize, MinimumSize, Screen.FromControl(this).WorkingArea);
             shellBuilt = true;
             ResumeLayout(false);
             PerformLayout();
+        }
+
+        /// <summary>
+        /// Taille et position de depart : <paramref name="wanted"/> si la fenetre est plus petite, ramenee a la zone de travail,
+        /// jamais sous <paramref name="minimum"/>, et deplacee pour tenir entierement dans la zone de travail (coin haut-gauche
+        /// prioritaire si la taille minimale la depasse).
+        /// </summary>
+        internal static Rectangle FitStartBounds(Rectangle current, Size wanted, Size minimum, Rectangle workArea)
+        {
+            var size = current.Width < wanted.Width || current.Height < wanted.Height ? wanted : current.Size;
+            int w = Math.Max(minimum.Width, Math.Min(size.Width, workArea.Width));
+            int h = Math.Max(minimum.Height, Math.Min(size.Height, workArea.Height));
+            int x = Math.Max(workArea.Left, Math.Min(current.X, workArea.Right - w));
+            int y = Math.Max(workArea.Top, Math.Min(current.Y, workArea.Bottom - h));
+            return new Rectangle(x, y, w, h);
         }
 
         /// <summary>

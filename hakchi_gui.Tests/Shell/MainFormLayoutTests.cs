@@ -823,4 +823,50 @@ namespace hakchi_gui.Tests.Shell
             }
         }
     }
+    /// <summary>Taille de depart de la fenetre principale ramenee a l'ecran (MainForm.FitStartBounds, fonction pure).</summary>
+    public class StartBoundsTests
+    {
+        private static readonly Size Wanted = MainForm.ShellDefaultSize, Min = MainForm.ShellMinimumSize;
+
+        [Fact]
+        public void LargeScreenKeepsDefaultSize()
+        {
+            var r = MainForm.FitStartBounds(new Rectangle(100, 50, 989, 707), Wanted, Min, new Rectangle(0, 0, 1920, 1040));
+            Assert.Equal(new Rectangle(100, 50, 1280, 800), r);
+        }
+
+        [Fact]
+        public void SmallScreenClampsToWorkAreaAndStaysOnScreen()
+        {
+            var wa = new Rectangle(0, 0, 1366, 728);        // 1366x768 moins la barre des taches
+            var r = MainForm.FitStartBounds(new Rectangle(300, 200, 989, 707), Wanted, Min, wa);
+            Assert.Equal(new Size(1280, 728), r.Size);
+            Assert.True(wa.Contains(r), r + " hors de " + wa);
+        }
+
+        [Fact]
+        public void NeverBelowMinimumSize()
+        {
+            var wa = new Rectangle(0, 0, 1000, 600);
+            var r = MainForm.FitStartBounds(new Rectangle(50, 50, 989, 707), Wanted, Min, wa);
+            Assert.Equal(Min, r.Size);
+            Assert.Equal(wa.Location, r.Location);           // plus grande que l'ecran : coin haut-gauche a l'ecran
+        }
+
+        [Fact]
+        public void SecondaryMonitorWorkAreaIsHonoured()
+        {
+            var wa = new Rectangle(-1280, 100, 1280, 984);
+            var r = MainForm.FitStartBounds(new Rectangle(0, 0, 989, 707), Wanted, Min, wa);
+            Assert.Equal(new Size(1280, 800), r.Size);
+            Assert.True(wa.Contains(r), r + " hors de " + wa);
+        }
+
+        [Fact]
+        public void LargerWindowIsKeptWhenItFits()
+        {
+            var r = MainForm.FitStartBounds(new Rectangle(0, 0, 1500, 900), Wanted, Min, new Rectangle(0, 0, 1920, 1040));
+            Assert.Equal(new Size(1500, 900), r.Size);
+        }
+    }
 }
