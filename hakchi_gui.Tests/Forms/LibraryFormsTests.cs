@@ -141,6 +141,24 @@ namespace hakchi_gui.Tests.Forms
                         Assert.True(o.Left < p.Left, name + " : " + o.Name + " est a droite du bouton primaire " + p.Name);
         }
 
+        // Boutons deplaces (primaire a droite) : la touche Tab suit l'ordre visuel, de gauche a droite, sur chaque rangee.
+        [StaTheory]
+        [InlineData("GameGenieCodeAddModForm")]
+        [InlineData("GameGenieCodeForm")]
+        [InlineData("FoldersManagerForm")]
+        [InlineData("SelectCoverDialog")]
+        [InlineData("SelectCoreDialog")]
+        public void TabOrderFollowsButtonRowLeftToRight(string name)
+        {
+            using (var f = Create(name))
+            {
+                var stops = Tree(f).Where(c => (c is ButtonBase || c is ComboBox) && c.TabStop).ToList();
+                foreach (var a in stops)
+                    foreach (var b in stops.Where(x => x != a && x.Parent == a.Parent && a.Left < x.Left && Math.Abs(x.Top - a.Top) < 8))
+                        Assert.True(a.TabIndex < b.TabIndex, name + " : " + a.Name + " (" + a.TabIndex + ") est a gauche de " + b.Name + " (" + b.TabIndex + ") mais vient apres au Tab");
+            }
+        }
+
         [StaTheory]
         [InlineData("GameGenieCodeAddModForm", "buttonOk")]
         [InlineData("GameGenieCodeForm", "buttonOk")]
@@ -307,6 +325,85 @@ namespace hakchi_gui.Tests.Forms
                 Assert.Equal(fx.Bar.Maximum, fx.Bar.Value);
                 Assert.Equal(T("State.Applied"), fx.Item(0).SubItems[3].Text);
                 Assert.NotEqual(T("State.Applied"), fx.Item(1).SubItems[3].Text);
+            }
+        }
+
+        /// <summary>Deux candidats par jeu : le premier telecharge une image tronquee, le second une image valide.</summary>
+        private sealed class TwoCandidateSource : ICoverSource
+        {
+            public string Name { get { return "fake"; } }
+            public bool IsAvailable { get { return true; } }
+            public Task<IReadOnlyList<CoverCandidate>> FindAsync(GameQuery q, CancellationToken ct)
+            {
+                return Task.FromResult<IReadOnlyList<CoverCandidate>>(new[]
+                {
+                    new CoverCandidate { Url = "fake://bad/" + q.Title, SourceName = "fake", Region = "Europe", Match = MatchKind.Crc, MatchedName = q.Title },
+                    new CoverCandidate { Url = "fake://good/" + q.Title, SourceName = "fake", Region = "Europe", Match = MatchKind.Crc, MatchedName = q.Title },
+                });
+            }
+        }
+
+        // Revue Task 8 : seul l'en-tete etait verifie ; une image que GDI+ ne sait pas decoder etait retenue au lieu de passer au
+        // candidat suivant. GDI+ decode sans erreur un PNG tronque ou aux donnees alterees (il complete l'image) : le cas
+        // discriminant est un PNG a en-tete lisible dont les pixels ne peuvent pas etre decodes (dimensions declarees enormes).
+        [StaFact]
+        public void CoverBatchUndecodableCandidateFallsThroughToNext()
+        {
+            var fx = Batch(1, new FakeSource());
+            using (fx.Form)
+            {
+                var good = Png(300, 400, B1Palette.Accent);
+                var bad = WithPngSize(Png(300, 400, B1Palette.Primary), 30000, 30000);
+                using (var ms = new MemoryStream(bad))
+                using (var probe = Image.FromStream(ms, false, false))    // l'ancienne verification (en-tete seul) l'acceptait
+                    Assert.Equal(30000, probe.Width);
+                var asked = new List<string>();
+                fx.Form.ServiceFactory = () => new CoverSearchService(new ICoverSource[] { new TwoCandidateSource() });
+                fx.Form.Downloader = (url, ct) => { lock (asked) asked.Add(url); return Task.FromResult(url.Contains("/bad/") ? bad : good); };
+                Wait(fx.Form.RunSearchAsync());
+                Assert.Contains(asked, u => u.Contains("/bad/"));
+                Assert.Contains(asked, u => u.Contains("/good/"));
+                var chosen = Field<ConcurrentDictionary<NesApplication, byte[]>>(fx.Form, "_chosenData");
+                Assert.True(chosen.ContainsKey(fx.Apps[0]), "aucune jaquette retenue");
+                Assert.Equal(good, chosen[fx.Apps[0]]);
+                Assert.Equal(T("State.Ready"), fx.Item(0).SubItems[3].Text);
+            }
+        }
+
+        /// <summary>Copie d'un PNG dont l'en-tete IHDR declare d'autres dimensions (CRC recalcule) : en-tete valide, pixels indecodables.</summary>
+        private static byte[] WithPngSize(byte[] png, int w, int h)
+        {
+            var d = (byte[])png.Clone();
+            // signature (8) + longueur (4) + "IHDR" (4) : largeur a l'octet 16, hauteur a 20, CRC du bloc a 29
+            Action<int, uint> be = (o, v) => { d[o] = (byte)(v >> 24); d[o + 1] = (byte)(v >> 16); d[o + 2] = (byte)(v >> 8); d[o + 3] = (byte)v; };
+            be(16, (uint)w); be(20, (uint)h);
+            uint crc = 0xFFFFFFFF;
+            for (int i = 12; i < 29; i++)
+            {
+                crc ^= d[i];
+                for (int k = 0; k < 8; k++) crc = (crc & 1) != 0 ? (crc >> 1) ^ 0xEDB88320u : crc >> 1;
+            }
+            be(29, ~crc);
+            return d;
+        }
+
+        // Revue Task 8 : cocher une ligne apres l'application remettait le resume « pretes » et perdait le nombre de jaquettes appliquees.
+        [StaFact]
+        public void CoverBatchSummaryKeepsAppliedCountAfterNewCheck()
+        {
+            var fx = Batch(3, new FakeSource());
+            using (fx.Form)
+            {
+                Wait(fx.Form.RunSearchAsync());
+                for (int i = 0; i < 3; i++) fx.Item(i).Checked = i == 0;
+                Wait(fx.Form.RunApplyAsync());
+                Assert.Equal(1, fx.Form.AppliedCount);
+                fx.Item(1).Checked = true;
+                fx.Form.RefreshSummaryAndButtons();                         // ce que fait ItemChecked quand la fenetre est affichee
+                var summary = Field<Label>(fx.Form, "labelSummary").Text;
+                Assert.Equal(string.Format(T("Msg.SummaryMixed"), 1, 1, 0, 1), summary);
+                Assert.NotEqual(string.Format(T("Msg.SummarySearch"), 1, 1, 0), summary);   // l'ancien resume sans les appliquees
+                Assert.True(Field<Button>(fx.Form, "buttonApply").Enabled, "Appliquer doit etre actif : une ligne trouvee est cochee");
             }
         }
 

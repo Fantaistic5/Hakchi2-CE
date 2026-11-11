@@ -146,7 +146,7 @@
             this.tableLayoutPanelMain.PerformLayout();
             this.tableLayoutPanelButtons.ResumeLayout(false);
             this.tableLayoutPanelButtons.PerformLayout();
-            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(this.buttonImport); // B1: bouton de validation primaire
+            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(this.buttonImport); // B1: do not remove (bouton de validation primaire)
             this.ResumeLayout(false);
 
         }

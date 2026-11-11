@@ -45,6 +45,7 @@
   <data name="Msg.NoGames" xml:space="preserve"><value>No game to search.</value></data>
   <data name="Msg.SummarySearch" xml:space="preserve"><value>{0} ready · {1} to check · {2} not found</value></data>
   <data name="Msg.SummaryApplied" xml:space="preserve"><value>{0} applied · {1} to check · {2} not found</value></data>
+  <data name="Msg.SummaryMixed" xml:space="preserve"><value>{3} applied · {0} ready · {1} to check · {2} not found</value></data>
   <data name="State.NetworkError" xml:space="preserve"><value>Network error</value></data>
   <data name="State.Cancelled" xml:space="preserve"><value>Cancelled</value></data>
   <data name="Msg.NetworkDown" xml:space="preserve"><value>Network unavailable: no source could be reached.</value></data>

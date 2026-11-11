@@ -87,7 +87,7 @@ namespace FormGallery
         {
             var f = (CoverBatchForm)form;
             UiContext();
-            f.CreateControl();          // controles « crees » (Created) comme a l'affichage : les cases mettent le resume a jour
+            f.CreateControl();          // handles crees ; Created reste faux tant que la fenetre est cachee (voir RefreshSummaryAndButtons)
             CreateHandles(f);
             var search = f.RunSearchAsync();
             Pump(() => search.IsCompleted);
@@ -97,6 +97,7 @@ namespace FormGallery
             Pump(() => apply.IsCompleted);
             // apres l'application : les autres propositions exactes restent a appliquer
             foreach (ListViewItem it in list.Items) if (it.Text == "Super Metroid" || it.Text == "F-Zero") it.Checked = true;
+            f.RefreshSummaryAndButtons();   // ItemChecked s'arrete avant le resume tant que la fenetre n'est pas affichee
             var metroid = list.Items.Cast<ListViewItem>().First(it => it.Text == "Super Metroid");
             UiContext();
             metroid.Selected = true;

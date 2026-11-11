@@ -247,8 +247,17 @@ namespace com.clusterrr.hakchi_gui
                     if (r.Item.Checked) ready++; else toCheck++;
                 }
             }
-            labelSummary.Text = string.Format(T(applied ? "Msg.SummaryApplied" : "Msg.SummarySearch"),
-                applied ? AppliedCount : ready, toCheck, notFound);
+            // apres une application, une nouvelle case cochee ne fait pas disparaitre le nombre de jaquettes deja appliquees
+            string key = applied ? "Msg.SummaryApplied" : AppliedCount > 0 ? "Msg.SummaryMixed" : "Msg.SummarySearch";
+            labelSummary.Text = string.Format(T(key), applied ? AppliedCount : ready, toCheck, notFound, AppliedCount);
+        }
+
+        /// <summary>Resume et boutons recalcules comme apres un clic (galerie : fenetre jamais affichee, ItemChecked s'arrete avant).</summary>
+        internal void RefreshSummaryAndButtons()
+        {
+            foreach (var r in VisibleRows()) RefreshItem(r);
+            UpdateSummary(false);
+            UpdateButtons();
         }
 
         private void UpdateButtons()
@@ -443,12 +452,15 @@ namespace com.clusterrr.hakchi_gui
             {
                 var data = await Downloader(url, _closeCts.Token);
                 if (data == null || data.Length == 0) throw new InvalidDataException("image vide");
-                // en-tete lisible (format reconnu, dimensions) sans decoder les pixels
+                // decodage complet une fois (en tache de fond) : une image tronquee ou corrompue echoue ici et le candidat suivant est essaye
                 await Task.Run(() =>
                 {
                     using (var ms = new MemoryStream(data, false))
-                    using (var img = Image.FromStream(ms, false, false))
+                    using (var img = Image.FromStream(ms, false, true))
+                    {
                         if (img.Width <= 0 || img.Height <= 0) throw new InvalidDataException("image vide");
+                        using (var probe = new Bitmap(img)) { }      // force la lecture de tous les pixels
+                    }
                 });
                 if (_disposed) throw new OperationCanceledException(_closeCts.Token);
                 _images[url] = data;

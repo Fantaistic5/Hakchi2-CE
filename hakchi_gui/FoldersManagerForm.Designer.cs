@@ -500,7 +500,7 @@
             this.tableLayoutPanel1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(this.buttonOk); // B1: bouton de validation primaire
+            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(this.buttonOk); // B1: do not remove (bouton de validation primaire)
             this.ResumeLayout(false);
             this.PerformLayout();
 

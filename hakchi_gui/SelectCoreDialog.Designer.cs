@@ -172,7 +172,7 @@
             this.Name = "SelectCoreDialog";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SelectCoreDialog_FormClosing);
             this.Shown += new System.EventHandler(this.SelectCoreDialog_Shown);
-            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(this.buttonApply); // B1: bouton de validation primaire
+            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(this.buttonApply); // B1: do not remove (bouton de validation primaire)
             this.ResumeLayout(false);
             this.PerformLayout();
 

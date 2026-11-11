@@ -156,7 +156,7 @@
             this.Name = "SelectCoverDialog";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SelectCoverDialog_FormClosing);
             this.Shown += new System.EventHandler(this.SelectCoverDialog_Shown);
-            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(this.buttonAccept); // B1: bouton de validation primaire
+            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(this.buttonAccept); // B1: do not remove (bouton de validation primaire)
             this.ResumeLayout(false);
             this.PerformLayout();
 
