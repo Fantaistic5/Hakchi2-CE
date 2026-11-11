@@ -59,10 +59,11 @@ namespace com.clusterrr.hakchi_gui
             listViewGames.Dock = DockStyle.None;
             listViewGames.Visible = false;
             Controls.Add(listViewGames);
-            listViewGames.ContextMenuStrip = contextMenuStrip;      // la grille montre le menu de sa source
+            listViewGames.ContextMenuStrip = contextMenuStrip;      // liste cachee : listViewGames_MouseDown ne l'ouvre jamais
 
             // --- centre : puces + grille ---
             grid = new CoverGridView { Name = "grid", Dock = DockStyle.Fill };
+            grid.ContextMenuStrip = contextMenuStrip;               // vrai menu de la grille : WM_CONTEXTMENU l'ouvre (clic droit, Menu, Maj+F10)
             chipOnConsole = new B1Chip { Name = "chipOnConsole", Text = Resources.ShellChipOnConsole, AutoSize = false };
             chipLibrary = new B1Chip { Name = "chipLibrary", Text = Resources.ShellChipLibrary, AutoSize = false, Checked = true };
             chipAz = new B1Chip { Name = "chipAz", Text = Resources.ShellChipAz, AutoSize = false, AutoCheck = false, Dock = DockStyle.Fill };

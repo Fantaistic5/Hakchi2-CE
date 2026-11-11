@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using com.clusterrr.hakchi_gui;
 using com.clusterrr.hakchi_gui.Theme;
@@ -251,16 +252,68 @@ namespace hakchi_gui.Tests.Grid
             }
         }
 
+        [DllImport("user32.dll")] private static extern IntPtr SendMessage(IntPtr h, int msg, IntPtr w, IntPtr l);
+        private const int WM_CONTEXTMENU = 0x007B, WM_VSCROLL = 0x0115, SB_TOP = 6;
+
+        /// <summary>WM_CONTEXTMENU comme Windows l'envoie : coordonnees ecran, ou -1 pour le clavier (touche Menu, Maj+F10).</summary>
+        private static void ContextMenuMessage(CoverGridView g, Point? client)
+        {
+            IntPtr l = new IntPtr(-1);
+            if (client.HasValue)
+            {
+                var s = g.PointToScreen(client.Value);
+                l = new IntPtr((s.Y << 16) | (s.X & 0xFFFF));
+            }
+            SendMessage(g.Handle, WM_CONTEXTMENU, g.Handle, l);
+        }
+
+        /// <summary>« Atteignable » veut dire « s'ouvre vraiment » : WM_CONTEXTMENU fait partir Opening (annule ici, rien ne s'affiche).</summary>
         [StaFact]
-        public void ContextMenuIsSourcesMenu()
+        public void ContextMenuOpensOnWmContextMenuWithListViewSelectionRule()
+        {
+            ListView src;
+            using (var f = GridFixture.Host(out src, GridFixture.Apps(40)))
+            using (var menu = new ContextMenuStrip())
+            {
+                menu.Items.Add("x");
+                int opened = 0;
+                menu.Opening += (s, e) => { opened++; e.Cancel = true; };
+                var g = Grid(f, src);
+                g.ContextMenuStrip = menu;
+
+                // souris sur un jeu non selectionne : il devient la seule selection, et le menu s'ouvre
+                Click(g, Center(g, 0));
+                ContextMenuMessage(g, Center(g, 2));
+                Assert.Equal(1, opened);
+                Assert.Same(g, menu.SourceControl);
+                Assert.Equal(new[] { 2 }, src.SelectedIndices.Cast<int>());
+
+                // souris sur un jeu deja selectionne : la selection multiple est gardee
+                Click(g, Center(g, 0), Keys.Control);
+                Assert.Equal(new[] { 0, 2 }, src.SelectedIndices.Cast<int>());
+                ContextMenuMessage(g, Center(g, 2));
+                Assert.Equal(2, opened);
+                Assert.Equal(new[] { 0, 2 }, src.SelectedIndices.Cast<int>());
+
+                // clavier (lParam -1) : le menu s'ouvre sur le jeu qui a le focus, ramene a l'ecran, selection inchangee
+                Key(g, Keys.End);
+                Assert.Equal(new[] { 39 }, src.SelectedIndices.Cast<int>());
+                SendMessage(g.Handle, WM_VSCROLL, new IntPtr(SB_TOP), IntPtr.Zero);
+                Assert.False(g.ClientRectangle.Contains(g.GetItemRect(39)), "le jeu 39 devrait etre hors de la vue apres SB_TOP");
+                ContextMenuMessage(g, null);
+                Assert.Equal(3, opened);
+                Assert.True(g.ClientRectangle.Contains(g.GetItemRect(39)), "le menu clavier doit ramener le jeu qui a le focus a l'ecran");
+                Assert.Equal(new[] { 39 }, src.SelectedIndices.Cast<int>());
+            }
+        }
+
+        [StaFact]
+        public void RightClickSelectsUnselectedGameOnly()
         {
             ListView src;
             using (var f = GridFixture.Host(out src, GridFixture.Apps(3)))
-            using (var menu = new ContextMenuStrip())
             {
-                src.ContextMenuStrip = menu;
                 var g = Grid(f, src);
-                Assert.Same(menu, g.ContextMenuStrip);
                 // clic droit sur un jeu non selectionne : il devient la selection (comme une ListView)
                 Click(g, Center(g, 2), Keys.None, MouseButtons.Right);
                 Assert.Equal(new[] { 2 }, src.SelectedIndices.Cast<int>());

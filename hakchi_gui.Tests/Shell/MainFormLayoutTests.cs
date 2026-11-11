@@ -144,6 +144,32 @@ namespace hakchi_gui.Tests.Shell
             }
         }
 
+        [DllImport("user32.dll")] private static extern IntPtr SendMessage(IntPtr h, int msg, IntPtr w, IntPtr l);
+
+        /// <summary>
+        /// Envoie WM_CONTEXTMENU a la grille comme Windows (coordonnees ecran du centre de <paramref name="clientRect"/>,
+        /// ou -1 = clavier si null) et compte les Opening du menu (annules : rien ne s'affiche).
+        /// </summary>
+        public static int ContextMenuOpenings(MainForm f, ContextMenuStrip menu, Rectangle? clientRect)
+        {
+            int opened = 0;
+            CancelEventHandler h = (s, e) => { opened++; e.Cancel = true; };
+            menu.Opening += h;
+            try
+            {
+                IntPtr l = new IntPtr(-1);
+                if (clientRect.HasValue)
+                {
+                    var r = clientRect.Value;
+                    var p = f.grid.PointToScreen(new Point(r.X + r.Width / 2, r.Y + r.Height / 3));
+                    l = new IntPtr((p.Y << 16) | (p.X & 0xFFFF));
+                }
+                SendMessage(f.grid.Handle, 0x007B, f.grid.Handle, l);
+            }
+            finally { menu.Opening -= h; }
+            return opened;
+        }
+
         /// <summary>Visibilite propre du controle (sans tenir compte des parents), comme la fixe Visible = x.</summary>
         public static bool OwnVisible(Control c)
         {
@@ -257,9 +283,13 @@ namespace hakchi_gui.Tests.Shell
                 Assert.Equal(4, f.topBar.MenuCount);
                 // un seul MenuStrip dans la fenetre : les raccourcis ne sont pas trouves deux fois
                 Assert.Single(All(f).OfType<MenuStrip>());
-                // la grille montre le menu contextuel de sa source ; le dossier « Structure » est ouvert par son bouton
-                Assert.Same(((ContextMenuStrip)Field(f, "contextMenuStrip")), f.listViewGames.ContextMenuStrip);
-                Assert.Same(((ContextMenuStrip)Field(f, "contextMenuStrip")), f.grid.ContextMenuStrip);
+                // le menu contextuel des jeux s'ouvre VRAIMENT sur la grille (WM_CONTEXTMENU, souris et clavier) : ses items
+                // comptent donc comme atteignables ci-dessous ; le dossier « Structure » est ouvert par son bouton
+                var gameMenu = (ContextMenuStrip)Field(f, "contextMenuStrip");
+                Assert.Equal(1, MainFormEnv.ContextMenuOpenings(f, gameMenu, f.grid.GetItemRect(0)));
+                Assert.Equal(1, MainFormEnv.ContextMenuOpenings(f, gameMenu, null));
+                // le clic droit a selectionne un jeu : on le retire, sinon Ctrl+J (plus bas) ouvrirait le vrai choix de fichier
+                foreach (ListViewItem it in f.listViewGames.Items) it.Selected = false;
                 var structure = (Button)Field(f, "structureButton");
                 Assert.True(MainFormEnv.Shown(structure));
                 Assert.Contains("MainForm.structureButton_Click", MainFormEnv.HandlerNames(MainFormEnv.Handlers(structure, typeof(Control), "EventClick")));
@@ -273,7 +303,7 @@ namespace hakchi_gui.Tests.Shell
                     var item = Field(f, field) as ToolStripMenuItem;
                     if (item == null) { missing.Add(field + " : null"); continue; }
                     var root = Root(item);
-                    bool reachable = root == f.topBar.Menu || root == ((ContextMenuStrip)Field(f, "contextMenuStrip")) || root == (ToolStrip)Field(f, "foldersContextMenuStrip");
+                    bool reachable = root == f.topBar.Menu || root == gameMenu || root == (ToolStrip)Field(f, "foldersContextMenuStrip");
                     if (!reachable) { missing.Add(field + " : hors des menus (" + (root == null ? "sans proprietaire" : root.Name) + ")"); continue; }
                     var want = ((JArray)m["clickHandlers"]).Select(x => (string)x).ToList();
                     var have = MainFormEnv.HandlerNames(MainFormEnv.Handlers(item, typeof(ToolStripItem), "EventClick")).ToList();
@@ -294,6 +324,36 @@ namespace hakchi_gui.Tests.Shell
             finally { MainFormEnv.Close(f); }
         }
 
+        /// <summary>
+        /// Clic droit sur une jaquette : le jeu vise devient la selection AVANT l'ouverture du menu, donc les items du menu
+        /// sont prepares pour lui (listViewGames_ItemSelectionChanged les active) ; un jeu deja selectionne garde la selection.
+        /// </summary>
+        [StaFact]
+        public void GridContextMenuSelectsTargetAndPreparesItems()
+        {
+            var f = MainFormEnv.Create(MainFormEnv.Games(4));
+            try
+            {
+                var gameMenu = (ContextMenuStrip)Field(f, "contextMenuStrip");
+                var explorer = (ToolStripMenuItem)Field(f, "explorerToolStripMenuItem");
+                foreach (ListViewItem it in f.listViewGames.Items) it.Selected = false;
+                Application.DoEvents();
+                Assert.False(explorer.Enabled, "sans selection, « ouvrir dans l'explorateur » doit etre grise");
+
+                Assert.True(f.grid.VisibleCount >= 2);
+                var target = f.grid.VisibleItems[1];
+                Assert.Equal(1, MainFormEnv.ContextMenuOpenings(f, gameMenu, f.grid.GetItemRect(1)));
+                Assert.Equal(new[] { target }, f.listViewGames.SelectedItems.Cast<ListViewItem>().ToArray());
+                Assert.True(explorer.Enabled, "le menu doit etre prepare pour le jeu vise");
+
+                // deux jeux selectionnes, clic droit sur l'un d'eux : les deux restent selectionnes
+                f.grid.VisibleItems[0].Selected = true;
+                Assert.Equal(1, MainFormEnv.ContextMenuOpenings(f, gameMenu, f.grid.GetItemRect(1)));
+                Assert.Equal(2, f.listViewGames.SelectedItems.Count);
+            }
+            finally { MainFormEnv.Close(f); }
+        }
+
         [StaFact]
         public void NoOriginalButtonHandlerLost()
         {
@@ -308,6 +368,8 @@ namespace hakchi_gui.Tests.Shell
                 f.ShowSelected();
                 Application.DoEvents();
                 var tree = new HashSet<Control>(All(f));
+                // le menu contextuel compte comme route seulement s'il s'ouvre vraiment (clavier : la selection ne bouge pas)
+                Assert.Equal(1, MainFormEnv.ContextMenuOpenings(f, (ContextMenuStrip)Field(f, "contextMenuStrip"), null));
                 // Click d'un bouton, ou MouseClick (Parcourir), et les items de menu qui portent le meme gestionnaire
                 var menuHandlers = new HashSet<string>();
                 foreach (var it in f.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).Where(x => typeof(ToolStripItem).IsAssignableFrom(x.FieldType)))

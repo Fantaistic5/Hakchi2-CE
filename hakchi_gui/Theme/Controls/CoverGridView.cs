@@ -359,6 +359,11 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
                 m.Result = IntPtr.Zero;
                 return;
             }
+            if (m.Msg == WM_CONTEXTMENU && ShowContextMenu(m.LParam))
+            {
+                m.Result = IntPtr.Zero;
+                return;
+            }
             base.WndProc(ref m);
         }
 
@@ -622,11 +627,46 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             Invalidate();
         }
 
-        /// <summary>Menu contextuel : celui de la grille s'il est defini, sinon celui de la source.</summary>
-        public override ContextMenuStrip ContextMenuStrip
+        /// <summary>
+        /// WM_CONTEXTMENU (clic droit, touche Menu, Maj+F10) : comme une ListView, le menu porte sur le jeu vise.
+        /// A la souris, un jeu non selectionne devient la seule selection, un jeu deja selectionne garde la selection ;
+        /// au clavier (lParam = -1), le menu s'ouvre sur le jeu qui a le focus (sinon le premier selectionne), sans
+        /// changer la selection. Faux si le message doit suivre le chemin par defaut (pas de menu, hors zone client).
+        /// </summary>
+        private bool ShowContextMenu(IntPtr lParam)
         {
-            get { return base.ContextMenuStrip ?? (source != null ? source.ContextMenuStrip : null); }
-            set { base.ContextMenuStrip = value; }
+            var menu = ContextMenuStrip;
+            if (menu == null || source == null) return false;
+            FlushRebuild();
+            long lp = lParam.ToInt64();
+            Point client;
+            if (lp == -1 || (lp & 0xFFFFFFFFL) == 0xFFFFFFFFL)
+            {
+                int i = IndexOf(focusItem);
+                if (i < 0)
+                    foreach (ListViewItem it in source.SelectedItems) { i = IndexOf(it); if (i >= 0) break; }
+                if (i >= 0)
+                {
+                    EnsureVisible(i);
+                    var r = GetCoverRect(i);
+                    client = new Point(r.Left + r.Width / 2, r.Top + r.Height / 2);
+                }
+                else client = new Point(B1Draw.Px(8, DpiScale), B1Draw.Px(8, DpiScale));
+            }
+            else
+            {
+                client = PointToClient(new Point((short)(lp & 0xFFFF), (short)((lp >> 16) & 0xFFFF)));
+                if (!ClientRectangle.Contains(client)) return false;     // barre de defilement : menu systeme par defaut
+                int i = HitTest(client);
+                if (i >= 0 && !items[i].Selected)
+                {
+                    SelectOnly(items[i]);
+                    anchor = focusItem = items[i];
+                }
+            }
+            Invalidate();
+            menu.Show(this, client);
+            return true;
         }
 
         protected override void OnGotFocus(EventArgs e) { base.OnGotFocus(e); Invalidate(); }
@@ -779,7 +819,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
 
         // --- natif ---------------------------------------------------------------------------------------------
 
-        private const int WS_VSCROLL = 0x00200000, WM_VSCROLL = 0x0115, SB_VERT = 1;
+        private const int WS_VSCROLL = 0x00200000, WM_VSCROLL = 0x0115, WM_CONTEXTMENU = 0x007B, SB_VERT = 1;
         private const int SB_LINEUP = 0, SB_LINEDOWN = 1, SB_PAGEUP = 2, SB_PAGEDOWN = 3, SB_THUMBPOSITION = 4, SB_THUMBTRACK = 5, SB_TOP = 6, SB_BOTTOM = 7;
         private const int SIF_RANGE = 0x1, SIF_PAGE = 0x2, SIF_POS = 0x4, SIF_TRACKPOS = 0x10;
 

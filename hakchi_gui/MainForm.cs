@@ -1350,7 +1350,7 @@ namespace com.clusterrr.hakchi_gui
 
         private void listViewGames_MouseDown(object sender, MouseEventArgs e)
         {
-            // la grille montre deja listViewGames.ContextMenuStrip : jamais deux fois
+            // listViewGames est cachee (la grille ouvre ce menu elle-meme) : garde pour ne jamais l'ouvrir deux fois
             if (e.Button == MouseButtons.Right && listViewGames.ContextMenuStrip == null)
                 contextMenuStrip.Show(sender as Control, e.X + 5, e.Y);
         }
