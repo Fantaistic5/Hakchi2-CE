@@ -60,8 +60,16 @@ namespace FormGallery
         }
 
         // Jeux d'exemple copies depuis la copie de test (lecture seule) pour fournir de vrais NesApplication aux fenetres qui en exigent un.
+        // Copie de test : variable d'environnement HAKCHI_SAMPLES, par defaut P:\HakchiSNESUSA\app (poste de l'auteur) ; jeux dans games.
+        // Absente : les fenetres qui exigent un jeu ne sont pas rendues (message dans la sortie), le reste de la galerie oui.
         public static object SampleNes, SampleSnes;
-        public static string SamplesSource = "P:" + Path.DirectorySeparatorChar + "HakchiSNESUSA" + Path.DirectorySeparatorChar + "app" + Path.DirectorySeparatorChar + "games";
+        public static string SamplesSource = Path.Combine(SamplesRoot(), "games");
+
+        private static string SamplesRoot()
+        {
+            var env = Environment.GetEnvironmentVariable("HAKCHI_SAMPLES");
+            return string.IsNullOrWhiteSpace(env) ? @"P:\HakchiSNESUSA\app" : env.Trim();
+        }
 
         private static void LoadSamples()
         {

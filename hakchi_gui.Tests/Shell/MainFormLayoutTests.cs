@@ -21,14 +21,15 @@ namespace hakchi_gui.Tests.Shell
 {
     /// <summary>
     /// Fenetre principale REELLE (MainForm) : construite comme la galerie (sans Load/Shown, donc sans console, ni mise a jour,
-    /// ni chargement des jeux), avec de vrais jeux copies de la copie de test dans un dossier jetable.
+    /// ni chargement des jeux), avec de vrais jeux copies de la copie de test (HAKCHI_SAMPLES, voir Repo.SamplesRoot) dans un
+    /// dossier jetable. Sans cette copie, les tests qui demandent des jeux sont ignores (SkipTestException), pas en echec.
     /// </summary>
     internal static class MainFormEnv
     {
         private static readonly object gate = new object();
         private static bool done;
         private static List<string> sampleDirs;
-        public const string SamplesSource = @"P:\HakchiSNESUSA\app\games";
+        public static string SamplesSource { get { return Path.Combine(Repo.SamplesRoot, "games"); } }
 
         [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr h, int cmd);
 
@@ -62,6 +63,8 @@ namespace hakchi_gui.Tests.Shell
         /// <summary>Copie (lecture seule de la source) de quelques vrais jeux dans le dossier jetable.</summary>
         public static List<NesApplication> Games(int n)
         {
+            if (!Directory.Exists(SamplesSource))
+                throw new SkipTestException("jeux d'exemple absents (" + SamplesSource + ") : definir HAKCHI_SAMPLES sur une copie de test de hakchi");
             Init();
             lock (gate)
             {

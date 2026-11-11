@@ -24,6 +24,19 @@ namespace hakchi_gui.Tests
 
         public static string GalleryExe => Path.Combine(Root, "tools", "FormGallery", "bin", "Debug", "net48", "FormGallery.exe");
         public static string DataDir => Path.Combine(Root, "hakchi_gui.Tests", "Data");
+
+        /// <summary>
+        /// Copie de test de hakchi (lecture seule) qui fournit les vrais jeux d'exemple : variable d'environnement
+        /// HAKCHI_SAMPLES, par defaut P:\HakchiSNESUSA\app (poste de l'auteur). Les jeux sont dans son dossier games.
+        /// </summary>
+        public static string SamplesRoot
+        {
+            get
+            {
+                var env = Environment.GetEnvironmentVariable("HAKCHI_SAMPLES");
+                return string.IsNullOrWhiteSpace(env) ? @"P:\HakchiSNESUSA\app" : env.Trim();
+            }
+        }
     }
 
     public class GalleryTests
