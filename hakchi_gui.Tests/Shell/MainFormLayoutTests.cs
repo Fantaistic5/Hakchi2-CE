@@ -65,28 +65,36 @@ namespace hakchi_gui.Tests.Shell
             Init();
             lock (gate)
             {
-                if (sampleDirs == null)
-                {
-                    sampleDirs = new List<string>();
-                    if (Directory.Exists(SamplesSource))
+                // seulement les jeux demandes (au plus 6 aujourd'hui), copies une fois, dans l'ordre
+                if (sampleDirs == null) sampleDirs = new List<string>();
+                if (sampleDirs.Count < n)
+                    foreach (var src in Directory.GetDirectories(SamplesSource).OrderBy(x => x, StringComparer.Ordinal).Skip(sampleDirs.Count).Take(n - sampleDirs.Count))
                     {
-                        foreach (var src in Directory.GetDirectories(SamplesSource).OrderBy(x => x, StringComparer.Ordinal).Take(12))
-                        {
-                            var dst = Path.Combine(HakchiEnv.Temp, "games", Path.GetFileName(src));
-                            CopyDir(src, dst);
-                            sampleDirs.Add(dst);
-                        }
+                        var dst = Path.Combine(HakchiEnv.Temp, "games", Path.GetFileName(src));
+                        CopyDir(src, dst);
+                        sampleDirs.Add(dst);
                     }
-                }
             }
             Assert.True(sampleDirs.Count >= n, "jeux d'exemple introuvables dans " + SamplesSource);
             return sampleDirs.Take(n).Select(d => NesApplication.FromDirectory(d)).ToList();
         }
 
+        /// <summary>
+        /// Fichiers vraiment copies : description, metadonnees, images, et ROM compressees (ShowSelected ouvre l'archive pour
+        /// DecompressPossible). Les ROM non compressees (jusqu'a 32 Mo chacune) deviennent des fichiers vides de meme nom.
+        /// </summary>
+        private static readonly HashSet<string> CopiedExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        { ".desktop", ".json", ".png", ".jpg", ".jpeg", ".bmp", ".gif", ".txt", ".ini", ".cfg", ".7z", ".zip", ".rar", ".gz", ".tgz", ".tar", ".bz2", ".xz" };
+
         private static void CopyDir(string src, string dst)
         {
             Directory.CreateDirectory(dst);
-            foreach (var f in Directory.GetFiles(src)) File.Copy(f, Path.Combine(dst, Path.GetFileName(f)), true);
+            foreach (var f in Directory.GetFiles(src))
+            {
+                var to = Path.Combine(dst, Path.GetFileName(f));
+                if (CopiedExtensions.Contains(Path.GetExtension(f))) File.Copy(f, to, true);
+                else File.WriteAllBytes(to, new byte[0]);     // aucun test ne lit les octets d'une ROM non compressee
+            }
             foreach (var d in Directory.GetDirectories(src)) CopyDir(d, Path.Combine(dst, Path.GetFileName(d)));
         }
 

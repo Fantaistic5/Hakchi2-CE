@@ -121,6 +121,7 @@ namespace hakchi_gui.Tests.Forms
             var exe = Repo.GalleryExe;
             Assert.True(File.Exists(exe), "FormGallery.exe absent : " + exe);
             var outDir = Path.Combine(Path.GetTempPath(), "hakchi_simple_forms_" + Guid.NewGuid().ToString("N"));
+            TempCleanup.Register(outDir);       // relu par plusieurs tests : supprime a la fin du processus
             var psi = new System.Diagnostics.ProcessStartInfo(exe, "--out \"" + outDir + "\"")
             { UseShellExecute = false, RedirectStandardOutput = true, RedirectStandardError = true, CreateNoWindow = true, WorkingDirectory = Path.GetDirectoryName(exe) };
             using (var p = System.Diagnostics.Process.Start(psi))

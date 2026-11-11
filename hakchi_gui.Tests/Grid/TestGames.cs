@@ -14,13 +14,15 @@ namespace hakchi_gui.Tests.Grid
     /// <summary>
     /// Environnement minimal de hakchi pour construire des NesApplication dans les tests :
     /// Program.BaseDirectoryInternal pointe sur la sortie msbuild (data\desktop_entries.tar, lu par le constructeur
-    /// statique de NesApplication ; sinon il affiche une ErrorForm modale), BaseDirectoryExternal sur un dossier jetable.
+    /// statique de NesApplication ; sinon il affiche une ErrorForm modale), BaseDirectoryExternal sur un dossier jetable,
+    /// supprime a la fin du processus (voir TempCleanup).
     /// </summary>
     internal static class HakchiEnv
     {
         private static readonly object gate = new object();
         private static bool done;
         public static string Temp;
+        public const string TempPrefix = "hakchi_grid_tests_";
 
         public static void Init()
         {
@@ -30,8 +32,11 @@ namespace hakchi_gui.Tests.Grid
                 var prog = typeof(NesApplication).Assembly.GetType("com.clusterrr.hakchi_gui.Program", true);
                 var flags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
                 prog.GetField("BaseDirectoryInternal", flags).SetValue(null, Path.Combine(Repo.Root, "hakchi_gui", "bin", "Debug", "net48"));
-                Temp = Path.Combine(Path.GetTempPath(), "hakchi_grid_tests_" + Process.GetCurrentProcess().Id);
+                // dossiers d'anciens processus d'abord, puis le notre, supprime a la sortie (jonctions retirees avant le reste)
+                TempCleanup.DeleteStale(Path.GetTempPath(), TempPrefix);
+                Temp = Path.Combine(Path.GetTempPath(), TempPrefix + Process.GetCurrentProcess().Id);
                 Directory.CreateDirectory(Temp);
+                TempCleanup.Register(Temp);
                 prog.GetField("BaseDirectoryExternal", flags).SetValue(null, Temp);
                 done = true;
             }
