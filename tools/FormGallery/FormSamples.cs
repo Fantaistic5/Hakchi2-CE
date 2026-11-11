@@ -56,7 +56,31 @@ namespace FormGallery
                     SetText(c, "errorLabel", "La console ne repond pas.");
                     SetText(c, "richTextBox1", "System.TimeoutException: La console ne repond pas." + Environment.NewLine + "   a hakchi.Shell.Execute(...)");
                     break;
+                case "CoverBatchForm": CoverBatchSample.Populate(c); break;
+                case "FoldersManagerForm": FillFolders(c); break;
                 case "TextInfo": Find<TextBox>(c, "textBoxInfo").Text = "Licence GPL v3" + Environment.NewLine + "--------------------------------------------------------------------------------" + Environment.NewLine + "Un exemple de texte long, affiche dans une police a chasse fixe."; break;
+            }
+        }
+
+        // FoldersManagerForm sans constructeur reel : arbre et contenu d'exemple, aucune selection (AfterSelect veut le vrai
+        // constructeur). panel1 (vide, Dock Fill) est masque : DrawToBitmap le peindrait par-dessus le splitContainer.
+        private static void FillFolders(Control c)
+        {
+            var panel = Find<Control>(c, "panel1");
+            if (panel != null) panel.Visible = false;
+            var tree = Find<TreeView>(c, "treeView");
+            if (tree != null)
+            {
+                var root = tree.Nodes.Add("Mini SNES");
+                var a = root.Nodes.Add("Action"); a.Nodes.Add("Super Metroid"); a.Nodes.Add("Contra III");
+                var r = root.Nodes.Add("RPG"); r.Nodes.Add("Chrono Trigger"); r.Nodes.Add("Star Ocean");
+                root.Nodes.Add("Course").Nodes.Add("F-Zero");
+                tree.ExpandAll();
+            }
+            var list = Find<ListView>(c, "listViewContent");
+            if (list != null)
+            {
+                list.Items.Add("Super Metroid"); list.Items.Add("Contra III"); list.Items.Add("Super Mario World");
             }
         }
 

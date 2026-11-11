@@ -13,7 +13,7 @@ using System.Xml;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class FoldersManagerForm : Form
+    public partial class FoldersManagerForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public static string FoldersXmlPathBase
         {
@@ -104,6 +104,8 @@ namespace com.clusterrr.hakchi_gui
                 }
                 splitContainer.Panel2MinSize = 485;
                 comboBoxPosition.Left = labelPosition1.Left + labelPosition1.Width;
+                // B1 : la police du theme arrive a la creation du handle et elargit le libelle ; la liste deroulante le suit
+                labelPosition1.SizeChanged += (s, e) => comboBoxPosition.Left = labelPosition1.Left + labelPosition1.Width;
                 treeView.TreeViewNodeSorter = new NodeSorter();
                 listViewContent.ListViewItemSorter = new NodeSorter();
                 pictureBoxLeft = pictureBoxArt.Left;
@@ -311,12 +313,12 @@ namespace com.clusterrr.hakchi_gui
                 labelElementCount.Text = string.Format(Resources.FolderStatistics, node.Text, node.Nodes.Count);
                 if (node.Nodes.Count >= MainForm.MaxGamesPerFolder)
                 {
-                    labelElementCount.ForeColor = Color.Red;
+                    labelElementCount.ForeColor = com.clusterrr.hakchi_gui.Theme.B1Palette.Error;
                     toolTip1.SetToolTip(labelElementCount, Resources.TooManyPerFolder);
                 }
                 else
                 {
-                    labelElementCount.ForeColor = SystemColors.ControlText;
+                    labelElementCount.ForeColor = com.clusterrr.hakchi_gui.Theme.B1Palette.Text;
                     toolTip1.SetToolTip(labelElementCount, null);
                 }
                 buttonNewFolder.Enabled = true;

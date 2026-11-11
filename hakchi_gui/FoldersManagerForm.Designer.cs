@@ -380,9 +380,9 @@
             // 
             resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
             this.tableLayoutPanel1.Controls.Add(this.labelElementCount, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.buttonCancel, 5, 0);
+            this.tableLayoutPanel1.Controls.Add(this.buttonCancel, 4, 0);
             this.tableLayoutPanel1.Controls.Add(this.checkBoxAddHome, 3, 0);
-            this.tableLayoutPanel1.Controls.Add(this.buttonOk, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.buttonOk, 5, 0);
             this.tableLayoutPanel1.Controls.Add(this.labelPosition2, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.comboBoxBackPosition, 2, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -500,6 +500,7 @@
             this.tableLayoutPanel1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(this.buttonOk); // B1: bouton de validation primaire
             this.ResumeLayout(false);
             this.PerformLayout();
 

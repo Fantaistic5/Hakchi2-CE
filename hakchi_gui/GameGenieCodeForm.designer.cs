@@ -127,6 +127,7 @@
             this.Name = "GameGenieCodeForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.GameGenieForm_FormClosed);
             this.contextMenuStrip.ResumeLayout(false);
+            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(this.buttonOk); // B1: bouton de validation primaire
             this.ResumeLayout(false);
 
         }

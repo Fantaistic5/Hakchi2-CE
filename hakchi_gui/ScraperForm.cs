@@ -18,7 +18,7 @@ using static com.clusterrr.hakchi_gui.MainForm;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class ScraperForm : Form
+    public partial class ScraperForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         private enum DataType { Name, Description, Publisher, Developer, ReleaseDate, Copyright, Genre, PlayerCount, FrontArt, SpineArt, SelectedScraper, SpineTemplate }
         private enum PageDirection { Previous, Next }

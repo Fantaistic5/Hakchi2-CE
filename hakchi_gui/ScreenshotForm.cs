@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class ScreenshotForm : Form
+    public partial class ScreenshotForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         private bool f8Pressed = false;
         private readonly string unattendedPath = Path.Combine(Program.BaseDirectoryExternal, "screenshots");

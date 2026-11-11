@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class SelectCoreDialog : Form
+    public partial class SelectCoreDialog : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public List<NesApplication> Games = new List<NesApplication>();
         public bool Modified

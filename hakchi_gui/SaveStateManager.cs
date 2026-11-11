@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class SaveStateManager : Form
+    public partial class SaveStateManager : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         Dictionary<string, string> gameNames;
         ImagesForm imagesForm = null;

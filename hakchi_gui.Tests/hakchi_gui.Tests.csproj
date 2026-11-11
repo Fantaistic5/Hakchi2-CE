@@ -28,6 +28,11 @@
       <HintPath>..\hakchi_gui\bin\Debug\net48\hakchi.exe</HintPath>
       <Private>true</Private>
     </Reference>
+    <!-- Scrapers est embarque dans hakchi.exe (Costura) : reference de compilation pour les sources factices de CoverBatchForm -->
+    <Reference Include="Scrapers">
+      <HintPath>..\Scrapers\bin\Debug\netstandard2.0\Scrapers.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
     <None Include="Data\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 

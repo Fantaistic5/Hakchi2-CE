@@ -155,6 +155,12 @@ namespace FormGallery
                 ctorDescription = DesignerOnlyDescription;
                 return ConstructDesignerOnly(t);
             }
+            if (t.Name == "CoverBatchForm")
+            {
+                // jeux factices, sources et telechargements factices : jamais le reseau, rien n'est ecrit (voir CoverBatchSample)
+                ctorDescription = "CoverBatchSample (jeux, sources et images factices)";
+                return CoverBatchSample.Build();
+            }
             if (t.Name == "MessageForm")
             {
                 // vrai chemin d'affichage (MessageForm.Get) : textes et boutons Oui / Non / Annuler poses, sans ShowDialog
@@ -205,8 +211,10 @@ namespace FormGallery
         /// DriverInstalled() || InstallDriver() (installeur du pilote avec elevation "runas"), WaitingShellForm interroge pnputil.
         /// Elles sont construites comme le concepteur : objet non initialise, constructeur de B1Form, InitializeComponent, minuteurs coupes.
         /// Aucun chemin ne mene a pnputil ni a l'installeur (pas de controle prealable du pilote, donc pas de « verifier puis agir »).
+        /// SaveStateManager (fil qui attend la console : WaitingShellForm.WaitForDevice) et ScreenshotForm (fil de capture qui parle a
+        /// la console, dossier de captures cree) : jamais construites par leur constructeur applicatif non plus.
         /// </summary>
-        public static readonly string[] DesignerOnlyTypes = { "WaitingFelForm", "WaitingShellForm" };
+        public static readonly string[] DesignerOnlyTypes = { "WaitingFelForm", "WaitingShellForm", "SaveStateManager", "ScreenshotForm" };
         public const string DesignerOnlyDescription = "concepteur seul (B1Form + InitializeComponent, sans constructeur applicatif)";
 
         public static Control ConstructDesignerOnly(Type t)

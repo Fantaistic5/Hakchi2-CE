@@ -498,6 +498,7 @@
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
             this.tableLayoutPanel5.ResumeLayout(false);
+            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(this.buttonOk); // B1: bouton de validation primaire
             this.ResumeLayout(false);
             this.PerformLayout();
 

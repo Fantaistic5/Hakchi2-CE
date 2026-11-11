@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class GameGenieCodeForm : Form
+    public partial class GameGenieCodeForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         private readonly NesApplication FGame;
         private GameGenieDataBase FGameGenieDataBase;

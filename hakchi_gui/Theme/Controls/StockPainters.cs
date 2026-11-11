@@ -547,6 +547,18 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
 
         protected override void WndProc(ref Message m)
         {
+            // liste desactivee : la liste native efface avec COLOR_BTNFACE (gris clair) au lieu de sa couleur de fond
+            if (m.Msg == ControlNative.WM_ERASEBKGND && m.WParam != IntPtr.Zero && !list.IsDisposed && !list.Enabled)
+            {
+                try
+                {
+                    using (var g = Graphics.FromHdc(m.WParam))
+                        B1Draw.Fill(g, B1Draw.IsPalette(list.BackColor) ? list.BackColor : B1Palette.Slate, ControlNative.ClientRect(Handle));
+                    m.Result = (IntPtr)1;
+                    return;
+                }
+                catch (Exception) { /* cosmetique : dessin natif */ }
+            }
             base.WndProc(ref m);
             if (m.Msg != WM_REFLECT_NOTIFY || list.IsDisposed) return;
             try

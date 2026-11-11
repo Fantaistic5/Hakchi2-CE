@@ -17,7 +17,7 @@ using static com.clusterrr.hakchi_gui.Tasks.Tasker;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class GameImporterForm : Form
+    public partial class GameImporterForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public bool gameCopied = false;
         public IEnumerable<FoundGame> SelectedGames => listViewGames.SelectedItems.Cast<ListViewItem>().Where(item => item.Tag is FoundGame).Select(item => item.Tag as FoundGame);

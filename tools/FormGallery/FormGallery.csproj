@@ -29,6 +29,11 @@
       <HintPath>..\..\hakchi_gui\bin\Debug\net48\hakchi.exe</HintPath>
       <Private>true</Private>
     </Reference>
+    <!-- Scrapers est embarque dans hakchi.exe (Costura) : reference de compilation pour l'exemple de CoverBatchForm (sources factices) -->
+    <Reference Include="Scrapers">
+      <HintPath>..\..\Scrapers\bin\Debug\netstandard2.0\Scrapers.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
     <!-- Satellites de langue : hakchi les cherche dans languages\(culture)\hakchi.resources.dll -->
     <None Include="..\..\hakchi_gui\bin\Debug\net48\languages\**\*.dll" Link="languages\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

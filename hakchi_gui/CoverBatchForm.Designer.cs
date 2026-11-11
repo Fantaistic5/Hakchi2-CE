@@ -13,11 +13,13 @@ namespace com.clusterrr.hakchi_gui
             base.Dispose(disposing);
         }
 
+        // Mise en page B1 : marges laterales de 16 px (Padding de la fenetre), barre d'outils en haut, liste dessinee comme la grille
+        // (vignette 3:4, source et region en TextDim, case B1), candidats en vignettes 3:4, boutons en bas a droite (Appliquer, primaire, a droite).
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CoverBatchForm));
             this.panelTop = new System.Windows.Forms.Panel();
-            this.checkBoxIncludeExisting = new System.Windows.Forms.CheckBox();
+            this.checkBoxIncludeExisting = new com.clusterrr.hakchi_gui.Theme.Controls.B1CheckBox();
             this.buttonSearch = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.progressBar = new System.Windows.Forms.ProgressBar();
@@ -48,22 +50,14 @@ namespace com.clusterrr.hakchi_gui
             this.panelTop.Controls.Add(this.labelStatus);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(900, 92);
-            //
-            // checkBoxIncludeExisting
-            //
-            this.checkBoxIncludeExisting.AutoSize = true;
-            this.checkBoxIncludeExisting.Location = new System.Drawing.Point(12, 10);
-            this.checkBoxIncludeExisting.Name = "checkBoxIncludeExisting";
-            this.checkBoxIncludeExisting.Size = new System.Drawing.Size(300, 17);
-            this.checkBoxIncludeExisting.TabIndex = 0;
-            this.checkBoxIncludeExisting.CheckedChanged += new System.EventHandler(this.checkBoxIncludeExisting_CheckedChanged);
+            this.panelTop.Size = new System.Drawing.Size(868, 96);
+            this.panelTop.Paint += new System.Windows.Forms.PaintEventHandler(this.panelTop_Paint);
             //
             // buttonSearch
             //
-            this.buttonSearch.Location = new System.Drawing.Point(12, 36);
+            this.buttonSearch.Location = new System.Drawing.Point(0, 16);
             this.buttonSearch.Name = "buttonSearch";
-            this.buttonSearch.Size = new System.Drawing.Size(110, 26);
+            this.buttonSearch.Size = new System.Drawing.Size(120, 30);
             this.buttonSearch.TabIndex = 1;
             this.buttonSearch.UseVisualStyleBackColor = true;
             this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
@@ -71,9 +65,9 @@ namespace com.clusterrr.hakchi_gui
             // buttonCancel
             //
             this.buttonCancel.Enabled = false;
-            this.buttonCancel.Location = new System.Drawing.Point(128, 36);
+            this.buttonCancel.Location = new System.Drawing.Point(128, 16);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(110, 26);
+            this.buttonCancel.Size = new System.Drawing.Size(110, 30);
             this.buttonCancel.TabIndex = 2;
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
@@ -81,21 +75,33 @@ namespace com.clusterrr.hakchi_gui
             // progressBar
             //
             this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.Location = new System.Drawing.Point(250, 40);
+            this.progressBar.Location = new System.Drawing.Point(254, 27);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(638, 18);
+            this.progressBar.Size = new System.Drawing.Size(614, 8);
             this.progressBar.TabIndex = 3;
+            //
+            // checkBoxIncludeExisting
+            //
+            this.checkBoxIncludeExisting.AutoSize = true;
+            this.checkBoxIncludeExisting.Location = new System.Drawing.Point(0, 58);
+            this.checkBoxIncludeExisting.Name = "checkBoxIncludeExisting";
+            this.checkBoxIncludeExisting.Size = new System.Drawing.Size(300, 22);
+            this.checkBoxIncludeExisting.TabIndex = 0;
+            this.checkBoxIncludeExisting.CheckedChanged += new System.EventHandler(this.checkBoxIncludeExisting_CheckedChanged);
             //
             // labelStatus
             //
             this.labelStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelStatus.Location = new System.Drawing.Point(12, 68);
+            this.labelStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(138)))), ((int)(((byte)(156)))));
+            this.labelStatus.Location = new System.Drawing.Point(330, 60);
             this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(876, 18);
+            this.labelStatus.Size = new System.Drawing.Size(538, 18);
             this.labelStatus.TabIndex = 4;
+            this.labelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             //
             // listViewResults
             //
+            this.listViewResults.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listViewResults.CheckBoxes = true;
             this.listViewResults.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnGame,
@@ -104,21 +110,27 @@ namespace com.clusterrr.hakchi_gui
             this.columnState});
             this.listViewResults.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewResults.FullRowSelect = true;
+            this.listViewResults.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.listViewResults.HideSelection = false;
             this.listViewResults.MultiSelect = false;
             this.listViewResults.Name = "listViewResults";
+            this.listViewResults.OwnerDraw = true;
             this.listViewResults.TabIndex = 5;
             this.listViewResults.UseCompatibleStateImageBehavior = false;
             this.listViewResults.View = System.Windows.Forms.View.Details;
+            this.listViewResults.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.listViewResults_DrawColumnHeader);
+            this.listViewResults.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.listViewResults_DrawItem);
+            this.listViewResults.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.listViewResults_DrawSubItem);
+            this.listViewResults.ClientSizeChanged += new System.EventHandler(this.listViewResults_ClientSizeChanged);
             this.listViewResults.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.listViewResults_ItemChecked);
             this.listViewResults.SelectedIndexChanged += new System.EventHandler(this.listViewResults_SelectedIndexChanged);
             //
-            // columns
+            // columns : le texte des sous-elements reste renseigne (accessibilite), la ligne est dessinee par la fenetre
             //
-            this.columnGame.Width = 330;
-            this.columnSource.Width = 230;
-            this.columnMatch.Width = 140;
-            this.columnState.Width = 160;
+            this.columnGame.Width = 865;
+            this.columnSource.Width = 1;
+            this.columnMatch.Width = 1;
+            this.columnState.Width = 1;
             //
             // panelAlternatives
             //
@@ -126,21 +138,22 @@ namespace com.clusterrr.hakchi_gui
             this.panelAlternatives.Controls.Add(this.labelAlternatives);
             this.panelAlternatives.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelAlternatives.Name = "panelAlternatives";
-            this.panelAlternatives.Size = new System.Drawing.Size(900, 124);
+            this.panelAlternatives.Size = new System.Drawing.Size(868, 132);
+            this.panelAlternatives.Paint += new System.Windows.Forms.PaintEventHandler(this.panelRuleTop_Paint);
             //
             // labelAlternatives
             //
             this.labelAlternatives.Dock = System.Windows.Forms.DockStyle.Top;
+            this.labelAlternatives.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(142)))), ((int)(((byte)(138)))), ((int)(((byte)(156)))));
             this.labelAlternatives.Name = "labelAlternatives";
-            this.labelAlternatives.Padding = new System.Windows.Forms.Padding(12, 4, 0, 0);
-            this.labelAlternatives.Size = new System.Drawing.Size(900, 20);
+            this.labelAlternatives.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.labelAlternatives.Size = new System.Drawing.Size(868, 32);
             //
             // flowAlternatives
             //
             this.flowAlternatives.AutoScroll = true;
             this.flowAlternatives.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowAlternatives.Name = "flowAlternatives";
-            this.flowAlternatives.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.flowAlternatives.WrapContents = false;
             //
             // panelBottom
@@ -150,35 +163,37 @@ namespace com.clusterrr.hakchi_gui
             this.panelBottom.Controls.Add(this.buttonClose);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(900, 44);
+            this.panelBottom.Size = new System.Drawing.Size(868, 62);
+            this.panelBottom.Paint += new System.Windows.Forms.PaintEventHandler(this.panelRuleTop_Paint);
             //
             // labelSummary
             //
             this.labelSummary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelSummary.Location = new System.Drawing.Point(12, 14);
+            this.labelSummary.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(182)))), ((int)(((byte)(178)))), ((int)(((byte)(196)))));
+            this.labelSummary.Location = new System.Drawing.Point(0, 22);
             this.labelSummary.Name = "labelSummary";
-            this.labelSummary.Size = new System.Drawing.Size(640, 18);
+            this.labelSummary.Size = new System.Drawing.Size(600, 18);
+            //
+            // buttonClose
+            //
+            this.buttonClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonClose.Location = new System.Drawing.Point(620, 16);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(120, 30);
+            this.buttonClose.TabIndex = 7;
+            this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             //
             // buttonApply
             //
             this.buttonApply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonApply.Enabled = false;
-            this.buttonApply.Location = new System.Drawing.Point(662, 9);
+            this.buttonApply.Location = new System.Drawing.Point(748, 16);
             this.buttonApply.Name = "buttonApply";
-            this.buttonApply.Size = new System.Drawing.Size(110, 26);
+            this.buttonApply.Size = new System.Drawing.Size(120, 30);
             this.buttonApply.TabIndex = 6;
             this.buttonApply.UseVisualStyleBackColor = true;
             this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
-            //
-            // buttonClose
-            //
-            this.buttonClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonClose.Location = new System.Drawing.Point(778, 9);
-            this.buttonClose.Name = "buttonClose";
-            this.buttonClose.Size = new System.Drawing.Size(110, 26);
-            this.buttonClose.TabIndex = 7;
-            this.buttonClose.UseVisualStyleBackColor = true;
-            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             //
             // CoverBatchForm
             //
@@ -191,6 +206,7 @@ namespace com.clusterrr.hakchi_gui
             this.Controls.Add(this.panelTop);
             this.MinimumSize = new System.Drawing.Size(720, 480);
             this.Name = "CoverBatchForm";
+            this.Padding = new System.Windows.Forms.Padding(16, 0, 16, 0);
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -213,7 +229,7 @@ namespace com.clusterrr.hakchi_gui
         }
 
         private System.Windows.Forms.Panel panelTop;
-        private System.Windows.Forms.CheckBox checkBoxIncludeExisting;
+        private com.clusterrr.hakchi_gui.Theme.Controls.B1CheckBox checkBoxIncludeExisting;
         private System.Windows.Forms.Button buttonSearch;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.ProgressBar progressBar;

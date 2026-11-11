@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class GameGenieCodeAddModForm : Form
+    public partial class GameGenieCodeAddModForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         readonly NesApplication FGame = null;
 

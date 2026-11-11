@@ -42,6 +42,18 @@ namespace com.clusterrr.hakchi_gui.Covers
         /// <summary>Telecharge et decode une image. Leve une exception en cas d'echec reseau ou d'image invalide.</summary>
         public static async Task<Bitmap> DownloadImageAsync(string url, CancellationToken ct)
         {
+            byte[] data = await DownloadBytesAsync(url, ct);
+            using (var ms = new MemoryStream(data))
+            using (var img = Image.FromStream(ms))
+                return new Bitmap(img); // copie detachee du flux
+        }
+
+        /// <summary>
+        /// Telecharge une image sans la decoder (octets du fichier). Leve une exception en cas d'echec reseau.
+        /// La recherche groupee garde ces octets (quelques centaines de Ko) plutot qu'une image decodee pleine taille (plusieurs Mo).
+        /// </summary>
+        public static async Task<byte[]> DownloadBytesAsync(string url, CancellationToken ct)
+        {
             HttpClient client;
             lock (Sync)
             {
@@ -55,10 +67,7 @@ namespace com.clusterrr.hakchi_gui.Covers
             using (var resp = await client.GetAsync(url, ct))
             {
                 resp.EnsureSuccessStatusCode();
-                byte[] data = await resp.Content.ReadAsByteArrayAsync();
-                using (var ms = new MemoryStream(data))
-                using (var img = Image.FromStream(ms))
-                    return new Bitmap(img); // copie detachee du flux
+                return await resp.Content.ReadAsByteArrayAsync();
             }
         }
     }

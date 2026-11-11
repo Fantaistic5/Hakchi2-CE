@@ -119,10 +119,10 @@
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="buttonClose.Location" type="System.Drawing.Point, System.Drawing">
-    <value>658, 334</value>
+    <value>577, 334</value>
   </data>
   <data name="buttonClose.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 23</value>
+    <value>75, 23</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="buttonClose.TabIndex" type="System.Int32, mscorlib">
@@ -367,7 +367,7 @@
     <value>3</value>
   </data>
   <data name="buttonApply.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 334</value>
+    <value>658, 334</value>
   </data>
   <data name="buttonApply.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -394,7 +394,7 @@
     <value>True</value>
   </data>
   <data name="resetCheckBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 338</value>
+    <value>12, 338</value>
   </data>
   <data name="resetCheckBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>174, 17</value>
@@ -424,7 +424,7 @@
     <value>MiddleRight</value>
   </data>
   <data name="showAllSystemsCheckBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>655, 10</value>
+    <value>625, 10</value>
   </data>
   <data name="showAllSystemsCheckBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>67, 17</value>

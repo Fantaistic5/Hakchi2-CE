@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui
 {
-    public partial class SelectCoverDialog : Form
+    public partial class SelectCoverDialog : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public List<NesApplication> Games = new List<NesApplication>();
         private Dictionary<string, int> imageIndexes = new Dictionary<string, int>();
