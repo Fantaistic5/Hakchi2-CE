@@ -85,7 +85,6 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             return collectionCounts.TryGetValue(collection, out n) ? n : -1;
         }
 
-        /// <summary>Somme des jeux de tous les systemes (la ligne « Tous »).</summary>
         /// <summary>Libelle affiche d'un systeme (cle), null si absent.</summary>
         public string DisplayOf(string system)
         {
@@ -93,6 +92,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             return r == null ? null : r.Text;
         }
 
+        /// <summary>Somme des jeux de tous les systemes (la ligne « Tous »).</summary>
         public int TotalCount { get { return systems.Sum(x => x.Value); } }
 
         /// <summary>Systeme choisi ; null = tous.</summary>

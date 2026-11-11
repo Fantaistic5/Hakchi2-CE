@@ -56,6 +56,7 @@ Le Release livre n'a pas de reference Release « avant » ; il n'entre pas dans 
 Deux correctifs (`19a7a573`) ont ramene B et C dans les objectifs. Avant eux, mesure par compteur, B etait a +8,2 % et C a +7,0 %. Les correctifs :
 - l'habillage ne cree plus le handle des listes deroulantes cachees ;
 - la grille se peint des sa relecture.
+
 ## Points connus, reportes
 
 - La jauge de stockage compte la memoire interne, comme l'original, meme quand les jeux sont sur USB.

@@ -40,9 +40,9 @@ namespace com.clusterrr.hakchi_gui
         private bool shellBuilt, shellLayingOut;
         private string lastBadgeKey;
 
-        /// <summary>Taille minimale de la fenetre (logique, 96 dpi).</summary>
         private bool fittingCombos;
         internal const int DescriptionMinHeight = 120;      // px a 96 dpi
+        /// <summary>Taille minimale de la fenetre (logique, 96 dpi).</summary>
         internal static readonly Size ShellMinimumSize = new Size(1024, 640);
         /// <summary>Taille de depart souhaitee, ramenee a la zone de travail de l'ecran (<see cref="FitStartBounds"/>).</summary>
         internal static readonly Size ShellDefaultSize = new Size(1280, 800);
@@ -519,7 +519,6 @@ namespace com.clusterrr.hakchi_gui
             return listViewGames.SelectedItems.Cast<ListViewItem>().Select(i => i.Tag as NesApplication).Where(a => a != null).ToList();
         }
 
-        /// <summary>Systemes et nombre de jeux (colonne gauche), jeux sans jaquette (collection + bouton du bas).</summary>
         /// <summary>Pied de page : « N jeu(x) selectionne(s) · Console » devant la jauge (ancienne barre d'etat, memes chaines).</summary>
         internal void ShowSelectedCount(int count)
         {
@@ -527,6 +526,7 @@ namespace com.clusterrr.hakchi_gui
             storageBar.Caption = count + " " + Resources.GamesSelected + " · " + Resources.StorageBarCaption;
         }
 
+        /// <summary>Systemes et nombre de jeux (colonne gauche), jeux sans jaquette (collection + bouton du bas).</summary>
         internal void UpdateShellCounts()
         {
             if (!shellBuilt) return;

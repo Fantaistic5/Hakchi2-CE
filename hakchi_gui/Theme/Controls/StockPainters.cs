@@ -629,13 +629,13 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         // Cases a cocher natives (CheckBoxes sans OwnerDraw) : la case claire du systeme est recouverte par la case B1.
         private bool NativeChecks { get { return list.CheckBoxes && !list.OwnerDraw && list.View == View.Details; } }
 
+        /// <summary>x d'un trait de largeur w : tel quel, ou reflete dans une fenetre en miroir de largeur mirrorWidth (sinon -1).</summary>
+        internal static int Mirror(int x, int w, int mirrorWidth) { return mirrorWidth < 0 ? x : mirrorWidth - x - w; }
+
         /// <summary>
         /// Case B1 (B1Draw.CheckGlyph) a la place de la case native : la zone de l'image d'etat (du bord de l'element a l'icone)
         /// est repeinte du fond de la ligne, puis la case est centree dedans. Le clic reste celui de la liste (meme zone).
         /// </summary>
-        /// <summary>x d'un trait de largeur w : tel quel, ou reflete dans une fenetre en miroir de largeur mirrorWidth (sinon -1).</summary>
-        internal static int Mirror(int x, int w, int mirrorWidth) { return mirrorWidth < 0 ? x : mirrorWidth - x - w; }
-
         private void PaintCheck(Graphics g, ListViewItem item, Rectangle rc, bool selected, float s, int mirrorWidth)
         {
             var bounds = item.Bounds;
