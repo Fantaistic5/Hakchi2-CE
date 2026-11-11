@@ -126,8 +126,20 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             // jamais de relecture pendant que la source est en train d'inserer ou de retirer : toujours apres coup
             if (!IsHandleCreated) { rebuildPending = true; return; }
             rebuildPosted = true;
-            try { BeginInvoke(new Action(FlushRebuild)); }
+            try { BeginInvoke(new Action(PostedRebuild)); }
             catch (InvalidOperationException) { rebuildPosted = false; rebuildPending = true; }
+        }
+
+        /// <summary>
+        /// Relecture apres un changement de la source, puis peinture immediate : WM_PAINT ne passe qu'apres tous les autres
+        /// messages, et au demarrage le thread UI enchaine d'autres travaux juste apres le remplissage de la liste (partie
+        /// synchrone de MainForm.UpdateFiles) ; sans cela les jeux n'apparaissaient que 250 a 500 ms apres avoir ete charges.
+        /// </summary>
+        private void PostedRebuild()
+        {
+            if (!rebuildPosted || IsDisposed) return;
+            FlushRebuild();
+            if (IsHandleCreated && Visible) Update();
         }
 
         /// <summary>Applique tout de suite une relecture en attente : avant chaque clic, touche ou peinture, pour ne jamais agir

@@ -111,6 +111,39 @@ namespace hakchi_gui.Tests.Theme
             }
         }
 
+        /// <summary>
+        /// Une liste deroulante cachee (fiche de MainForm au demarrage) ne recoit pas de handle a l'habillage :
+        /// le setter ItemHeight en creait un, avec ceux de ses parents (~150 ms au demarrage de MainForm).
+        /// La hauteur native conservee est posee quand le handle est cree.
+        /// </summary>
+        [StaFact]
+        public void SkinningHiddenComboBoxDefersHandleAndKeepsItemHeight()
+        {
+            var combo = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Bounds = new Rectangle(8, 8, 160, 24) };
+            combo.Items.AddRange(new object[] { "Un", "Deux", "Trois" });
+            var panel = new Panel { Visible = false, Bounds = new Rectangle(0, 0, 300, 100) };
+            panel.Controls.Add(combo);
+            using (var f = new Form { FormBorderStyle = FormBorderStyle.None, StartPosition = FormStartPosition.Manual, Location = new Point(-30000, -30000), ShowInTaskbar = false })
+            {
+                f.Controls.Add(panel);
+                var formHandle = f.Handle;                       // comme B1Form : habillage a la creation du handle de la fenetre
+                B1Skin.Apply(f);
+                int expected = combo.ItemHeight;                 // hauteur retenue par l'habillage (police B1)
+                Assert.False(combo.IsHandleCreated);
+                Assert.False(panel.IsHandleCreated);
+                Assert.Equal(DrawMode.OwnerDrawFixed, combo.DrawMode);
+
+                f.Show();
+                panel.Visible = true;
+                Application.DoEvents();
+                Assert.True(combo.IsHandleCreated);
+                Assert.Equal(expected, combo.ItemHeight);
+                Paint(combo);
+                combo.SelectedIndex = 1;
+                Assert.Equal("Deux", combo.Text);
+            }
+        }
+
         [StaFact]
         public void NumericUpDownKeepsItsBehaviour()
         {

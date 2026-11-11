@@ -140,7 +140,11 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             {
                 int h = c.ItemHeight;                          // hauteur native, conservee : la mise en page ne bouge pas
                 c.DrawMode = DrawMode.OwnerDrawFixed;
-                try { c.ItemHeight = h; } catch (Exception) { }
+                // Le setter ItemHeight cree le handle (ComboBox.UpdateItemHeight -> CreateControl), et avec lui ceux de tous
+                // les parents, meme caches : ~20-50 ms par liste au demarrage de MainForm (fiche cachee). La meme valeur est
+                // donc posee a la creation du handle, quand elle a lieu.
+                if (c.IsHandleCreated) { try { c.ItemHeight = h; } catch (Exception) { } }
+                else NativeTheme.WithHandle(c, "b1itemheight", _ => { try { c.ItemHeight = h; } catch (Exception) { } });
                 c.DrawItem += StockDrawItem;
                 c.DropDown += StockDropDown;
             }
