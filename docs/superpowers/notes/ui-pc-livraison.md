@@ -11,7 +11,7 @@
 
 | Quoi | Emplacement |
 |---|---|
-| Build Release | `hakchi_gui\bin\Release\net48\hakchi.exe` (3.9.3+19a7a573, x86 comme le projet d'origine) |
+| Build Release | `hakchi_gui\bin\Release\net48\hakchi.exe` (3.9.3+e158744f, meme code que 19a7a573 ; x86 `Requires32Bit`, reglage du csproj d'origine inchange) |
 | Copie de test | `P:\HakchiSNESUSA\app\hakchi_new.exe` (Release, mutex patche) + `hakchi_new.exe.config` + `languages\*\hakchi.resources.dll` |
 | Galerie apres, 96 dpi | `P:\HakchiSNESUSA\ui_after\` (50 fenetres et controles, fr-FR) |
 | Galerie apres, 144 dpi | `P:\HakchiSNESUSA\ui_after_144\` (144 dpi emule) |
@@ -32,24 +32,30 @@ Redeployer apres un nouveau build :
 - remplacer le « 2 » par « 3 » (offset de la chaine + 12) ;
 - copier aussi `hakchi.exe.config` en `hakchi_new.exe.config`, et les satellites `languages\*\hakchi.resources.dll`.
 
-L'offset change a chaque build : 4978139 pour ce Release. Ne jamais toucher a `P:\HakchiSNESUSA\app\hakchi.exe` ni a `R:`.
+L'offset change a chaque build : 4978411 pour ce Release. Ne jamais toucher a `P:\HakchiSNESUSA\app\hakchi.exe` ni a `R:`.
 
 ## Mesures (detail dans baseline-perf.md)
 
-Series alternees avant / apres, 10 fois, mediane. Reference « avant » : `hakchi_mtx.exe`, interface d'origine.
+- Tous les temps sont comptes depuis le lancement.
+- 10 lancements alternes avant / apres, mediane (IQR).
+- Les deux exe sont des builds **Debug** :
+  - avant : `hakchi_mtx.exe`, interface d'origine ;
+  - apres : `19a7a573`.
+- Mesure par capture de la fenetre (`tools/perf/measure-visible.ps1`), sans passer par le thread UI de hakchi.
 
-| | avant | apres (Release) | objectif |
-|---|---|---|---|
-| B fenetre principale visible | 1090 ms | 1119 ms (+2,7 %) | <= +5 % : tenu |
-| C premiers jeux | 1497 ms | 1414,5 ms (-5,5 %) | pas plus lent : tenu |
-| Grille de jaquettes complete apres C | - | 499 ms | < 1 s : tenu |
+| Mesure | avant | apres | objectif | verdict |
+|---|---|---|---|---|
+| B fenetre principale visible | 972 ms (43) | 939,5 ms (58) | <= +5 % | tenu (-3,3 %) |
+| Premiers jeux a l'ecran (C_visible) | 1552 ms (39) | 1510,5 ms (99) | pas plus lent | tenu (-2,7 %, dans le bruit) |
+| Grille complete (jaquettes visibles dessinees) | 1552 ms (liste sans jaquettes) | 1593 ms (148) | < 1 s | non tenu depuis le lancement ; tenu depuis l'affichage des jeux (+60 a 150 ms) ; +41 ms contre l'avant, dans le bruit |
 
-En Debug, la meme comparaison donne B -1,3 % et C -5,5 %.
+Le seuil de 1 s ne peut pas etre tenu depuis le lancement, ni par la refonte ni par l'interface d'origine : la fenetre seule apparait a ~0,94 s.
 
-Avant correction, les objectifs etaient rates : B +8,2 % et C +7,0 %. Deux correctifs ont ete faits (commit `19a7a573`) :
+Le Release livre n'a pas de reference Release « avant » ; il n'entre pas dans ces verdicts.
+
+Deux correctifs (`19a7a573`) ont ramene B et C dans les objectifs. Avant eux, mesure par compteur, B etait a +8,2 % et C a +7,0 %. Les correctifs :
 - l'habillage ne cree plus le handle des listes deroulantes cachees ;
-- la grille se peint des que la liste est chargee.
-
+- la grille se peint des sa relecture.
 ## Points connus, reportes
 
 - La jauge de stockage compte la memoire interne, comme l'original, meme quand les jeux sont sur USB.
@@ -58,4 +64,4 @@ Avant correction, les objectifs etaient rates : B +8,2 % et C +7,0 %. Deux corre
 - SettingsForm est une fenetre vide de l'original.
 - Le genre de F-ZERO est vide dans les donnees d'origine.
 - Galerie : barres de titre claires (DrawToBitmap), sombres dans l'application. Le 144 dpi est emule (mise a l'echelle de la police), l'application reste non DPI-aware comme l'original.
-- 13 fichiers `patches\*.ips` du build manquent dans la copie de test. Ils n'ont pas ete copies, car seuls l'exe, sa config et les satellites de langue sont redeployes. Tous les autres fichiers du build Release y sont deja.
+- `patches\` : verifie le 2026-11-11, `hakchi_gui\bin\Release\net48\patches` et `P:\HakchiSNESUSA\app\patches` sont identiques. Plus generalement, aucun fichier du build Release ne manque dans la copie de test (verification par chemins litteraux). Le « 13 fichiers manquants » de la premiere version venait d'un faux positif : les crochets des noms etaient lus comme des jokers par `Test-Path`.

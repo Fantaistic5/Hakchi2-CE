@@ -43,43 +43,74 @@ Notes :
 - B est plus haut que la serie du matin (768 ms) : variation de machine et de cache, pas de changement de code. Les budgets de la refonte se jugent contre **cette** serie : B <= 995 x 1,05 ~ 1045 ms, C <= 1328 ms.
 - La galerie (`tools/FormGallery`) ne mesure pas la performance : elle ne rend que l'etat vide de conception des fenetres.
 
-## Refonte PC (projet 2) : mesures apres refonte (2026-11-11, Task 11)
+## Refonte PC (projet 2) : mesures apres refonte (2026-11-11, Task 11, corrigees au fix round 1)
 
-- Binaires : `P:\HakchiSNESUSA\app\hakchi_new.exe` (copie de test patchee pour le mutex), branche `snes-usa/ui-pc`, commit `19a7a573`, en Debug (meme configuration que la serie « avant ») puis en Release (livraison). Bibliotheque : 198 dossiers de jeux, compteur 219.
-- Machine chargee pendant la journee (VM qemu, python, Alchemia : 50 a 60 % de CPU hors hakchi) : les valeurs absolues bougent de +-30 %. Pour comparer a conditions egales, chaque serie alterne l'exe d'avant et celui d'apres, 10 fois. Reference « avant » : `hakchi_mtx.exe` (interface d'origine, 3.9.3-98aef422, meme dossier, meme bibliotheque).
-- Script : `tools/perf/measure-startup.ps1 -Runs 1 -Exe <exe> -HiddenLists`, alterne. `-HiddenLists` : listViewGames est maintenant cachee derriere la grille, son compteur est lu quand meme (meme message `LVM_GETITEMCOUNT`, meme liste).
-- « Grille complete » : `-Grid`. Un lancement de calibration repere la fenetre de la grille, puis chaque lancement capture la grille (PrintWindow) toutes les ~40 ms. La mesure est la derniere modification des pixels avant 2,5 s de stabilite. Les captures intermediaires (`-SaveChanges`) montrent la suite : grille vide, cases avec titres, jaquettes. Limite : comme pour C, l'echantillonnage attend que le thread UI reponde ; les instants sont des bornes hautes.
+### Ce que mesure chaque chiffre
 
-### Premiere mesure, avant correction (Debug, 10 alternances, mediane)
+Tous les temps partent du lancement du processus (`Process.Start`).
 
-| | avant (hakchi_mtx) | apres (19a7a573^) | ecart |
-|---|---|---|---|
-| B fenetre visible | 1210 ms | 1309 ms | **+8,2 %** (objectif +5 % : rate) |
-| C premiers jeux | 1591 ms | 1702 ms | **+7,0 %** (objectif : pas plus lent : rate) |
+| Mesure | Definition | Outil |
+|---|---|---|
+| B | la fenetre principale « hakchi CE... » est visible | les deux scripts |
+| C (compteur) | `LVM_GETITEMCOUNT` > 0 sur listViewGames (cachee dans l'interface B1) | `measure-startup.ps1 -HiddenLists` |
+| C_visible | des jeux sont **a l'ecran** dans la zone de la liste | `measure-visible.ps1` |
+| Grille complete | toutes les cases visibles affichent leur jaquette | `measure-visible.ps1` |
 
-Cause trouvee par traces temporaires (retirees) : le premier habillage de MainForm prenait 190 a 280 ms, dont ~150 ms pour 4 listes deroulantes. `ComboPaint.HookStock` reposait `ItemHeight`, et ce setter cree le handle de la liste et de tous ses parents, meme caches (fiche de jeu). La valeur est maintenant posee a la creation du handle (meme hauteur, test `SkinningHiddenComboBoxDefersHandleAndKeepsItemHeight`). Second correctif : la grille se peignait seulement quand le thread UI etait libre, soit apres la partie synchrone de `UpdateFiles` (250 a 500 ms apres le remplissage). Elle se peint maintenant des la relecture (`CoverGridView.PostedRebuild`).
+Precisions sur C_visible :
+- interface d'origine : la ListView blanche contient du texte, au moins 150 px sombres ;
+- interface B1 : la grille montre ses cases et leurs titres, au moins 5 % de pixels RowActive `#26252E`.
 
-### Mesure finale (10 alternances, mediane)
+Precisions sur la grille complete :
+- interface B1 : les pixels satures (jaquettes) atteignent 97 % de leur nombre final, soit 21 cases a 96 dpi ;
+- interface d'origine : la liste n'a pas de jaquettes et s'affiche d'un coup, donc grille complete = C_visible.
 
-| | avant (hakchi_mtx) | apres | ecart | objectif |
-|---|---|---|---|---|
-| B fenetre visible, Debug | 987,5 ms | 974,5 ms | -1,3 % | <= +5 % : tenu |
-| C premiers jeux, Debug | 1327 ms | 1254,5 ms | -5,5 % | pas plus lent : tenu |
-| B fenetre visible, Release | 1090 ms | 1119 ms | +2,7 % | <= +5 % : tenu |
-| C premiers jeux, Release | 1497 ms | 1414,5 ms | -5,5 % | pas plus lent : tenu |
+C (compteur) ne dit pas ce que voit l'utilisateur. Dans l'interface B1, la liste comptee est cachee ; les jeux n'apparaissent qu'une fois la grille peinte. Les verdicts « premiers jeux » et « grille » se jugent donc sur C_visible et sur la grille complete.
 
-Valeurs brutes (Release, apres) : B 905, 914, 940, 996, 1116, 1122, 1129, 1162, 1295, 1321 ; C 1169, 1178, 1187, 1293, 1404, 1425, 1460, 1551, 1585, 1648.
+`measure-visible.ps1` capture la fenetre depuis le processus de mesure, par `GetWindowDC` + `BitBlt` sur la surface DWM de la fenetre, toutes les ~30 ms. Il n'envoie aucun message a hakchi et n'attend pas son thread UI.
 
-### Grille complete (Release, 3 lancements)
+Verification sur une fenetre de test dont le thread UI dort 3 s : la capture repond en moins de 1 ms et montre le contenu reel. En revanche, `measure-startup.ps1` (C et `-Grid`) attend le thread UI de hakchi (`LVM_GETITEMCOUNT` dans la meme boucle) : ses instants sont des bornes hautes. La premiere version de ce rapport en a deduit a tort que les titres n'apparaissaient que ~400 ms apres C.
 
-| Mesure | Run 1 | Run 2 | Run 3 | Mediane |
-|---|---|---|---|---|
-| B | 989 ms | 905 ms | 1011 ms | 989 ms |
-| C (compteur > 0) | 1237 ms | 1138 ms | 1382 ms | 1237 ms |
-| Grille complete (jaquettes visibles toutes dessinees) | 1735 ms | 1637 ms | 1930 ms | 1735 ms |
-| Grille complete - C | 498 ms | 499 ms | 548 ms | **499 ms** (objectif < 1 s : tenu) |
+### Configuration et conditions
 
-- 21 jeux visibles (645 x 634 px, 96 dpi), 219 elements. Etat final verifie a l'image : toutes les cases visibles ont leur jaquette.
-- La grille montre les titres environ 400 ms apres C, puis les jaquettes ~110 ms plus tard. Ces instants sont des bornes hautes : le thread UI execute alors `UpdateFiles` (lecture de hakchi.hmod) et ne repond pas a l'echantillonnage.
-- En Debug, apres le premier correctif seulement, la grille complete arrivait 620 ms apres C. Dans 2 lancements sur 5, un dernier changement venait plus tard : la mise en evidence d'un jeu (texte du titre plus clair), sans lien avec les jaquettes.
-- Avant la refonte, la « grille » etait la ListView : texte visible des C, pas de jaquettes.
+- « Avant » : `P:\HakchiSNESUSA\app\hakchi_mtx.exe`, interface d'origine, 3.9.3-98aef422. **C'est un build Debug** : `AssemblyConfiguration("Debug")`, `DebuggableAttribute` 0x107, optimisations JIT coupees.
+- « Apres » : `hakchi_new.exe` construit en **Debug** depuis `19a7a573`, meme configuration. Seule cette paire sert aux verdicts.
+- Le Release livre n'a pas de reference Release « avant ». Ses chiffres ne servent pas de comparaison.
+- Meme dossier, meme bibliotheque : 198 dossiers, 219 elements, console non connectee.
+- 10 lancements alternes avant / apres, mediane et ecart interquartile (IQR).
+- La machine est chargee par d'autres processus (python, Adobe, par moments qemu et Alchemia), d'ou des valeurs absolues instables d'une serie a l'autre. Seule l'alternance compare a conditions egales.
+
+### Resultats (Debug contre Debug, 10 alternances, 2026-11-11)
+
+| Mesure (depuis le lancement) | avant : mediane (IQR) | apres : mediane (IQR) | ecart | objectif | verdict |
+|---|---|---|---|---|---|
+| B fenetre visible | 972 ms (43) | 939,5 ms (58) | -3,3 % | <= +5 % | **tenu** |
+| C_visible premiers jeux a l'ecran | 1552 ms (39) | 1510,5 ms (99) | -2,7 % | pas plus lent | **tenu** (ecart dans le bruit) |
+| Grille complete | 1552 ms (39), liste sans jaquettes | 1593 ms (148) | +2,6 % (+41 ms) | < 1 s sur ~257 jaquettes | voir ci-dessous |
+
+Valeurs brutes, en ms.
+
+Avant :
+- B : 884, 911, 930, 945, 969, 975, 976, 977, 982, 999
+- C_visible : 1449, 1526, 1532, 1536, 1538, 1566, 1572, 1572, 1581, 1649
+
+Apres :
+- B : 870, 902, 930, 931, 932, 947, 975, 993, 994, 1015
+- C_visible : 1465, 1466, 1468, 1475, 1494, 1527, 1558, 1572, 1589, 1622
+- grille complete : 1526, 1527, 1529, 1556, 1588, 1598, 1681, 1685, 1697, 1742
+- grille complete - C_visible : 60 a 153 ms, mediane 62,5 ms
+
+Verdict sur la grille (« premier rendu complet en moins de 1 s ») :
+- **Depuis le lancement : non tenu.** Mediane 1,59 s. L'objectif est hors d'atteinte depuis le lancement : la fenetre principale elle-meme n'apparait qu'a ~0,94 s, et la liste d'origine (texte seul) s'affichait a 1,55 s.
+- **Depuis l'affichage des premiers jeux : tenu.** Les jaquettes visibles sont toutes dessinees 60 a 150 ms apres les titres.
+- **Par rapport a l'avant : dans le bruit.** La grille complete arrive 41 ms apres la liste d'origine, et cet ecart est inferieur a l'IQR de la serie apres (148 ms).
+
+### Historique de la Task 11
+
+1. **Premiere mesure, avec C (compteur), avant les correctifs** (code 89d169e7, Debug contre Debug, 10 alternances) : B +8,2 % (1210 contre 1309 ms), C +7,0 %. Les objectifs etaient rates.
+2. **Correctifs `19a7a573`.**
+   - `ComboPaint.HookStock` reposait `ItemHeight` ; ce setter creait le handle de 4 listes deroulantes cachees et de leurs parents, ~150 ms dans le premier habillage de MainForm. La valeur est maintenant posee a la creation du handle. Test : `SkinningHiddenComboBoxDefersHandleAndKeepsItemHeight`, qui verifie aussi la valeur native `CB_GETITEMHEIGHT`.
+   - La grille se peint juste apres sa relecture (`PostedRebuild` + `Update()`), sans attendre que le thread UI soit libre.
+3. **Mesures avec C (compteur) apres les correctifs** (alternance, mediane) :
+   - Debug : B -1,3 %, C -5,5 %.
+   - Release « apres » contre Debug « avant » : B +2,7 %, C -5,5 %. Ces deux chiffres ne comparent pas la meme configuration et l'ecart est dans le bruit (IQR ~200 ms) : ils sont **retires des verdicts**.
+4. **Fix round 1.** Nouvelle mesure de ce que voit l'utilisateur (`measure-visible.ps1`) : tableau ci-dessus. Aucun nouveau correctif n'a ete necessaire : C_visible n'est pas plus lent, et la grille suit les titres de 60 a 150 ms.

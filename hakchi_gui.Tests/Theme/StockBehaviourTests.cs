@@ -29,6 +29,10 @@ namespace hakchi_gui.Tests.Theme
             return f;
         }
 
+        private const int CB_GETITEMHEIGHT = 0x0154;
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+
         private static void Paint(Control c)
         {
             using (var bmp = new Bitmap(c.Width, c.Height, PixelFormat.Format24bppRgb)) c.DrawToBitmap(bmp, new Rectangle(0, 0, c.Width, c.Height));
@@ -138,6 +142,9 @@ namespace hakchi_gui.Tests.Theme
                 Application.DoEvents();
                 Assert.True(combo.IsHandleCreated);
                 Assert.Equal(expected, combo.ItemHeight);
+                // valeur native : lignes de la liste (0) et champ de selection (-1), posees par CB_SETITEMHEIGHT
+                Assert.Equal(expected, (int)SendMessage(combo.Handle, CB_GETITEMHEIGHT, IntPtr.Zero, IntPtr.Zero));
+                Assert.Equal(expected, (int)SendMessage(combo.Handle, CB_GETITEMHEIGHT, new IntPtr(-1), IntPtr.Zero));
                 Paint(combo);
                 combo.SelectedIndex = 1;
                 Assert.Equal("Deux", combo.Text);
