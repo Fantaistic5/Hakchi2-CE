@@ -124,7 +124,7 @@ public static class Vis {
                 RECT rr, wr; GetWindowRect(reg, out rr); GetWindowRect(top, out wr);
                 int w, h; var px = Grab(top, out w, out h); if (px == null) continue;
                 var f = Measure(px, w, h, rr, wr, now);
-                if (saveDir != null) f.Px = px;
+                if (!string.IsNullOrEmpty(saveDir)) f.Px = px;
                 frames.Add(f);
                 bool visible = b1 ? f.RowActive >= 0.05 : (f.White >= 0.5 && f.Dark >= 150);
                 if (visible && tCv < 0) tCv = now;
@@ -140,7 +140,7 @@ public static class Vis {
                 foreach (var f in frames) if (f.T >= tCv && f.RowActive >= 0.02 && f.Colorful >= fin * 0.97) { tFull = f.T; break; }
             }
         }
-        if (saveDir != null) Save(frames, saveDir, tag, tCv, tFull);
+        if (!string.IsNullOrEmpty(saveDir)) Save(frames, saveDir, tag, tCv, tFull);   // PowerShell passe $null comme ""
         int finalCol = frames.Count > 0 ? frames[frames.Count - 1].Colorful : 0;
         return string.Format("B={0} Cvis={1} Full={2} frames={3} finalColorful={4} {5}", tB, tCv, tFull, frames.Count, finalCol, err);
     }
@@ -174,7 +174,7 @@ foreach ($e in $Exes) { $isB1[$e] = [bool](Select-String -Path $e -Pattern 'B1Sk
 for ($i = 1; $i -le $Rounds; $i++) {
     foreach ($e in $Exes) {
         $tag = '{0}_{1}' -f [IO.Path]::GetFileNameWithoutExtension($e), $i
-        $r = [Vis]::Run($e, $isB1[$e], $MaxMs, $AfterMs, $(if ($SaveDir) { $SaveDir } else { $null }), $tag)
+        $r = [Vis]::Run($e, $isB1[$e], $MaxMs, $AfterMs, $SaveDir, $tag)
         Write-Output ("{0} {1} b1={2} {3}" -f $i, [IO.Path]::GetFileName($e), $isB1[$e], $r)
         Start-Sleep -Milliseconds 800
     }
