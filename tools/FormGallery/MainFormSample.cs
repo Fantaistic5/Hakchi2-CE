@@ -94,6 +94,7 @@ namespace FormGallery
                     f.StartPosition = FormStartPosition.Manual;
                     f.Location = new Point(-30000, -30000);
                     f.ShowInTaskbar = false;
+                    if (o.Rtl) Gallery.Mirror(f);
                     Gallery.ApplyDpi(f, shot.Dpi);
                     f.Size = new Size(shot.W, shot.H);
 
@@ -126,9 +127,11 @@ namespace FormGallery
                     using (var warm = new Bitmap(f.Width, f.Height)) f.DrawToBitmap(warm, new Rectangle(0, 0, f.Width, f.Height));
                     if (!Pump(() => f.grid.AllVisibleThumbnailsReady, 20000)) Console.WriteLine("ATTENTION : vignettes pas toutes pretes");
                     Pump(() => f.sheet.CoverReady, 10000);
+                    // en miroir, la liste recree son handle et relance le recalcul (sans console : capacite 0) : on repose la demo
+                    f.storageBar.SetUsage(6L * GB + GB / 10, 9L * GB + GB * 4 / 10);
                     using (var bmp = new Bitmap(f.Width, f.Height, PixelFormat.Format32bppArgb))
                     {
-                        f.DrawToBitmap(bmp, new Rectangle(0, 0, f.Width, f.Height));
+                        Gallery.Capture(f, bmp, o);
                         if (shot.Scroll) RedrawScrolledSheet(f, bmp);
                         bmp.Save(Path.Combine(o.Out, shot.File), ImageFormat.Png);
                     }

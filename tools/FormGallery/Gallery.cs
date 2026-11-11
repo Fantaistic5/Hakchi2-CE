@@ -164,6 +164,51 @@ namespace FormGallery
         }
 
         [DllImport("user32.dll")] private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        [DllImport("user32.dll")] private static extern bool PrintWindow(IntPtr hWnd, IntPtr hdc, uint flags);
+        [DllImport("gdi32.dll")] private static extern uint SetLayout(IntPtr hdc, uint layout);
+        private const uint LAYOUT_RTL = 1;
+
+        /// <summary>--rtl : la fenetre en miroir (RightToLeft + RightToLeftLayout), comme le ferait une langue de droite a gauche.</summary>
+        internal static void Mirror(Form f)
+        {
+            f.RightToLeft = RightToLeft.Yes;
+            f.RightToLeftLayout = true;
+            MirrorChildren(f);
+        }
+
+        // WinForms ne propage pas le miroir aux enfants (WS_EX_NOINHERITLAYOUT) : listes, arbres, onglets... ont leur propre
+        // RightToLeftLayout, qu'une traduction RTL poserait aussi. On le pose partout ou il existe (cases natives des listes : Task 9).
+        private static void MirrorChildren(Control parent)
+        {
+            foreach (Control c in parent.Controls)
+            {
+                var p = c.GetType().GetProperty("RightToLeftLayout", BindingFlags.Public | BindingFlags.Instance);
+                if (p != null && p.PropertyType == typeof(bool) && p.CanWrite) p.SetValue(c, true, null);
+                MirrorChildren(c);
+            }
+        }
+
+        /// <summary>
+        /// Image de la fenetre. En miroir, DrawToBitmap peint dans un DC non miroir et place mal les enfants ; PrintWindow avec le
+        /// contenu complet (DWM) rend une page blanche hors ecran. On fait donc peindre la fenetre (PrintWindow, cadre compris) dans
+        /// un DC mis en LAYOUT_RTL, comme l'est l'ecran pour une fenetre en miroir : l'image est celle que verrait l'utilisateur.
+        /// </summary>
+        internal static void Capture(Form host, Bitmap bmp, Options o)
+        {
+            if (o.Rtl)
+            {
+                using (var g = Graphics.FromImage(bmp))
+                {
+                    var hdc = g.GetHdc();
+                    bool ok;
+                    SetLayout(hdc, LAYOUT_RTL);
+                    try { ok = PrintWindow(host.Handle, hdc, 0); }
+                    finally { g.ReleaseHdc(hdc); }
+                    if (ok) return;
+                }
+            }
+            host.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
+        }
         private const int SW_SHOWNOACTIVATE = 4;
 
         // Evenements de Form dont les gestionnaires parlent a la console / au reseau / a la config (Load, Shown, fermeture...).
@@ -203,6 +248,7 @@ namespace FormGallery
             try
             {
                 StripHandlers(host);
+                if (o.Rtl) Mirror(host);
                 try { FormSamples.Fill(host); } catch (Exception ex) { Console.WriteLine("exemples ignores : " + ex.Message); }
                 host.StartPosition = FormStartPosition.Manual;
                 host.Location = new Point(-30000, -30000);
@@ -222,7 +268,7 @@ namespace FormGallery
                 int hgt = Math.Min(Math.Max(host.Height, 1), 4000);
                 using (var bmp = new Bitmap(w, hgt, PixelFormat.Format32bppArgb))
                 {
-                    host.DrawToBitmap(bmp, new Rectangle(0, 0, w, hgt));
+                    Capture(host, bmp, o);
                     OverlayBrowsers(host, browsers, bmp);
                     bmp.Save(png, ImageFormat.Png);
                 }

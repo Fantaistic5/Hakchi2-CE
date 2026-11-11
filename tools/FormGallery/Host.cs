@@ -224,8 +224,10 @@ namespace FormGallery
         /// la console, dossier de captures cree) : jamais construites par leur constructeur applicatif non plus.
         /// ModHubForm (Hmod.GetMods : liste des mods installes, interroge la console si elle est en ligne) et SelectForm (GetMods,
         /// renommage dans user_mods, CoreCollection rechargee, ConfigIni) : concepteur seul, puis donnees d'exemple (ModHubSample).
+        /// SelectFirmwareDialog (fil qui attend la console : WaitingShellForm.WaitForDevice, ouvert des que la fenetre a un handle et
+        /// que les messages sont pompes, ce que fait la capture --rtl) : concepteur seul aussi.
         /// </summary>
-        public static readonly string[] DesignerOnlyTypes = { "WaitingFelForm", "WaitingShellForm", "SaveStateManager", "ScreenshotForm", "ModHubForm", "SelectForm" };
+        public static readonly string[] DesignerOnlyTypes = { "WaitingFelForm", "WaitingShellForm", "SaveStateManager", "ScreenshotForm", "ModHubForm", "SelectForm", "SelectFirmwareDialog" };
         public const string DesignerOnlyDescription = "concepteur seul (B1Form + InitializeComponent, sans constructeur applicatif)";
 
         public static Control ConstructDesignerOnly(Type t)

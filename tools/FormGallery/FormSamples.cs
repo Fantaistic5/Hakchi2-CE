@@ -71,8 +71,13 @@ namespace FormGallery
             var panel = Find<Control>(c, "panel1");
             if (panel != null) panel.Visible = false;
             var tree = Find<TreeView>(c, "treeView");
+            // les tris de la fenetre (NodeSorter) lisent les Tag (TreeNode / INesMenuElement) des vrais dossiers : sans eux,
+            // NullReferenceException a l'ajout. Les exemples sont donc ranges dans l'ordre alphabetique par defaut.
+            var sortedList = Find<ListView>(c, "listViewContent");
+            if (sortedList != null) sortedList.ListViewItemSorter = null;
             if (tree != null)
             {
+                tree.TreeViewNodeSorter = null;
                 var root = tree.Nodes.Add("Mini SNES");
                 var a = root.Nodes.Add("Action"); a.Nodes.Add("Super Metroid"); a.Nodes.Add("Contra III");
                 var r = root.Nodes.Add("RPG"); r.Nodes.Add("Chrono Trigger"); r.Nodes.Add("Star Ocean");

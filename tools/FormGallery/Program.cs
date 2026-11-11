@@ -18,12 +18,13 @@ namespace FormGallery
         public string StateDir;
         public string Culture = "fr-FR";
         public bool List;
+        public bool Rtl;
     }
 
     internal static class Program
     {
         private const string Usage =
-            "FormGallery.exe --out <dir> [--dpi 96|144] [--only <FormName>] [--culture fr-FR] [--appdir <dir>] [--state <dir>]\n" +
+            "FormGallery.exe --out <dir> [--dpi 96|144] [--only <FormName>] [--culture fr-FR] [--rtl] [--appdir <dir>] [--state <dir>]\n" +
             "FormGallery.exe --dump-baselines <dir> [--appdir <dir>] [--state <dir>]\n" +
             "FormGallery.exe --list";
 
@@ -110,6 +111,7 @@ namespace FormGallery
                     case "--state": o.StateDir = Path.GetFullPath(next()); break;
                     case "--culture": o.Culture = next(); break;
                     case "--list": o.List = true; break;
+                    case "--rtl": o.Rtl = true; break;
                     default: throw new ArgumentException("Argument inconnu : " + a);
                 }
             }

@@ -670,25 +670,46 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             float s = B1Dpi.Scale(list);
             var group = GroupById((int)cd.nmcd.dwItemSpec);
             string text = group == null ? "" : (group.Header ?? "").Replace("&", "").ToUpper(System.Globalization.CultureInfo.CurrentUICulture);
-            bool rtl = list.RightToLeft == RightToLeft.Yes;
-            using (var g = Graphics.FromHdc(cd.nmcd.hdc))
+            PaintGroupHeader(cd.nmcd.hdc, rc, text, list.Font, B1Draw.IsPalette(list.BackColor) ? list.BackColor : B1Palette.Slate,
+                list.RightToLeft == RightToLeft.Yes, s, list.ClientSize.Width);
+        }
+
+        /// <summary>
+        /// En-tete de groupe dans le DC de la liste. rc est logique (dans une liste en miroir, origine a droite). Si le DC est en
+        /// LAYOUT_RTL (RightToLeftLayout), GDI+ ne suit pas le miroir et TextRenderer recoit un decoupage GDI+ non reflete (le titre
+        /// disparaissait) : comme pour les cases, le DC passe en disposition normale le temps du dessin et rc est reflete a la main.
+        /// </summary>
+        internal static void PaintGroupHeader(IntPtr hdc, Rectangle rc, string text, Font listFont, Color back, bool rtl, float s, int clientWidth)
+        {
+            uint layout = GetLayout(hdc);
+            bool mirrored = layout != 0xFFFFFFFF && (layout & LAYOUT_RTL) != 0;
+            if (mirrored)
             {
-                B1Draw.Fill(g, B1Draw.IsPalette(list.BackColor) ? list.BackColor : B1Palette.Slate, rc);
-                int pad = B1Draw.Px(6, s), gap = B1Draw.Px(8, s);
-                int textW = 0;
-                if (text.Length > 0)
-                {
-                    var caps = B1Draw.CapsFont(list.Font);          // police en cache partagee : jamais liberee ici
-                    textW = B1Draw.TrackedWidth(g, text, caps, B1Fonts.CapsTracking);
-                    int x = rtl ? rc.Right - pad - textW : rc.Left + pad;
-                    int y = rc.Top + Math.Max(0, (rc.Height - caps.Height) / 2);
-                    B1Draw.DrawTracked(g, text, caps, B1Palette.Lavender, x, y, B1Fonts.CapsTracking);
-                }
-                int ly = rc.Top + rc.Height / 2;
-                int from = rtl ? rc.Left + pad : rc.Left + pad + textW + (textW > 0 ? gap : 0);
-                int to = rtl ? rc.Right - pad - textW - (textW > 0 ? gap : 0) : rc.Right - pad;
-                if (to > from) B1Draw.Fill(g, B1Palette.Rule, from, ly, to - from, B1Draw.Px(1, s));
+                SetLayout(hdc, layout & ~LAYOUT_RTL);
+                rc = new Rectangle(Mirror(rc.Left, rc.Width, clientWidth), rc.Top, rc.Width, rc.Height);
             }
+            try
+            {
+                using (var g = Graphics.FromHdc(hdc))
+                {
+                    B1Draw.Fill(g, back, rc);
+                    int pad = B1Draw.Px(6, s), gap = B1Draw.Px(8, s);
+                    int textW = 0;
+                    if (text.Length > 0)
+                    {
+                        var caps = B1Draw.CapsFont(listFont);          // police en cache partagee : jamais liberee ici
+                        textW = B1Draw.TrackedWidth(g, text, caps, B1Fonts.CapsTracking);
+                        int x = rtl ? rc.Right - pad - textW : rc.Left + pad;
+                        int y = rc.Top + Math.Max(0, (rc.Height - caps.Height) / 2);
+                        B1Draw.DrawTracked(g, text, caps, B1Palette.Lavender, x, y, B1Fonts.CapsTracking);
+                    }
+                    int ly = rc.Top + rc.Height / 2;
+                    int from = rtl ? rc.Left + pad : rc.Left + pad + textW + (textW > 0 ? gap : 0);
+                    int to = rtl ? rc.Right - pad - textW - (textW > 0 ? gap : 0) : rc.Right - pad;
+                    if (to > from) B1Draw.Fill(g, B1Palette.Rule, from, ly, to - from, B1Draw.Px(1, s));
+                }
+            }
+            finally { if (mirrored) SetLayout(hdc, layout); }
         }
 
         private ListViewItem ItemAt(int index)

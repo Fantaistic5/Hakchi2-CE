@@ -130,9 +130,27 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             return TextRenderer.MeasureText(g, s, f, new Size(int.MaxValue, int.MaxValue), Raw).Width;
         }
 
+        /// <summary>
+        /// Texte a mise en forme complexe (ecritures de droite a gauche, marques combinantes) : ses lettres dependent de leurs voisines
+        /// et de l'ordre bidirectionnel, il ne peut pas etre pose lettre par lettre. Il est alors dessine d'un seul tenant, sans espacement.
+        /// </summary>
+        internal static bool NeedsShaping(string text)
+        {
+            foreach (char ch in text)
+            {
+                if (ch >= '֐' && ch <= 'ࣿ') return true;           // hebreu, arabe, syriaque, thaana, n'ko...
+                if (ch >= 'יִ' && ch <= '﷿') return true;           // formes de presentation hebreu / arabe A
+                if (ch >= 'ﹰ' && ch <= '﻿') return true;           // formes de presentation arabe B
+                var cat = char.GetUnicodeCategory(ch);
+                if (cat == System.Globalization.UnicodeCategory.NonSpacingMark || cat == System.Globalization.UnicodeCategory.SpacingCombiningMark) return true;
+            }
+            return false;
+        }
+
         /// <summary>Largeur d'un texte avec espacement (em) ajoute entre les lettres.</summary>
         public static int TrackedWidth(Graphics g, string text, Font f, float trackEm)
         {
+            if (NeedsShaping(text)) return CharWidth(g, text, f);
             float extra = trackEm * f.SizeInPoints * g.DpiX / 72f;
             float w = 0;
             int space = Math.Max(1, CharWidth(g, "a a", f) - 2 * CharWidth(g, "a", f));
@@ -143,6 +161,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         /// <summary>Texte en capitales espacees (0,14 em) : GDI ne sait pas espacer les lettres, on les pose une a une.</summary>
         public static void DrawTracked(Graphics g, string text, Font f, Color c, int x, int y, float trackEm)
         {
+            if (NeedsShaping(text)) { TextRenderer.DrawText(g, text, f, new Point(x, y), c, Raw); return; }
             float extra = trackEm * f.SizeInPoints * g.DpiX / 72f;
             float cx = x;
             int space = Math.Max(1, CharWidth(g, "a a", f) - 2 * CharWidth(g, "a", f));
@@ -266,6 +285,17 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             return new Rectangle(x, y, size.Width, size.Height);
         }
 
+        /// <summary>
+        /// Texte d'un bouton : sur une ligne ; s'il n'y tient pas et que le bouton est assez haut pour deux lignes, il passe a la ligne
+        /// (comme le bouton natif), au lieu d'etre coupe par des points de suspension (libelles longs : allemand, Task 10).
+        /// </summary>
+        internal static TextFormatFlags TextFlags(Graphics g, string text, Font font, Rectangle area, TextFormatFlags flags)
+        {
+            var one = TextRenderer.MeasureText(g, text, font, new Size(int.MaxValue, int.MaxValue), (flags & ~TextFormatFlags.EndEllipsis) | TextFormatFlags.NoPrefix);
+            if (one.Width <= area.Width || area.Height < 2 * one.Height) return flags;
+            return (flags & ~TextFormatFlags.SingleLine) | TextFormatFlags.WordBreak;
+        }
+
         /// <summary>Texte et image d'un bouton, dans la zone interieure du bouton.</summary>
         public static void ButtonContent(Graphics g, Rectangle r, ButtonBase b, Color color, float s)
         {
@@ -279,7 +309,7 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             if (glyph != B1Glyph.None && !hasText && img == null) { Glyph(g, area, glyph, color, s); return; }
             if (img == null)
             {
-                if (hasText) TextRenderer.DrawText(g, b.Text, b.Font, area, color, flags);
+                if (hasText) TextRenderer.DrawText(g, b.Text, b.Font, area, color, TextFlags(g, b.Text, b.Font, area, flags));
                 return;
             }
             var isz = img.Size;
@@ -444,12 +474,21 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             if (string.IsNullOrEmpty(gb.Text)) return;
             var caps = CapsFont(gb.Font);
             string text = gb.Text.Replace("&", "").ToUpper(System.Globalization.CultureInfo.CurrentUICulture);
-            int w = TrackedWidth(g, text, caps, B1Fonts.CapsTracking);
             bool rtl = gb.RightToLeft == RightToLeft.Yes;
-            int x = rtl ? client.Right - Px(3, s) - w : client.Left + Px(3, s);
-            DrawTracked(g, text, caps, B1Palette.TextFaint, x, client.Top + Px(5, s), B1Fonts.CapsTracking);
+            int room = Math.Max(1, client.Width - 2 * Px(3, s));
+            int y = client.Top + Px(5, s);
+            int w = TrackedWidth(g, text, caps, B1Fonts.CapsTracking);
+            if (w <= room)
+            {
+                int x = rtl ? client.Right - Px(3, s) - w : client.Left + Px(3, s);
+                DrawTracked(g, text, caps, B1Palette.TextFaint, x, y, B1Fonts.CapsTracking);
+                return;
+            }
+            // titre plus large que le groupe (langues aux libelles longs) : sans espacement, puis avec points de suspension
+            var r = new Rectangle(client.Left + Px(3, s), y, room, caps.Height + Px(2, s));
+            TextRenderer.DrawText(g, text, caps, r, B1Palette.TextFaint, TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine |
+                TextFormatFlags.Top | TextFormatFlags.EndEllipsis | (rtl ? TextFormatFlags.Right | TextFormatFlags.RightToLeft : TextFormatFlags.Left));
         }
-
         // --- barre de progression -------------------------------------------------------------------------
 
         public static void PaintProgress(Graphics g, Rectangle r, Color back, int min, int max, int value, bool marquee, float marqueePhase, float s)
