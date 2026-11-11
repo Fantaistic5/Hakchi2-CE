@@ -584,22 +584,50 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
                     Color back = selected ? B1Palette.RowActive : (B1Draw.IsPalette(list.BackColor) ? list.BackColor : B1Palette.Slate);
                     Color fore = selected ? B1Palette.Text : (B1Draw.IsPalette(list.ForeColor) ? list.ForeColor : B1Palette.Text);
                     if (item != null && !selected && item.ForeColor != list.ForeColor && B1Draw.IsPalette(item.ForeColor)) fore = item.ForeColor;
+                    // element grise par l'application (SystemColors.GrayText : mod deja installe...) : TextDim, la nuance reste visible
+                    else if (item != null && !selected && item.ForeColor.ToArgb() == SystemColors.GrayText.ToArgb()) fore = B1Palette.TextDim;
                     Marshal.WriteInt32(m.LParam, offText, Bgr(fore));
                     Marshal.WriteInt32(m.LParam, offBack, Bgr(back));
                     // pas de surbrillance systeme (bleue) : l'etat selectionne / survol est retire, le fond est peint par clrTextBk
                     Marshal.WriteInt32(m.LParam, offState, cd.nmcd.uItemState & ~(CDIS_SELECTED | CDIS_FOCUS | CDIS_HOT | CDIS_MARKED));
-                    m.Result = (IntPtr)(result | CDRF_NEWFONT | (selected ? CDRF_NOTIFYPOSTPAINT : 0));
+                    m.Result = (IntPtr)(result | CDRF_NEWFONT | (selected || NativeChecks ? CDRF_NOTIFYPOSTPAINT : 0));
                     return;
                 }
                 if (stage == CDDS_ITEMPOSTPAINT && cd.nmcd.hdc != IntPtr.Zero)
                 {
                     float s = B1Dpi.Scale(list);
                     var rc = cd.nmcd.rc.ToRectangle();
+                    var item = ItemAt((int)cd.nmcd.dwItemSpec);
+                    bool selected = item != null ? item.Selected : (cd.nmcd.uItemState & CDIS_SELECTED) != 0;
                     using (var g = Graphics.FromHdc(cd.nmcd.hdc))
-                        B1Draw.Fill(g, B1Palette.Accent, rc.Left, rc.Top, B1Draw.Px(2, s), rc.Height);
+                    {
+                        if (NativeChecks && item != null) PaintCheck(g, item, rc, selected, s);
+                        if (selected) B1Draw.Fill(g, B1Palette.Accent, rc.Left, rc.Top, B1Draw.Px(2, s), rc.Height);
+                    }
                 }
             }
             catch (Exception) { /* cosmetique */ }
+        }
+
+        // Cases a cocher natives (CheckBoxes sans OwnerDraw) : la case claire du systeme est recouverte par la case B1.
+        private bool NativeChecks { get { return list.CheckBoxes && !list.OwnerDraw && list.View == View.Details; } }
+
+        /// <summary>
+        /// Case B1 (B1Draw.CheckGlyph) a la place de la case native : la zone de l'image d'etat (du bord de l'element a l'icone)
+        /// est repeinte du fond de la ligne, puis la case est centree dedans. Le clic reste celui de la liste (meme zone).
+        /// </summary>
+        private void PaintCheck(Graphics g, ListViewItem item, Rectangle rc, bool selected, float s)
+        {
+            var bounds = item.Bounds;
+            var icon = item.GetBounds(ItemBoundsPortion.Icon);
+            int left = bounds.Left, right = icon.Left > bounds.Left + 4 ? icon.Left : bounds.Left + B1Draw.Px(20, s);
+            Color back = selected ? B1Palette.RowActive : (B1Draw.IsPalette(list.BackColor) ? list.BackColor : B1Palette.Slate);
+            B1Draw.Fill(g, back, left, rc.Top, right - left, rc.Height);
+            int size = B1Draw.GlyphSize(s);
+            var box = new Rectangle(left + (right - left - size) / 2, rc.Top + (rc.Height - size) / 2, size, size);
+            var st = item.Checked ? B1VisualState.Checked : B1VisualState.Normal;
+            if (!list.Enabled) st |= B1VisualState.Disabled;
+            B1Draw.CheckGlyph(g, box, st, s, false);
         }
 
         private static readonly System.Reflection.PropertyInfo groupId = typeof(ListViewGroup).GetProperty("ID", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);

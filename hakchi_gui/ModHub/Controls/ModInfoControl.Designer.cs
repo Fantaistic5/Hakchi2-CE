@@ -35,7 +35,7 @@
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(210)))), ((int)(((byte)(0)))), ((int)(((byte)(20)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(37)))), ((int)(((byte)(46))))); // B1: RowActive #26252E (carte)
             this.Name = "ModInfoControl";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.ModInfo_Paint);
             this.ResumeLayout(false);

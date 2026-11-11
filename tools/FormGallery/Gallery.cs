@@ -214,11 +214,14 @@ namespace FormGallery
                 ShowWindow(host.Handle, SW_SHOWNOACTIVATE);
                 host.PerformLayout();
 
+                var browsers = WaitForBrowsers(host);
+
                 int w = Math.Min(Math.Max(host.Width, 1), 4000);
                 int hgt = Math.Min(Math.Max(host.Height, 1), 4000);
                 using (var bmp = new Bitmap(w, hgt, PixelFormat.Format32bppArgb))
                 {
                     host.DrawToBitmap(bmp, new Rectangle(0, 0, w, hgt));
+                    OverlayBrowsers(host, browsers, bmp);
                     bmp.Save(png, ImageFormat.Png);
                 }
                 WriteRects(host, png);
@@ -229,6 +232,49 @@ namespace FormGallery
             {
                 if (wrapper != null) { try { wrapper.Dispose(); } catch { } }
             }
+        }
+
+        /// <summary>
+        /// Pages HTML (WebBrowser : readme des mods, message du jour) : chargees de facon asynchrone, on pompe les messages jusqu'a
+        /// ce qu'elles soient pretes (8 s au plus). Les pages de hakchi sont ecrites en memoire (DocumentText) ; les exemples de la
+        /// galerie n'ont aucune ressource distante, rien n'est demande au reseau.
+        /// </summary>
+        private static List<WebBrowser> WaitForBrowsers(Form host)
+        {
+            var list = new List<WebBrowser>();
+            Action<Control> walk = null;
+            walk = c => { foreach (Control ch in c.Controls) { var wb = ch as WebBrowser; if (wb != null) list.Add(wb); else walk(ch); } };
+            walk(host);
+            if (list.Count == 0) return list;
+            var ctx = System.Threading.SynchronizationContext.Current;
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            Func<bool> busy = () => list.Any(b => { try { return b.Visible && (b.IsBusy || b.ReadyState != WebBrowserReadyState.Complete); } catch { return false; } });
+            while (sw.ElapsedMilliseconds < 8000 && busy()) { Application.DoEvents(); Thread.Sleep(15); }
+            var settle = System.Diagnostics.Stopwatch.StartNew();          // mise en page et polices de la page
+            while (settle.ElapsedMilliseconds < 400) { Application.DoEvents(); Thread.Sleep(15); }
+            if (ctx != null) System.Threading.SynchronizationContext.SetSynchronizationContext(ctx);
+            return list;
+        }
+
+        /// <summary>DrawToBitmap de la fenetre laisse les WebBrowser vides : chaque page visible est rendue a part puis posee a sa place.</summary>
+        private static void OverlayBrowsers(Form host, List<WebBrowser> browsers, Bitmap bmp)
+        {
+            if (browsers.Count == 0) return;
+            using (var g = Graphics.FromImage(bmp))
+                foreach (var wb in browsers)
+                {
+                    try
+                    {
+                        if (!wb.Visible || wb.Width <= 0 || wb.Height <= 0) continue;
+                        var r = wb.Parent.RectangleToScreen(wb.Bounds);
+                        using (var page = new Bitmap(wb.Width, wb.Height, PixelFormat.Format32bppArgb))
+                        {
+                            wb.DrawToBitmap(page, new Rectangle(0, 0, wb.Width, wb.Height));
+                            g.DrawImageUnscaled(page, r.X - host.Location.X, r.Y - host.Location.Y);
+                        }
+                    }
+                    catch (Exception ex) { Console.WriteLine("page HTML non rendue : " + ex.Message); }
+                }
         }
 
         /// <summary>

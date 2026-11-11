@@ -121,7 +121,7 @@
             // readmeControl1
             // 
             resources.ApplyResources(this.readmeControl1, "readmeControl1");
-            this.readmeControl1.BackColor = System.Drawing.SystemColors.Control;
+            this.readmeControl1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(27)))), ((int)(((byte)(34))))); // B1: Slate #1C1B22
             this.readmeControl1.Name = "readmeControl1";
             // 
             // SelectForm

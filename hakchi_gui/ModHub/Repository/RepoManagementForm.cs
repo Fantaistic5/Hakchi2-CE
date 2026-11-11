@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui.ModHub.Repository
 {
-    public partial class RepoManagementForm : Form
+    public partial class RepoManagementForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         public RepoManagementForm()
         {

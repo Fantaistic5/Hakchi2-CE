@@ -34,7 +34,8 @@
             // 
             // tbReadme
             // 
-            this.tbReadme.BackColor = System.Drawing.SystemColors.Window;
+            this.tbReadme.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(37)))), ((int)(((byte)(46))))); // B1: RowActive #26252E
+            this.tbReadme.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(226)))), ((int)(((byte)(234))))); // B1: Text #E4E2EA
             resources.ApplyResources(this.tbReadme, "tbReadme");
             this.tbReadme.Name = "tbReadme";
             this.tbReadme.ReadOnly = true;
@@ -43,7 +44,7 @@
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(27)))), ((int)(((byte)(34))))); // B1: Slate #1C1B22
             this.Controls.Add(this.tbReadme);
             this.Name = "TextReadmeControl";
             this.ResumeLayout(false);

@@ -42,7 +42,7 @@
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Control;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(27)))), ((int)(((byte)(34))))); // B1: Slate #1C1B22 (fond de la page du readme)
             this.Controls.Add(this.wbReadme);
             this.Name = "BrowserReadmeControl";
             this.ResumeLayout(false);

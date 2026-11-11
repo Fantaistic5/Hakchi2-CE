@@ -56,7 +56,7 @@
             // moveUpButton
             // 
             resources.ApplyResources(this.moveUpButton, "moveUpButton");
-            this.moveUpButton.BackgroundImage = global::com.clusterrr.hakchi_gui.Properties.Resources.sign_up;
+            com.clusterrr.hakchi_gui.Theme.B1Skin.SetGlyph(this.moveUpButton, com.clusterrr.hakchi_gui.Theme.Controls.B1Glyph.ArrowUp); // B1: pictogramme vectoriel a la place de l'image en couleurs (sign_up)
             this.moveUpButton.Name = "moveUpButton";
             this.moveUpButton.UseVisualStyleBackColor = true;
             this.moveUpButton.Click += new System.EventHandler(this.moveUpButton_Click);
@@ -64,7 +64,7 @@
             // moveDownButton
             // 
             resources.ApplyResources(this.moveDownButton, "moveDownButton");
-            this.moveDownButton.BackgroundImage = global::com.clusterrr.hakchi_gui.Properties.Resources.sign_down;
+            com.clusterrr.hakchi_gui.Theme.B1Skin.SetGlyph(this.moveDownButton, com.clusterrr.hakchi_gui.Theme.Controls.B1Glyph.ArrowDown); // B1: pictogramme vectoriel a la place de l'image en couleurs (sign_down)
             this.moveDownButton.Name = "moveDownButton";
             this.moveDownButton.UseVisualStyleBackColor = true;
             this.moveDownButton.Click += new System.EventHandler(this.moveDownButton_Click);
@@ -72,7 +72,7 @@
             // deleteButton
             // 
             resources.ApplyResources(this.deleteButton, "deleteButton");
-            this.deleteButton.BackgroundImage = global::com.clusterrr.hakchi_gui.Properties.Resources.sign_delete;
+            com.clusterrr.hakchi_gui.Theme.B1Skin.SetGlyph(this.deleteButton, com.clusterrr.hakchi_gui.Theme.Controls.B1Glyph.Remove); // B1: pictogramme vectoriel a la place de l'image en couleurs (sign_delete)
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
@@ -90,6 +90,7 @@
             resources.ApplyResources(this.addRepoButton, "addRepoButton");
             this.addRepoButton.Name = "addRepoButton";
             this.addRepoButton.UseVisualStyleBackColor = true;
+            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(this.addRepoButton); // B1: do not remove
             this.addRepoButton.Click += new System.EventHandler(this.btnAddRepository_Click);
             // 
             // tableLayoutPanel1
@@ -142,7 +143,7 @@
             // editButton
             // 
             resources.ApplyResources(this.editButton, "editButton");
-            this.editButton.BackgroundImage = global::com.clusterrr.hakchi_gui.Properties.Resources.pencil_icon;
+            com.clusterrr.hakchi_gui.Theme.B1Skin.SetGlyph(this.editButton, com.clusterrr.hakchi_gui.Theme.Controls.B1Glyph.Edit); // B1: pictogramme vectoriel a la place de l'image en couleurs (pencil_icon)
             this.editButton.Name = "editButton";
             this.editButton.UseVisualStyleBackColor = true;
             this.editButton.Click += new System.EventHandler(this.editButton_Click);

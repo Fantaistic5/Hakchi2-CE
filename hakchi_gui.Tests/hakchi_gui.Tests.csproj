@@ -34,6 +34,8 @@
       <Private>true</Private>
     </Reference>
     <None Include="Data\**" CopyToOutputDirectory="PreserveNewest" />
+    <!-- empreinte IL du chemin d'installation des mods (ModFormsTests.ModInstallPathUnchanged), partagee avec tools/ModInstallPath -->
+    <Compile Include="..\tools\ModInstallPath\IlCallees.cs" Link="Forms\IlCallees.cs" />
   </ItemGroup>
 
   <!-- Construit la galerie avant les tests : le test GalleryRendersAtLeast30Forms la lance. -->

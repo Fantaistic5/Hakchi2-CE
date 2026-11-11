@@ -1,4 +1,7 @@
-﻿using System.Drawing;
+﻿using com.clusterrr.hakchi_gui.Theme;
+using com.clusterrr.hakchi_gui.Theme.Controls;
+using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui.ModHub.Controls
@@ -18,7 +21,7 @@ namespace com.clusterrr.hakchi_gui.ModHub.Controls
             }
         }
 
-        private Color _textColor = Color.White;
+        private Color _textColor = B1Palette.Text;
         public Color textColor
         {
             get
@@ -33,9 +36,12 @@ namespace com.clusterrr.hakchi_gui.ModHub.Controls
             }
         }
 
-        private Font HeadingFont = new Font("Arial", 12, FontStyle.Bold);
-        private Font DataFont = new Font("Arial", 9, FontStyle.Regular);
-        private const int padding = 8;
+        // B1 : etiquettes en capitales espacees (Jost Regular, TextDim), valeurs en Jost Medium ; nom du module en Jost SemiBold.
+        // Polices partagees par toutes les instances (jamais liberees : comme les polices du theme).
+        private static Font dataFont, nameFont;
+        private static Font DataFont { get { return dataFont ?? (dataFont = B1Fonts.Body(9f)); } }
+        private static Font NameFont { get { return nameFont ?? (nameFont = B1Fonts.Title(11f)); } }
+        private const int padding = 12;
 
         private string _ModuleName;
         public string ModuleName
@@ -115,48 +121,51 @@ namespace com.clusterrr.hakchi_gui.ModHub.Controls
             }
         }
 
-        private int DrawString(Brush brush, string text, Font font, int yOffset, ref PaintEventArgs e)
+        private static readonly TextFormatFlags ValueFlags = TextFormatFlags.Left | TextFormatFlags.Top | TextFormatFlags.WordBreak | TextFormatFlags.NoPrefix | TextFormatFlags.NoPadding;
+
+        // Une rubrique : etiquette en capitales (sans les deux-points de la ressource), puis la valeur, retour a la ligne au mot.
+        private int DrawField(Graphics g, string label, string value, Font valueFont, int y, float s)
         {
-            e.Graphics.DrawString(text, font, brush, new RectangleF(padding, yOffset, Width - (padding * 2), Height));
-            return (int)(e.Graphics.MeasureString(text, font, Width - (padding * 2)).Height);
+            int pad = B1Dpi.Px(padding, s), width = Width - pad * 2;
+            if (width <= 0) return y;
+            var caps = B1Draw.CapsFont(DataFont);
+            var heading = (label ?? "").Trim().TrimEnd(':', '：').Trim().ToUpper(CultureInfo.CurrentCulture);
+            B1Draw.DrawTracked(g, heading, caps, B1Palette.TextDim, pad, y, B1Fonts.CapsTracking);
+            y += caps.Height + B1Dpi.Px(4, s);
+            var box = new Size(width, int.MaxValue);
+            int h = TextRenderer.MeasureText(g, value, valueFont, box, ValueFlags).Height;
+            TextRenderer.DrawText(g, value, valueFont, new Rectangle(pad, y, width, h), _textColor, ValueFlags);
+            return y + h + B1Dpi.Px(14, s);
         }
 
         private void ModInfo_Paint(object sender, PaintEventArgs e)
         {
-            var brush = new SolidBrush(_textColor);
+            var g = e.Graphics;
+            float s = B1Dpi.Scale(this);
 
-            int CurrentYOffset = padding;
             if (_infoStrips != null)
             {
                 for (int i = 0; i < Height; i = i + _infoStrips.Height)
                 {
-                    e.Graphics.DrawImage(_infoStrips, Width - _infoStrips.Width, i);
+                    g.DrawImage(_infoStrips, Width - _infoStrips.Width, i);
                 }
             }
 
-            if(_ModuleName != null && _ModuleName.Trim().Length > 0)
-            {
-                CurrentYOffset += DrawString(brush, ModHubResources.ModuleName, HeadingFont, CurrentYOffset, ref e);
-                CurrentYOffset += DrawString(brush, $"{_ModuleName}\r\n ", DataFont, CurrentYOffset, ref e);
-            }
+            int y = B1Dpi.Px(padding, s);
+            if (_ModuleName != null && _ModuleName.Trim().Length > 0)
+                y = DrawField(g, ModHubResources.ModuleName, _ModuleName, NameFont, y, s);
 
-            if(_Author != null && _Author.Trim().Length > 0)
-            {
-                CurrentYOffset += DrawString(brush, ModHubResources.Author, HeadingFont, CurrentYOffset, ref e);
-                CurrentYOffset += DrawString(brush, $"{_Author}\r\n ", DataFont, CurrentYOffset, ref e);
-            }
+            if (_Author != null && _Author.Trim().Length > 0)
+                y = DrawField(g, ModHubResources.Author, _Author, DataFont, y, s);
 
-            if(_LatestVersion != null && _LatestVersion.Trim().Length > 0)
-            {
-                CurrentYOffset += DrawString(brush, ModHubResources.LatestVersion, HeadingFont, CurrentYOffset, ref e);
-                CurrentYOffset += DrawString(brush, $"{_LatestVersion}\r\n ", DataFont, CurrentYOffset, ref e);
-            }
+            if (_LatestVersion != null && _LatestVersion.Trim().Length > 0)
+                y = DrawField(g, ModHubResources.LatestVersion, _LatestVersion, DataFont, y, s);
 
             if (_InstalledVersion != null && _InstalledVersion.Trim().Length > 0)
-            {
-                CurrentYOffset += DrawString(brush, ModHubResources.InstalledVersion, HeadingFont, CurrentYOffset, ref e);
-                CurrentYOffset += DrawString(brush, $"{_InstalledVersion}\r\n ", DataFont, CurrentYOffset, ref e);
-            }
+                y = DrawField(g, ModHubResources.InstalledVersion, _InstalledVersion, DataFont, y, s);
+
+            // filet de 1 px autour de la carte
+            B1Draw.Frame(g, B1Palette.Rule, ClientRectangle, B1Dpi.Px(1, s));
         }
     }
 }

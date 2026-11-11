@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui.Hmod
 {
-    public partial class SelectForm : Form
+    public partial class SelectForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         private string hmodDisplayed = null;
         private List<Hmod> hmods = new List<Hmod>();

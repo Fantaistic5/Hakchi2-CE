@@ -84,7 +84,7 @@
             this.modReadme.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.modReadme.BackColor = System.Drawing.SystemColors.Control;
+            this.modReadme.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(28)))), ((int)(((byte)(27)))), ((int)(((byte)(34))))); // B1: Slate #1C1B22
             this.modReadme.Location = new System.Drawing.Point(459, 3);
             this.modReadme.Name = "modReadme";
             this.modReadme.Size = new System.Drawing.Size(290, 408);
@@ -92,9 +92,11 @@
             // 
             // panel1
             // 
+            // B1: la carte (Dock Fill) est ajoutee en premier, au premier plan : les boutons se placent en bas, la carte prend le reste
+            // (avant : carte ancree sur toute la hauteur, sous les boutons)
+            this.panel1.Controls.Add(this.modInfo);
             this.panel1.Controls.Add(this.modDownloadButton);
             this.panel1.Controls.Add(this.modDownloadInstallButton);
-            this.panel1.Controls.Add(this.modInfo);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(247, 3);
             this.panel1.Name = "panel1";
@@ -126,24 +128,23 @@
             this.modDownloadInstallButton.Text = "modDownloadInstallButton";
             this.modDownloadInstallButton.UseVisualStyleBackColor = true;
             this.modDownloadInstallButton.Visible = false;
+            com.clusterrr.hakchi_gui.Theme.B1Skin.MarkPrimary(this.modDownloadInstallButton); // B1: do not remove (telecharger et installer)
             this.modDownloadInstallButton.Click += new System.EventHandler(this.modDownloadInstallButton_Click);
             // 
             // modInfo
             // 
-            this.modInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.modInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.modInfo.Author = null;
-            this.modInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(3)))), ((int)(((byte)(3)))), ((int)(((byte)(3)))));
-            this.modInfo.infoStrips = global::com.clusterrr.hakchi_gui.Properties.Resources.snes_dots;
+            this.modInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(37)))), ((int)(((byte)(46))))); // B1: RowActive #26252E (carte)
+            this.modInfo.infoStrips = null; // B1: plus de bandes de pastilles de couleur (decor hors palette)
             this.modInfo.InstalledVersion = null;
             this.modInfo.LatestVersion = null;
             this.modInfo.Location = new System.Drawing.Point(0, 0);
             this.modInfo.ModuleName = "";
             this.modInfo.Name = "modInfo";
-            this.modInfo.Size = new System.Drawing.Size(206, 408);
+            this.modInfo.Size = new System.Drawing.Size(206, 316);
             this.modInfo.TabIndex = 1;
-            this.modInfo.textColor = System.Drawing.Color.White;
+            this.modInfo.textColor = System.Drawing.Color.FromArgb(((int)(((byte)(228)))), ((int)(((byte)(226)))), ((int)(((byte)(234))))); // B1: Text #E4E2EA
             // 
             // ModHubTabControl
             // 

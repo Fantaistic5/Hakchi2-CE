@@ -22,6 +22,9 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
 
     public enum B1ButtonKind { Primary, Secondary, Quiet, Danger }
 
+    /// <summary>Pictogramme vectoriel d'un bouton sans texte (couleur du texte du bouton, a l'echelle du DPI), a la place d'une image en couleurs.</summary>
+    public enum B1Glyph { None, ArrowUp, ArrowDown, Edit, Remove }
+
     /// <summary>
     /// Echelle des controles dessines. Le processus n'est pas DPI-aware (Windows met alors l'ecran a l'echelle) :
     /// DeviceDpi vaut 96 et le facteur est 1. Les controles honorent quand meme DeviceDpi, pour qu'un passage futur
@@ -272,6 +275,8 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             var flags = Align(b.TextAlign, rtl) | TextFormatFlags.NoPadding | TextFormatFlags.EndEllipsis | TextFormatFlags.SingleLine | mnemo;
             bool hasText = !string.IsNullOrEmpty(b.Text);
             var img = b.Image;
+            var glyph = B1Skin.GlyphOf(b);
+            if (glyph != B1Glyph.None && !hasText && img == null) { Glyph(g, area, glyph, color, s); return; }
             if (img == null)
             {
                 if (hasText) TextRenderer.DrawText(g, b.Text, b.Font, area, color, flags);
@@ -518,6 +523,63 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
             var tr = Rectangle.Inflate(r, -Px(6, s), 0);
             TextRenderer.DrawText(g, text ?? "", font, tr, !enabled ? B1Palette.TextFaint : active ? B1Palette.Text : B1Palette.TextSecondary,
                 (rtl ? TextFormatFlags.Right | TextFormatFlags.RightToLeft : TextFormatFlags.Left) | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPadding | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix | TextFormatFlags.SingleLine);
+        }
+
+        /// <summary>
+        /// Pictogramme de bouton (18 px a 96 dpi, trait de 1,5 px) centre dans area : fleche haut / bas, crayon, moins.
+        /// Une seule couleur (celle du texte du bouton), aucun remplissage.
+        /// </summary>
+        public static void Glyph(Graphics g, Rectangle area, B1Glyph glyph, Color c, float s)
+        {
+            if (glyph == B1Glyph.None) return;
+            float size = Math.Max(6f, Math.Min(Px(18, s), Math.Min(area.Width, area.Height) - 2));
+            float cx = area.Left + area.Width / 2f, cy = area.Top + area.Height / 2f, h = size / 2f;
+            var old = g.SmoothingMode;
+            var oldTransform = g.Transform;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            try
+            {
+                using (var p = new Pen(c, Math.Max(1.5f, 1.5f * s)) { StartCap = LineCap.Square, EndCap = LineCap.Square, LineJoin = LineJoin.Miter })
+                {
+                    switch (glyph)
+                    {
+                        case B1Glyph.ArrowUp:
+                        case B1Glyph.ArrowDown:
+                        {
+                            float dir = glyph == B1Glyph.ArrowUp ? -1f : 1f;
+                            var tip = new PointF(cx, cy + dir * h);
+                            g.DrawLine(p, cx, cy - dir * h, tip.X, tip.Y);
+                            g.DrawLines(p, new[] { new PointF(cx - h * 0.62f, tip.Y - dir * h * 0.62f), tip, new PointF(cx + h * 0.62f, tip.Y - dir * h * 0.62f) });
+                            break;
+                        }
+                        case B1Glyph.Remove:
+                            g.DrawLine(p, cx - h * 0.8f, cy, cx + h * 0.8f, cy);
+                            break;
+                        case B1Glyph.Edit:
+                        {
+                            // crayon incline a 45 degres : corps (contour), virole, pointe
+                            g.TranslateTransform(cx, cy);
+                            g.RotateTransform(-45f);
+                            float len = size * 1.15f, w = size * 0.30f, tipLen = w * 1.1f;
+                            float x0 = -len / 2f, x1 = len / 2f;
+                            g.DrawPolygon(p, new[]
+                            {
+                                new PointF(x0, 0f), new PointF(x0 + tipLen, -w / 2f), new PointF(x1, -w / 2f),
+                                new PointF(x1, w / 2f), new PointF(x0 + tipLen, w / 2f),
+                            });
+                            g.DrawLine(p, x0 + tipLen, -w / 2f, x0 + tipLen, w / 2f);
+                            g.DrawLine(p, x1 - w * 0.9f, -w / 2f, x1 - w * 0.9f, w / 2f);
+                            break;
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                g.Transform = oldTransform;
+                oldTransform.Dispose();
+                g.SmoothingMode = old;
+            }
         }
 
         /// <summary>Chevron vers le bas (9 x 5 px a 96 dpi), trait de 1 px.</summary>

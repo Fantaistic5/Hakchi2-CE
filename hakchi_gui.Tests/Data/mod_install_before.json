@@ -1,0 +1,247 @@
+{
+ "_base": "snes-usa/theme-b1",
+ "_exe": "hakchi.exe",
+ "roots": {
+  "MainForm::installModulesToolStripMenuItem_Click": {
+   "callees": [
+    "com.clusterrr.hakchi_gui.MainForm::Void installModules(System.String[])"
+   ],
+   "strings": []
+  },
+  "MainForm::installModules": {
+   "callees": [
+    "System.Collections.Generic.List`1[System.String]::Int32 get_Count()",
+    "System.Collections.Generic.List`1[System.String]::System.String[] ToArray()",
+    "System.Collections.Generic.List`1[System.String]::Void .ctor()",
+    "System.Collections.Generic.List`1[System.String]::Void Add(System.String)",
+    "System.Collections.IEnumerator::Boolean MoveNext()",
+    "System.Collections.IEnumerator::System.Object get_Current()",
+    "System.IDisposable::Void Dispose()",
+    "System.Windows.Forms.Control::Void set_Text(System.String)",
+    "System.Windows.Forms.Form::System.Windows.Forms.DialogResult ShowDialog()",
+    "System.Windows.Forms.ListView+CheckedListViewItemCollection::System.Collections.IEnumerator GetEnumerator()",
+    "System.Windows.Forms.ListView::CheckedListViewItemCollection get_CheckedItems()",
+    "System.Windows.Forms.ListViewItem::System.Object get_Tag()",
+    "com.clusterrr.hakchi_gui.ConfigIni::com.clusterrr.hakchi_gui.ConfigIni get_Instance()",
+    "com.clusterrr.hakchi_gui.Hmod.SelectForm::Void .ctor(Boolean, Boolean, System.String[])",
+    "com.clusterrr.hakchi_gui.MainForm::Boolean InstallMods(System.String[])",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.Drawing.Bitmap get_sign_check()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_Done()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_SelectModsInstall()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_Wow()",
+    "com.clusterrr.hakchi_gui.Tasks.MessageForm::Button Show(System.String, System.String, System.Drawing.Image, Button[], DefaultButton)"
+   ],
+   "strings": []
+  },
+  "MainForm::uninstallModulesToolStripMenuItem_Click": {
+   "callees": [
+    "System.Collections.Generic.List`1[System.String]::Int32 get_Count()",
+    "System.Collections.Generic.List`1[System.String]::System.String[] ToArray()",
+    "System.Collections.Generic.List`1[System.String]::Void .ctor()",
+    "System.Collections.Generic.List`1[System.String]::Void Add(System.String)",
+    "System.Collections.IEnumerator::Boolean MoveNext()",
+    "System.Collections.IEnumerator::System.Object get_Current()",
+    "System.IDisposable::Void Dispose()",
+    "System.Windows.Forms.Control::Void set_Text(System.String)",
+    "System.Windows.Forms.Form::System.Windows.Forms.DialogResult ShowDialog()",
+    "System.Windows.Forms.ListView+CheckedListViewItemCollection::System.Collections.IEnumerator GetEnumerator()",
+    "System.Windows.Forms.ListView::CheckedListViewItemCollection get_CheckedItems()",
+    "System.Windows.Forms.ListViewItem::System.Object get_Tag()",
+    "com.clusterrr.hakchi_gui.ConfigIni::com.clusterrr.hakchi_gui.ConfigIni get_Instance()",
+    "com.clusterrr.hakchi_gui.Hmod.SelectForm::Void .ctor(Boolean, Boolean, System.String[])",
+    "com.clusterrr.hakchi_gui.MainForm::Boolean UninstallMods(System.String[])",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.Drawing.Bitmap get_sign_check()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_Done()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_SelectModsUninstall()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_Wow()",
+    "com.clusterrr.hakchi_gui.Tasks.MessageForm::Button Show(System.String, System.String, System.Drawing.Image, Button[], DefaultButton)"
+   ],
+   "strings": []
+  },
+  "MainForm::InstallMods": {
+   "callees": [
+    "System.IDisposable::Void Dispose()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.Drawing.Bitmap get_sign_brick()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_InstallingMods()",
+    "com.clusterrr.hakchi_gui.Tasks.MembootTasks::Conclusion BootHakchi(com.clusterrr.hakchi_gui.Tasks.Tasker, System.Object)",
+    "com.clusterrr.hakchi_gui.Tasks.MembootTasks::Void .ctor(MembootTaskType, System.String[], System.String[], System.String, Boolean, Boolean, Boolean)",
+    "com.clusterrr.hakchi_gui.Tasks.ModTasks::Void .ctor(System.String[], System.String[], Boolean, System.String, System.String)",
+    "com.clusterrr.hakchi_gui.Tasks.ShellTasks::Conclusion MountBase(com.clusterrr.hakchi_gui.Tasks.Tasker, System.Object)",
+    "com.clusterrr.hakchi_gui.Tasks.ShellTasks::Conclusion ShowSplashScreen(com.clusterrr.hakchi_gui.Tasks.Tasker, System.Object)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker+TaskFunc::Void .ctor(System.Object, IntPtr)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::Conclusion Start()",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::Void .ctor(System.Windows.Forms.Form)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AddFinalTask(TaskFunc)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AddTask(TaskFunc, Int32)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AddTasks(ITaskCollection[])",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AttachViews(com.clusterrr.hakchi_gui.Tasks.ITaskerView[])",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker SetStatusImage(System.Drawing.Image)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker SetTitle(System.String)",
+    "com.clusterrr.hakchi_gui.Tasks.TaskerForm::Void .ctor(Boolean, com.clusterrr.hakchi_gui.Tasks.Tasker)",
+    "com.clusterrr.hakchi_gui.Tasks.TaskerTaskbar::Void .ctor(com.clusterrr.hakchi_gui.Tasks.Tasker)"
+   ],
+   "strings": [
+    "/tmp/hmods",
+    "/var/lib/hakchi/transfer/uninstall"
+   ]
+  },
+  "MainForm::UninstallMods": {
+   "callees": [
+    "System.IDisposable::Void Dispose()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.Drawing.Bitmap get_sign_brick()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_UninstallingMods()",
+    "com.clusterrr.hakchi_gui.Tasks.MembootTasks::Conclusion BootHakchi(com.clusterrr.hakchi_gui.Tasks.Tasker, System.Object)",
+    "com.clusterrr.hakchi_gui.Tasks.MembootTasks::Void .ctor(MembootTaskType, System.String[], System.String[], System.String, Boolean, Boolean, Boolean)",
+    "com.clusterrr.hakchi_gui.Tasks.ModTasks::Void .ctor(System.String[], System.String[], Boolean, System.String, System.String)",
+    "com.clusterrr.hakchi_gui.Tasks.ShellTasks::Conclusion MountBase(com.clusterrr.hakchi_gui.Tasks.Tasker, System.Object)",
+    "com.clusterrr.hakchi_gui.Tasks.ShellTasks::Conclusion ShowSplashScreen(com.clusterrr.hakchi_gui.Tasks.Tasker, System.Object)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker+TaskFunc::Void .ctor(System.Object, IntPtr)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::Conclusion Start()",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::Void .ctor(System.Windows.Forms.Form)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AddFinalTask(TaskFunc)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AddTask(TaskFunc, Int32)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AddTasks(ITaskCollection[])",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AttachViews(com.clusterrr.hakchi_gui.Tasks.ITaskerView[])",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker SetStatusImage(System.Drawing.Image)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker SetTitle(System.String)",
+    "com.clusterrr.hakchi_gui.Tasks.TaskerForm::Void .ctor(Boolean, com.clusterrr.hakchi_gui.Tasks.Tasker)",
+    "com.clusterrr.hakchi_gui.Tasks.TaskerTaskbar::Void .ctor(com.clusterrr.hakchi_gui.Tasks.Tasker)"
+   ],
+   "strings": [
+    "/tmp/hmods",
+    "/var/lib/hakchi/transfer/uninstall"
+   ]
+  },
+  "Hmod.SelectForm::buttonOk_Click": {
+   "callees": [
+    "System.Windows.Forms.Form::Void Close()",
+    "System.Windows.Forms.Form::Void set_DialogResult(System.Windows.Forms.DialogResult)",
+    "System.Windows.Forms.ListView+CheckedListViewItemCollection::Int32 get_Count()",
+    "System.Windows.Forms.ListView::CheckedListViewItemCollection get_CheckedItems()"
+   ],
+   "strings": []
+  },
+  "ModHub.Controls.ModHubTabControl::modDownloadButton_Click": {
+   "callees": [
+    "com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl::Void handleModDownload(Boolean)"
+   ],
+   "strings": []
+  },
+  "ModHub.Controls.ModHubTabControl::modDownloadInstallButton_Click": {
+   "callees": [
+    "com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl::Void handleModDownload(Boolean)"
+   ],
+   "strings": []
+  },
+  "ModHub.Controls.ModHubTabControl::handleModDownload": {
+   "callees": [
+    "System.Collections.Generic.List`1+Enumerator[System.String]::Boolean MoveNext()",
+    "System.Collections.Generic.List`1+Enumerator[System.String]::System.String get_Current()",
+    "System.Collections.Generic.List`1[System.String]::Enumerator GetEnumerator()",
+    "System.Collections.Generic.List`1[System.String]::Int32 get_Count()",
+    "System.Collections.Generic.List`1[System.String]::System.String[] ToArray()",
+    "System.Collections.Generic.List`1[System.String]::Void .ctor()",
+    "System.Collections.Generic.List`1[System.String]::Void Add(System.String)",
+    "System.Collections.Generic.List`1[com.clusterrr.hakchi_gui.Hmod.Hmod]::Boolean Remove(com.clusterrr.hakchi_gui.Hmod.Hmod)",
+    "System.Collections.Generic.List`1[com.clusterrr.hakchi_gui.Hmod.Hmod]::Void AddRange(System.Collections.Generic.IEnumerable`1[com.clusterrr.hakchi_gui.Hmod.Hmod])",
+    "System.Collections.Generic.List`1[com.clusterrr.hakchi_gui.Hmod.Hmod]::com.clusterrr.hakchi_gui.Hmod.Hmod[] ToArray()",
+    "System.Collections.IEnumerator::Boolean MoveNext()",
+    "System.Collections.IEnumerator::System.Object get_Current()",
+    "System.Func`2[com.clusterrr.hakchi_gui.Hmod.Hmod,System.Boolean]::Void .ctor(System.Object, IntPtr)",
+    "System.IDisposable::Void Dispose()",
+    "System.Linq.Enumerable::System.Collections.Generic.IEnumerable`1[com.clusterrr.hakchi_gui.Hmod.Hmod] Where[Hmod](System.Collections.Generic.IEnumerable`1[com.clusterrr.hakchi_gui.Hmod.Hmod], System.Func`2[com.clusterrr.hakchi_gui.Hmod.Hmod,System.Boolean])",
+    "System.Linq.Enumerable::com.clusterrr.hakchi_gui.Hmod.Hmod[] ToArray[Hmod](System.Collections.Generic.IEnumerable`1[com.clusterrr.hakchi_gui.Hmod.Hmod])",
+    "System.Object::Void .ctor()",
+    "System.String::Boolean Equals(System.String, System.StringComparison)",
+    "System.Windows.Forms.ListView+SelectedListViewItemCollection::System.Collections.IEnumerator GetEnumerator()",
+    "System.Windows.Forms.ListView::SelectedListViewItemCollection get_SelectedItems()",
+    "System.Windows.Forms.ListViewItem::System.Object get_Tag()",
+    "com.clusterrr.hakchi_gui.CoreCollection::Void Load()",
+    "com.clusterrr.hakchi_gui.Hmod.Hmod::System.Collections.Generic.List`1[com.clusterrr.hakchi_gui.Hmod.Hmod] GetMods(Boolean, System.String[], System.Windows.Forms.Form)",
+    "com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl+<>c__DisplayClass::Boolean <handleModDownload>b__(com.clusterrr.hakchi_gui.Hmod.Hmod)",
+    "com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl+<>c__DisplayClass::Conclusion <handleModDownload>b__(com.clusterrr.hakchi_gui.Tasks.Tasker, System.Object)",
+    "com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl+<>c__DisplayClass::Void .ctor()",
+    "com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl::System.Collections.Generic.IEnumerable`1[com.clusterrr.hakchi_gui.Tasks.Tasker+TaskFunc] GetItemDownloadTask(Item)",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.Repository+Item::ItemKind get_Kind()",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.Repository+Item::System.String get_CleanName()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.Drawing.Bitmap get_sign_cogs()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_Processing()",
+    "com.clusterrr.hakchi_gui.Tasks.MembootTasks::Void .ctor(MembootTaskType, System.String[], System.String[], System.String, Boolean, Boolean, Boolean)",
+    "com.clusterrr.hakchi_gui.Tasks.ShellTasks::Conclusion MountBase(com.clusterrr.hakchi_gui.Tasks.Tasker, System.Object)",
+    "com.clusterrr.hakchi_gui.Tasks.ShellTasks::TaskFunc ShellCommand(System.String, System.IO.Stream, System.IO.Stream, System.IO.Stream, Int32, Boolean)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker+TaskFunc::Void .ctor(System.Object, IntPtr)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::Conclusion Start()",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::Void .ctor(System.Windows.Forms.Form)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AddTask(TaskFunc, Int32)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AddTasks(ITaskCollection[])",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AddTasks(System.Collections.Generic.IEnumerable`1[com.clusterrr.hakchi_gui.Tasks.Tasker+TaskFunc])",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AttachViews(com.clusterrr.hakchi_gui.Tasks.ITaskerView[])",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker SetStatusImage(System.Drawing.Image)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker SetTitle(System.String)",
+    "com.clusterrr.hakchi_gui.Tasks.TaskerForm::Void .ctor(Boolean, com.clusterrr.hakchi_gui.Tasks.Tasker)",
+    "com.clusterrr.hakchi_gui.Tasks.TaskerTaskbar::Void .ctor(com.clusterrr.hakchi_gui.Tasks.Tasker)"
+   ],
+   "strings": [
+    "touch /mod-recovery.flag",
+    "touch /user-recovery.flag"
+   ]
+  },
+  "ModHub.Controls.ModHubTabControl::GetItemDownloadTask": {
+   "callees": [
+    "System.Collections.Generic.List`1[com.clusterrr.hakchi_gui.Tasks.Tasker+TaskFunc]::Void .ctor()",
+    "System.Collections.Generic.List`1[com.clusterrr.hakchi_gui.Tasks.Tasker+TaskFunc]::Void Add(TaskFunc)",
+    "System.Collections.Generic.List`1[com.clusterrr.hakchi_gui.Tasks.Tasker+TaskFunc]::Void AddRange(System.Collections.Generic.IEnumerable`1[com.clusterrr.hakchi_gui.Tasks.Tasker+TaskFunc])",
+    "System.IO.Directory::Boolean Exists(System.String)",
+    "System.IO.Directory::Void Delete(System.String, Boolean)",
+    "System.IO.File::Boolean Exists(System.String)",
+    "System.IO.File::Void Delete(System.String)",
+    "System.IO.Path::System.String Combine(System.String, System.String)",
+    "System.IO.Path::System.String Combine(System.String, System.String, System.String)",
+    "System.Linq.Enumerable::com.clusterrr.hakchi_gui.Tasks.TaskerForm[] ToArray[TaskerForm](System.Collections.Generic.IEnumerable`1[com.clusterrr.hakchi_gui.Tasks.TaskerForm])",
+    "System.Object::Void .ctor()",
+    "System.String::System.String Concat(System.String, System.String)",
+    "com.clusterrr.hakchi_gui.MainForm::Void AddGames(System.Collections.Generic.IEnumerable`1[System.String], Boolean, System.Windows.Forms.Form)",
+    "com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl+<>c__DisplayClass::Conclusion <GetItemDownloadTask>b__(com.clusterrr.hakchi_gui.Tasks.Tasker, System.Object)",
+    "com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl+<>c__DisplayClass::Void .ctor()",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.Repository+Item::Boolean get_Extract()",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.Repository+Item::ItemKind get_Kind()",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.Repository+Item::System.String get_CleanName()",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.Repository+Item::System.String get_FileName()",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.Repository+Item::System.String get_URL()",
+    "com.clusterrr.hakchi_gui.Tasks.ArchiveTasks::TaskFunc ExtractArchive(System.String, System.String)",
+    "com.clusterrr.hakchi_gui.Tasks.IOTasks::TaskFunc DirectoryCreate(System.String)",
+    "com.clusterrr.hakchi_gui.Tasks.IOTasks::TaskFunc DirectoryDelete(System.String, Boolean)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker+TaskFunc::Void .ctor(System.Object, IntPtr)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::System.Collections.Generic.IEnumerable`1[com.clusterrr.hakchi_gui.Tasks.TaskerForm] GetSpecificViews[TaskerForm]()",
+    "com.clusterrr.hakchi_gui.Tasks.WebClientTasks::TaskFunc DownloadFile(System.String, System.String, Boolean, Boolean, System.Nullable`1[System.DateTime], Boolean)",
+    "com.clusterrr.hakchi_gui.TempHelpers::System.String getUniqueTempPath(System.String)"
+   ],
+   "strings": [
+    ".hmod",
+    "user_mods"
+   ]
+  },
+  "ModHub.ModHubForm::ModHubForm_FormClosing": {
+   "callees": [
+    "System.IDisposable::Void Dispose()",
+    "com.clusterrr.hakchi_gui.ISystemShell::Boolean get_IsOnline()",
+    "com.clusterrr.hakchi_gui.ISystemShell::Int32 Execute(System.String, System.IO.Stream, System.IO.Stream, System.IO.Stream, Int32, Boolean)",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.Drawing.Bitmap get_sign_sync()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_Rebooting()",
+    "com.clusterrr.hakchi_gui.Tasks.MembootTasks::Void .ctor(MembootTaskType, System.String[], System.String[], System.String, Boolean, Boolean, Boolean)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::Conclusion Start()",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::Void .ctor(System.Windows.Forms.Form)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AddTasks(ITaskCollection[])",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker AttachViews(com.clusterrr.hakchi_gui.Tasks.ITaskerView[])",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker SetStatusImage(System.Drawing.Image)",
+    "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker SetTitle(System.String)",
+    "com.clusterrr.hakchi_gui.Tasks.TaskerForm::Void .ctor(Boolean, com.clusterrr.hakchi_gui.Tasks.Tasker)",
+    "com.clusterrr.hakchi_gui.Tasks.TaskerTaskbar::Void .ctor(com.clusterrr.hakchi_gui.Tasks.Tasker)",
+    "com.clusterrr.hakchi_gui.hakchi::com.clusterrr.hakchi_gui.ISystemShell get_Shell()"
+   ],
+   "strings": [
+    "[ -e /mod-recovery.flag ]"
+   ]
+  }
+ }
+}

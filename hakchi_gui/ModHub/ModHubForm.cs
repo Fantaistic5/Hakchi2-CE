@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace com.clusterrr.hakchi_gui.ModHub
 {
-    public partial class ModHubForm : Form
+    public partial class ModHubForm : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         List<Hmod.Hmod> installedMods;
         public ModHubForm()

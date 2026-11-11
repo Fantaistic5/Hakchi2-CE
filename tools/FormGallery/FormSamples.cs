@@ -57,6 +57,8 @@ namespace FormGallery
                     SetText(c, "richTextBox1", "System.TimeoutException: La console ne repond pas." + Environment.NewLine + "   a hakchi.Shell.Execute(...)");
                     break;
                 case "CoverBatchForm": CoverBatchSample.Populate(c); break;
+                case "ModHubForm": ModHubSample.PopulateHub(c); break;
+                case "SelectForm": ModHubSample.PopulateSelect(c); break;
                 case "FoldersManagerForm": FillFolders(c); break;
                 case "TextInfo": Find<TextBox>(c, "textBoxInfo").Text = "Licence GPL v3" + Environment.NewLine + "--------------------------------------------------------------------------------" + Environment.NewLine + "Un exemple de texte long, affiche dans une police a chasse fixe."; break;
             }

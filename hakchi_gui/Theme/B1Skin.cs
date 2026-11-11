@@ -55,6 +55,27 @@ namespace com.clusterrr.hakchi_gui.Theme
             b.Invalidate();
         }
 
+        private sealed class GlyphBox { public B1Glyph Glyph; }
+        private static readonly ConditionalWeakTable<ButtonBase, GlyphBox> glyphs = new ConditionalWeakTable<ButtonBase, GlyphBox>();
+
+        /// <summary>
+        /// Bouton sans texte : pictogramme vectoriel B1 (couleur du texte du bouton) au lieu de son image en couleurs.
+        /// Le dessin B1 recouvre deja toute la surface du bouton (fond, BackgroundImage compris) ; seul le pictogramme s'ajoute.
+        /// </summary>
+        public static void SetGlyph(ButtonBase b, B1Glyph glyph)
+        {
+            if (b == null) return;
+            GlyphBox box;
+            if (glyphs.TryGetValue(b, out box)) box.Glyph = glyph; else glyphs.Add(b, new GlyphBox { Glyph = glyph });
+            b.Invalidate();
+        }
+
+        public static B1Glyph GlyphOf(ButtonBase b)
+        {
+            GlyphBox box;
+            return b != null && glyphs.TryGetValue(b, out box) ? box.Glyph : B1Glyph.None;
+        }
+
         internal static B1ButtonKind KindOf(ButtonBase b)
         {
             KindBox box;

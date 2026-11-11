@@ -1,0 +1,89 @@
+{
+ "_base": "snes-usa/theme-b1",
+ "ModHub.ModHubForm": {
+  "names": [
+   "tabControl1"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "ModHub.Repository.RepoManagementForm": {
+  "names": [
+   "addRepoButton",
+   "columnHeader1",
+   "columnHeader2",
+   "deleteButton",
+   "editButton",
+   "groupBox1",
+   "label1",
+   "label2",
+   "moveDownButton",
+   "moveUpButton",
+   "panel1",
+   "repoList",
+   "repoName",
+   "repoURL",
+   "tableLayoutPanel1",
+   "tableLayoutPanel2",
+   "tableLayoutPanel3"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "Hmod.SelectForm": {
+  "names": [
+   "buttonOk",
+   "categoryToolStripMenuItem",
+   "creatorToolStripMenuItem",
+   "deleteModFromDiskToolStripMenuItem",
+   "emulatedSystemToolStripMenuItem",
+   "groupByToolStripMenuItem",
+   "hmodName",
+   "listViewHmods",
+   "modListMenuStrip",
+   "readmeControl1",
+   "showModInExplorerToolStripMenuItem",
+   "splitContainer1"
+  ],
+  "accept": "buttonOk",
+  "cancel": null
+ },
+ "ModHub.Controls.ModHubTabControl": {
+  "names": [
+   "columnHeader1",
+   "modDownloadButton",
+   "modDownloadInstallButton",
+   "modInfo",
+   "modList",
+   "modReadme",
+   "panel1",
+   "tableLayoutPanel1"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "ModHub.Controls.ModInfoControl": {
+  "names": [],
+  "accept": null,
+  "cancel": null
+ },
+ "Hmod.Controls.ReadmeControl": {
+  "names": [],
+  "accept": null,
+  "cancel": null
+ },
+ "Hmod.Controls.BrowserReadmeControl": {
+  "names": [
+   "wbReadme"
+  ],
+  "accept": null,
+  "cancel": null
+ },
+ "Hmod.Controls.TextReadmeControl": {
+  "names": [
+   "tbReadme"
+  ],
+  "accept": null,
+  "cancel": null
+ }
+}

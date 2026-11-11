@@ -213,8 +213,10 @@ namespace FormGallery
         /// Aucun chemin ne mene a pnputil ni a l'installeur (pas de controle prealable du pilote, donc pas de « verifier puis agir »).
         /// SaveStateManager (fil qui attend la console : WaitingShellForm.WaitForDevice) et ScreenshotForm (fil de capture qui parle a
         /// la console, dossier de captures cree) : jamais construites par leur constructeur applicatif non plus.
+        /// ModHubForm (Hmod.GetMods : liste des mods installes, interroge la console si elle est en ligne) et SelectForm (GetMods,
+        /// renommage dans user_mods, CoreCollection rechargee, ConfigIni) : concepteur seul, puis donnees d'exemple (ModHubSample).
         /// </summary>
-        public static readonly string[] DesignerOnlyTypes = { "WaitingFelForm", "WaitingShellForm", "SaveStateManager", "ScreenshotForm" };
+        public static readonly string[] DesignerOnlyTypes = { "WaitingFelForm", "WaitingShellForm", "SaveStateManager", "ScreenshotForm", "ModHubForm", "SelectForm" };
         public const string DesignerOnlyDescription = "concepteur seul (B1Form + InitializeComponent, sans constructeur applicatif)";
 
         public static Control ConstructDesignerOnly(Type t)
