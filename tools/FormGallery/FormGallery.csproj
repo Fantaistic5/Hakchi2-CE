@@ -38,9 +38,4 @@
     <None Include="..\..\hakchi_gui\bin\Debug\net48\languages\**\*.dll" Link="languages\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
-  <!-- Doublure de pnputil.exe (voir Program.cs) -->
-  <Target Name="CopyPnputilStub" AfterTargets="Build">
-    <Copy SourceFiles="$(TargetPath)" DestinationFiles="$(OutDir)pnputil.exe" />
-  </Target>
-
 </Project>

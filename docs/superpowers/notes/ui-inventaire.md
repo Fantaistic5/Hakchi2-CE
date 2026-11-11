@@ -4,7 +4,7 @@ Genere le 2026-11-10 depuis `hakchi.exe` (branche `snes-usa/ui-pc`, build Debug)
 
 - 43 fenetres (`Form`) et 6 `UserControl` concrets dans `hakchi.exe`. Le plan en annonce 42 + 6 : l'ecart d'une fenetre vient de `LicenseInfo`, qui n'est citee dans aucune des Tasks 5 a 9 (rattachee a la Task 6 par defaut).
 - Rendues par la galerie : 49 sur 49. Une fenetre est rendue hors ecran, **sans** ses gestionnaires Load / Shown / Closing : c'est son etat vide de conception (aucune connexion console, aucun reseau).
-- Construction : arguments factices simples ; les fenetres qui exigent un jeu recoivent un vrai jeu copie de la copie de test (`CLV-Z-CKTTS`, `CLV-U-YABAN`). `WaitingFelForm` / `WaitingShellForm` lancent `pnputil` a la construction : la galerie fournit une doublure qui repond « pilote installe » (l'installeur de pilote n'est jamais lance).
+- Construction : arguments factices simples ; les fenetres qui exigent un jeu recoivent un vrai jeu copie de la copie de test (`CLV-Z-CKTTS`, `CLV-U-YABAN`). `WaitingFelForm` / `WaitingShellForm` lancent `pnputil` a la construction : la galerie les construit sans leur constructeur applicatif (`Host.DesignerOnlyTypes`, garde par les tests IL de `TaskFormsTests`) ; ni pnputil ni l'installeur du pilote ne sont lances. Les jeux d'exemple viennent de `HAKCHI_SAMPLES` (par defaut `P:\HakchiSNESUSA\app`).
 
 ## Fenetres (43)
 
