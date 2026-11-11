@@ -5,6 +5,7 @@
 // Pour chaque gestionnaire racine (type, nom de methode) : decodage reel de l'IL (opcode par opcode, table OpCodes), puis
 //  - ensemble des methodes appelees (call, callvirt, newobj, ldftn, ldvirtftn) ;
 //  - ensemble des chaines litterales (ldstr : commandes shell, drapeaux) ;
+//  - ensemble des champs lus / ecrits (ldfld, stfld, ldsfld, ldflda... : prefixe "field ") ;
 //  - descente dans les corps generes par le compilateur (lambdas, fermetures, iterateurs) atteints depuis la racine.
 // Les noms generes (<>c__DisplayClass12_0, <Methode>b__12_0, <Methode>d__7) sont normalises : leurs numeros dependent de
 // l'ordre des methodes dans la classe, pas de ce qu'elles font.
@@ -33,6 +34,18 @@ namespace ModInstallPath
             new[] { "ModHub.Controls.ModHubTabControl", "handleModDownload" },
             new[] { "ModHub.Controls.ModHubTabControl", "GetItemDownloadTask" },
             new[] { "ModHub.ModHubForm", "ModHubForm_FormClosing" },
+            // ajout / suppression de mods sur le disque depuis la selection
+            new[] { "Hmod.SelectForm", "deleteModFromDiskToolStripMenuItem_Click" },
+            new[] { "Hmod.SelectForm", "AddMods" },
+            new[] { "Hmod.SelectForm", "SelectModsForm_DragDrop" },
+            // gestion des depots (ecrit la config des depots)
+            new[] { "ModHub.Repository.RepoManagementForm", "btnAddRepository_Click" },
+            new[] { "ModHub.Repository.RepoManagementForm", "deleteButton_Click" },
+            new[] { "ModHub.Repository.RepoManagementForm", "editButton_Click" },
+            new[] { "ModHub.Repository.RepoManagementForm", "moveUpButton_Click" },
+            new[] { "ModHub.Repository.RepoManagementForm", "moveDownButton_Click" },
+            new[] { "ModHub.Repository.RepoManagementForm", "RepoManagementForm_FormClosing" },
+            new[] { "MainForm", "repoMenuItem_Click" },
         };
 
         public const string RootNamespace = "com.clusterrr.hakchi_gui.";
@@ -58,8 +71,10 @@ namespace ModInstallPath
             new Regex(@">b__\d+(_\d+)?"),
             new Regex(@">d__\d+"),
             new Regex(@">g__(\w+)\|\d+(_\d+)?"),
+            new Regex(@"<>9__\d+(_\d+)?"),
+            new Regex(@"<>8__locals\d+"),
         };
-        private static readonly string[] NumberedRepl = { "<>c__DisplayClass", ">b__", ">d__", ">g__$1" };
+        private static readonly string[] NumberedRepl = { "<>c__DisplayClass", ">b__", ">d__", ">g__$1", "<>9__", "<>8__locals" };
 
         public static string Normalize(string s)
         {
@@ -73,6 +88,12 @@ namespace ModInstallPath
             return Normalize((m.DeclaringType == null ? "" : m.DeclaringType.ToString()) + "::" + m.ToString());
         }
 
+        /// <summary>Champ lu ou ecrit : "field " + type declarant + "::" + type + nom (noms generes normalises).</summary>
+        public static string DescribeField(FieldInfo f)
+        {
+            return Normalize("field " + (f.DeclaringType == null ? "" : f.DeclaringType.ToString()) + "::" + f.FieldType.ToString() + " " + f.Name);
+        }
+
         private static bool IsCompilerGenerated(MethodBase m)
         {
             return m.Name.IndexOf('<') >= 0 || (m.DeclaringType != null && m.DeclaringType.FullName != null && m.DeclaringType.FullName.IndexOf('<') >= 0);
@@ -82,6 +103,7 @@ namespace ModInstallPath
         {
             public List<MethodBase> Methods = new List<MethodBase>();
             public List<string> Strings = new List<string>();
+            public List<FieldInfo> Fields = new List<FieldInfo>();
         }
 
         private static Body Decode(MethodBase m)
@@ -126,7 +148,14 @@ namespace ModInstallPath
                         i += 4;
                         break;
                     }
-                    default: i += 4; break;   // InlineI, InlineBrTarget, InlineField, InlineSig, InlineTok, InlineType, ShortInlineR
+                    case OperandType.InlineField:
+                    {
+                        int token = BitConverter.ToInt32(il, i);
+                        result.Fields.Add(m.Module.ResolveField(token, typeArgs, methodArgs));
+                        i += 4;
+                        break;
+                    }
+                    default: i += 4; break;   // InlineI, InlineBrTarget, InlineSig, InlineTok, InlineType, ShortInlineR
                 }
             }
             return result;
@@ -149,6 +178,7 @@ namespace ModInstallPath
                 var m = queue.Dequeue();
                 var b = Decode(m);
                 foreach (var str in b.Strings) s.Add(str);
+                foreach (var f in b.Fields) c.Add(DescribeField(f));
                 foreach (var callee in b.Methods)
                 {
                     c.Add(Describe(callee));

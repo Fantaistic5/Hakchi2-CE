@@ -213,6 +213,8 @@ namespace FormGallery
                 CreateHandles(host);
                 ShowWindow(host.Handle, SW_SHOWNOACTIVATE);
                 host.PerformLayout();
+                // exemples qui demandent des handles (page HTML d'un WebBrowser cree avec la fenetre)
+                try { FormSamples.AfterShow(host); } catch (Exception ex) { Console.WriteLine("exemples (apres affichage) ignores : " + ex.Message); }
 
                 var browsers = WaitForBrowsers(host);
 
@@ -266,6 +268,8 @@ namespace FormGallery
                     try
                     {
                         if (!wb.Visible || wb.Width <= 0 || wb.Height <= 0) continue;
+                        // page jamais remplie (about:blank, DocumentText non pose) : rien a superposer, on garde le rendu de la fenetre
+                        if (wb.Document == null || wb.Document.Body == null || string.IsNullOrWhiteSpace(wb.Document.Body.InnerHtml)) { Console.WriteLine("page HTML vide : " + wb.Name); continue; }
                         var r = wb.Parent.RectangleToScreen(wb.Bounds);
                         using (var page = new Bitmap(wb.Width, wb.Height, PixelFormat.Format32bppArgb))
                         {

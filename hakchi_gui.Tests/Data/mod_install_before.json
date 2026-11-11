@@ -1,5 +1,6 @@
 {
  "_base": "snes-usa/theme-b1",
+ "_base_sha": "1b2a1a61f3b443806df8a71094bcf0b55bb04442",
  "_exe": "hakchi.exe",
  "roots": {
   "MainForm::installModulesToolStripMenuItem_Click": {
@@ -29,7 +30,10 @@
     "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_Done()",
     "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_SelectModsInstall()",
     "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_Wow()",
-    "com.clusterrr.hakchi_gui.Tasks.MessageForm::Button Show(System.String, System.String, System.Drawing.Image, Button[], DefaultButton)"
+    "com.clusterrr.hakchi_gui.Tasks.MessageForm::Button Show(System.String, System.String, System.Drawing.Image, Button[], DefaultButton)",
+    "field com.clusterrr.hakchi_gui.ConfigIni::System.Boolean DisablePopups",
+    "field com.clusterrr.hakchi_gui.Hmod.Hmod::System.String RawName",
+    "field com.clusterrr.hakchi_gui.Hmod.SelectForm::System.Windows.Forms.ListView listViewHmods"
    ],
    "strings": []
   },
@@ -54,7 +58,10 @@
     "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_Done()",
     "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_SelectModsUninstall()",
     "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_Wow()",
-    "com.clusterrr.hakchi_gui.Tasks.MessageForm::Button Show(System.String, System.String, System.Drawing.Image, Button[], DefaultButton)"
+    "com.clusterrr.hakchi_gui.Tasks.MessageForm::Button Show(System.String, System.String, System.Drawing.Image, Button[], DefaultButton)",
+    "field com.clusterrr.hakchi_gui.ConfigIni::System.Boolean DisablePopups",
+    "field com.clusterrr.hakchi_gui.Hmod.Hmod::System.String RawName",
+    "field com.clusterrr.hakchi_gui.Hmod.SelectForm::System.Windows.Forms.ListView listViewHmods"
    ],
    "strings": []
   },
@@ -117,7 +124,8 @@
     "System.Windows.Forms.Form::Void Close()",
     "System.Windows.Forms.Form::Void set_DialogResult(System.Windows.Forms.DialogResult)",
     "System.Windows.Forms.ListView+CheckedListViewItemCollection::Int32 get_Count()",
-    "System.Windows.Forms.ListView::CheckedListViewItemCollection get_CheckedItems()"
+    "System.Windows.Forms.ListView::CheckedListViewItemCollection get_CheckedItems()",
+    "field com.clusterrr.hakchi_gui.Hmod.SelectForm::System.Windows.Forms.ListView listViewHmods"
    ],
    "strings": []
   },
@@ -179,7 +187,16 @@
     "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker SetStatusImage(System.Drawing.Image)",
     "com.clusterrr.hakchi_gui.Tasks.Tasker::com.clusterrr.hakchi_gui.Tasks.Tasker SetTitle(System.String)",
     "com.clusterrr.hakchi_gui.Tasks.TaskerForm::Void .ctor(Boolean, com.clusterrr.hakchi_gui.Tasks.Tasker)",
-    "com.clusterrr.hakchi_gui.Tasks.TaskerTaskbar::Void .ctor(com.clusterrr.hakchi_gui.Tasks.Tasker)"
+    "com.clusterrr.hakchi_gui.Tasks.TaskerTaskbar::Void .ctor(com.clusterrr.hakchi_gui.Tasks.Tasker)",
+    "field com.clusterrr.hakchi_gui.CoreCollection::com.clusterrr.hakchi_gui.Hmod.Hmod[] HmodInfo",
+    "field com.clusterrr.hakchi_gui.Hmod.Hmod::System.String RawName",
+    "field com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl+<>c__DisplayClass::System.Collections.Generic.List`1[System.String] selectedMods",
+    "field com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl+<>c__DisplayClass::System.String mod",
+    "field com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl+<>c__DisplayClass::com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl+<>c__DisplayClass CS$<>8__locals",
+    "field com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl+<>c__DisplayClass::com.clusterrr.hakchi_gui.Tasks.Tasker tasker",
+    "field com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl::System.Collections.Generic.List`1[com.clusterrr.hakchi_gui.Hmod.Hmod] installedMods",
+    "field com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl::System.Windows.Forms.ListView modList",
+    "field com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl::com.clusterrr.hakchi_gui.ModHub.ModHubForm parentForm"
    ],
    "strings": [
     "touch /mod-recovery.flag",
@@ -214,7 +231,13 @@
     "com.clusterrr.hakchi_gui.Tasks.Tasker+TaskFunc::Void .ctor(System.Object, IntPtr)",
     "com.clusterrr.hakchi_gui.Tasks.Tasker::System.Collections.Generic.IEnumerable`1[com.clusterrr.hakchi_gui.Tasks.TaskerForm] GetSpecificViews[TaskerForm]()",
     "com.clusterrr.hakchi_gui.Tasks.WebClientTasks::TaskFunc DownloadFile(System.String, System.String, Boolean, Boolean, System.Nullable`1[System.DateTime], Boolean)",
-    "com.clusterrr.hakchi_gui.TempHelpers::System.String getUniqueTempPath(System.String)"
+    "com.clusterrr.hakchi_gui.TempHelpers::System.String getUniqueTempPath(System.String)",
+    "field com.clusterrr.hakchi_gui.MainForm::com.clusterrr.hakchi_gui.MainForm StaticRef",
+    "field com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl+<>c__DisplayClass::System.String tempPath",
+    "field com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl+<>c__DisplayClass::com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl <>4__this",
+    "field com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl+<>c__DisplayClass::com.clusterrr.hakchi_gui.ModHub.Repository.Repository+Item item",
+    "field com.clusterrr.hakchi_gui.ModHub.Controls.ModHubTabControl::com.clusterrr.hakchi_gui.ModHub.ModHubForm parentForm",
+    "field com.clusterrr.hakchi_gui.Program::System.String BaseDirectoryExternal"
    ],
    "strings": [
     ".hmod",
@@ -241,6 +264,195 @@
    ],
    "strings": [
     "[ -e /mod-recovery.flag ]"
+   ]
+  },
+  "Hmod.SelectForm::deleteModFromDiskToolStripMenuItem_Click": {
+   "callees": [
+    "System.Collections.Generic.List`1[com.clusterrr.hakchi_gui.Hmod.Hmod]::Boolean Remove(com.clusterrr.hakchi_gui.Hmod.Hmod)",
+    "System.Collections.IEnumerator::Boolean MoveNext()",
+    "System.Collections.IEnumerator::System.Object get_Current()",
+    "System.IDisposable::Void Dispose()",
+    "System.IO.Directory::Void Delete(System.String, Boolean)",
+    "System.IO.File::Void Delete(System.String)",
+    "System.Windows.Forms.ListView+SelectedListViewItemCollection::System.Collections.IEnumerator GetEnumerator()",
+    "System.Windows.Forms.ListView::SelectedListViewItemCollection get_SelectedItems()",
+    "System.Windows.Forms.ListViewItem::System.Object get_Tag()",
+    "com.clusterrr.hakchi_gui.Hmod.Hmod::Boolean PresentInUserMods()",
+    "com.clusterrr.hakchi_gui.Hmod.SelectForm::Void populateList()",
+    "field com.clusterrr.hakchi_gui.Hmod.Hmod::System.Boolean isFile",
+    "field com.clusterrr.hakchi_gui.Hmod.Hmod::System.String HmodPath",
+    "field com.clusterrr.hakchi_gui.Hmod.SelectForm::System.Collections.Generic.List`1[com.clusterrr.hakchi_gui.Hmod.Hmod] hmods",
+    "field com.clusterrr.hakchi_gui.Hmod.SelectForm::System.Windows.Forms.ListView listViewHmods"
+   ],
+   "strings": []
+  },
+  "Hmod.SelectForm::AddMods": {
+   "callees": [
+    "SharpCompress.Archives.ArchiveFactory::SharpCompress.Archives.IArchive Open(System.String, SharpCompress.Readers.ReaderOptions)",
+    "SharpCompress.Archives.IArchiveExtensions::Void WriteToDirectory(SharpCompress.Archives.IArchive, System.String, SharpCompress.Common.ExtractionOptions)",
+    "SharpCompress.Common.ExtractionOptions::Void .ctor()",
+    "SharpCompress.Common.ExtractionOptions::Void set_ExtractFullPath(Boolean)",
+    "System.Action`1[System.String]::Void .ctor(System.Object, IntPtr)",
+    "System.Collections.Generic.List`1[System.String]::Void .ctor()",
+    "System.Collections.Generic.List`1[com.clusterrr.hakchi_gui.Hmod.Hmod]::Int32 RemoveAll(System.Predicate`1[com.clusterrr.hakchi_gui.Hmod.Hmod])",
+    "System.Collections.Generic.List`1[com.clusterrr.hakchi_gui.Hmod.Hmod]::Void Add(com.clusterrr.hakchi_gui.Hmod.Hmod)",
+    "System.IDisposable::Void Dispose()",
+    "System.IO.Directory::Boolean Exists(System.String)",
+    "System.IO.Directory::System.Collections.Generic.IEnumerable`1[System.String] EnumerateDirectories(System.String, System.String, System.IO.SearchOption)",
+    "System.IO.Directory::System.Collections.Generic.IEnumerable`1[System.String] EnumerateFiles(System.String, System.String, System.IO.SearchOption)",
+    "System.IO.Directory::Void Delete(System.String, Boolean)",
+    "System.IO.Directory::Void Move(System.String, System.String)",
+    "System.IO.File::Boolean Exists(System.String)",
+    "System.IO.File::Void Copy(System.String, System.String, Boolean)",
+    "System.IO.File::Void Delete(System.String)",
+    "System.IO.File::Void Move(System.String, System.String)",
+    "System.IO.Path::System.String Combine(System.String, System.String)",
+    "System.IO.Path::System.String GetExtension(System.String)",
+    "System.IO.Path::System.String GetFileNameWithoutExtension(System.String)",
+    "System.Linq.Enumerable::System.String[] ToArray[String](System.Collections.Generic.IEnumerable`1[System.String])",
+    "System.Object::Void .ctor()",
+    "System.Predicate`1[com.clusterrr.hakchi_gui.Hmod.Hmod]::Void .ctor(System.Object, IntPtr)",
+    "System.String::Boolean op_Equality(System.String, System.String)",
+    "System.String::Boolean op_Inequality(System.String, System.String)",
+    "System.String::System.String Concat(System.String, System.String)",
+    "System.String::System.String ToLower()",
+    "com.clusterrr.hakchi_gui.Hmod.Hmod::System.String GetCleanName(System.String, Boolean)",
+    "com.clusterrr.hakchi_gui.Hmod.Hmod::Void .ctor(System.String, System.String[])",
+    "com.clusterrr.hakchi_gui.Hmod.SelectForm+<>c__DisplayClass::Boolean <AddMods>b__(com.clusterrr.hakchi_gui.Hmod.Hmod)",
+    "com.clusterrr.hakchi_gui.Hmod.SelectForm+<>c__DisplayClass::Void .ctor()",
+    "com.clusterrr.hakchi_gui.Hmod.SelectForm+<>c__DisplayClass::Void <AddMods>b__(System.String)",
+    "com.clusterrr.hakchi_gui.Hmod.SelectForm::Void AddMods(System.String[], Boolean)",
+    "com.clusterrr.hakchi_gui.Hmod.SelectForm::Void populateList()",
+    "com.clusterrr.hakchi_gui.Shared::Void DirectoryCopy(System.String, System.String, Boolean, Boolean, Boolean, Boolean, System.String[])",
+    "com.clusterrr.hakchi_gui.TempHelpers::Void doWithTempFolder(System.Action`1[System.String], Boolean, System.String)",
+    "field com.clusterrr.hakchi_gui.Hmod.Hmod::System.String RawName",
+    "field com.clusterrr.hakchi_gui.Hmod.SelectForm+<>c__DisplayClass::SharpCompress.Archives.IArchive extractor",
+    "field com.clusterrr.hakchi_gui.Hmod.SelectForm+<>c__DisplayClass::System.String rawName",
+    "field com.clusterrr.hakchi_gui.Hmod.SelectForm+<>c__DisplayClass::com.clusterrr.hakchi_gui.Hmod.SelectForm <>4__this",
+    "field com.clusterrr.hakchi_gui.Hmod.SelectForm::System.Collections.Generic.List`1[com.clusterrr.hakchi_gui.Hmod.Hmod] hmods",
+    "field com.clusterrr.hakchi_gui.Hmod.SelectForm::System.String usermodsDirectory"
+   ],
+   "strings": [
+    "*.hmod",
+    ".7z",
+    ".hmod",
+    ".rar",
+    ".tar",
+    ".zip"
+   ]
+  },
+  "Hmod.SelectForm::SelectModsForm_DragDrop": {
+   "callees": [
+    "System.Windows.Forms.DragEventArgs::System.Windows.Forms.IDataObject get_Data()",
+    "System.Windows.Forms.IDataObject::System.Object GetData(System.String)",
+    "com.clusterrr.hakchi_gui.Hmod.SelectForm::Void AddMods(System.String[], Boolean)",
+    "field System.Windows.Forms.DataFormats::System.String FileDrop"
+   ],
+   "strings": []
+  },
+  "ModHub.Repository.RepoManagementForm::btnAddRepository_Click": {
+   "callees": [
+    "System.Windows.Forms.Control::System.String get_Text()",
+    "System.Windows.Forms.Control::Void set_Text(System.String)",
+    "System.Windows.Forms.ListView+ListViewItemCollection::System.Windows.Forms.ListViewItem Add(System.Windows.Forms.ListViewItem)",
+    "System.Windows.Forms.ListView::ListViewItemCollection get_Items()",
+    "System.Windows.Forms.ListViewItem+ListViewSubItemCollection::ListViewSubItem Add(System.String)",
+    "System.Windows.Forms.ListViewItem::ListViewSubItemCollection get_SubItems()",
+    "System.Windows.Forms.ListViewItem::Void .ctor(System.String)",
+    "System.Windows.Forms.ListViewItem::Void set_Tag(System.Object)",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.RepositoryInfo::Void .ctor(System.String, System.String)",
+    "field com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::System.Windows.Forms.ListView repoList",
+    "field com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::System.Windows.Forms.TextBox repoName",
+    "field com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::System.Windows.Forms.TextBox repoURL"
+   ],
+   "strings": []
+  },
+  "ModHub.Repository.RepoManagementForm::deleteButton_Click": {
+   "callees": [
+    "System.Collections.IEnumerator::Boolean MoveNext()",
+    "System.Collections.IEnumerator::System.Object get_Current()",
+    "System.IDisposable::Void Dispose()",
+    "System.Windows.Forms.ListView+ListViewItemCollection::Void Remove(System.Windows.Forms.ListViewItem)",
+    "System.Windows.Forms.ListView+SelectedListViewItemCollection::System.Collections.IEnumerator GetEnumerator()",
+    "System.Windows.Forms.ListView::ListViewItemCollection get_Items()",
+    "System.Windows.Forms.ListView::SelectedListViewItemCollection get_SelectedItems()",
+    "field com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::System.Windows.Forms.ListView repoList"
+   ],
+   "strings": []
+  },
+  "ModHub.Repository.RepoManagementForm::editButton_Click": {
+   "callees": [
+    "System.Windows.Forms.Control::Void set_Text(System.String)",
+    "System.Windows.Forms.ListView+ListViewItemCollection::Void Remove(System.Windows.Forms.ListViewItem)",
+    "System.Windows.Forms.ListView+SelectedListViewItemCollection::Int32 get_Count()",
+    "System.Windows.Forms.ListView+SelectedListViewItemCollection::System.Windows.Forms.ListViewItem get_Item(Int32)",
+    "System.Windows.Forms.ListView::ListViewItemCollection get_Items()",
+    "System.Windows.Forms.ListView::SelectedListViewItemCollection get_SelectedItems()",
+    "System.Windows.Forms.ListViewItem::System.Object get_Tag()",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.RepositoryInfo::System.String get_Name()",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.RepositoryInfo::System.String get_URL()",
+    "field com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::System.Windows.Forms.ListView repoList",
+    "field com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::System.Windows.Forms.TextBox repoName",
+    "field com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::System.Windows.Forms.TextBox repoURL"
+   ],
+   "strings": []
+  },
+  "ModHub.Repository.RepoManagementForm::moveUpButton_Click": {
+   "callees": [
+    "com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::Void MoveListViewItems(System.Windows.Forms.ListView, MoveDirection)",
+    "field com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::System.Windows.Forms.ListView repoList"
+   ],
+   "strings": []
+  },
+  "ModHub.Repository.RepoManagementForm::moveDownButton_Click": {
+   "callees": [
+    "com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::Void MoveListViewItems(System.Windows.Forms.ListView, MoveDirection)",
+    "field com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::System.Windows.Forms.ListView repoList"
+   ],
+   "strings": []
+  },
+  "ModHub.Repository.RepoManagementForm::RepoManagementForm_FormClosing": {
+   "callees": [
+    "System.Func`2[System.Windows.Forms.ListViewItem,com.clusterrr.hakchi_gui.ModHub.Repository.RepositoryInfo]::Void .ctor(System.Object, IntPtr)",
+    "System.Linq.Enumerable::System.Collections.Generic.IEnumerable`1[System.Windows.Forms.ListViewItem] Cast[ListViewItem](System.Collections.IEnumerable)",
+    "System.Linq.Enumerable::System.Collections.Generic.IEnumerable`1[com.clusterrr.hakchi_gui.ModHub.Repository.RepositoryInfo] Select[ListViewItem,RepositoryInfo](System.Collections.Generic.IEnumerable`1[System.Windows.Forms.ListViewItem], System.Func`2[System.Windows.Forms.ListViewItem,com.clusterrr.hakchi_gui.ModHub.Repository.RepositoryInfo])",
+    "System.Linq.Enumerable::com.clusterrr.hakchi_gui.ModHub.Repository.RepositoryInfo[] ToArray[RepositoryInfo](System.Collections.Generic.IEnumerable`1[com.clusterrr.hakchi_gui.ModHub.Repository.RepositoryInfo])",
+    "System.Windows.Forms.Control::Boolean get_Enabled()",
+    "System.Windows.Forms.ListView::ListViewItemCollection get_Items()",
+    "System.Windows.Forms.ListViewItem::System.Object get_Tag()",
+    "System.Windows.Forms.MessageBox::System.Windows.Forms.DialogResult Show(System.String, System.String, System.Windows.Forms.MessageBoxButtons)",
+    "com.clusterrr.hakchi_gui.ConfigIni::Void Save()",
+    "com.clusterrr.hakchi_gui.ConfigIni::com.clusterrr.hakchi_gui.ConfigIni get_Instance()",
+    "com.clusterrr.hakchi_gui.MainForm::Void populateRepos()",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm+<>c::com.clusterrr.hakchi_gui.ModHub.Repository.RepositoryInfo <RepoManagementForm_FormClosing>b__(System.Windows.Forms.ListViewItem)",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::Void btnAddRepository_Click(System.Object, System.EventArgs)",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_UnsavedChanges()",
+    "com.clusterrr.hakchi_gui.Properties.Resources::System.String get_UnsavedChangesQ()",
+    "field com.clusterrr.hakchi_gui.ConfigIni::com.clusterrr.hakchi_gui.ModHub.Repository.RepositoryInfo[] repos",
+    "field com.clusterrr.hakchi_gui.MainForm::com.clusterrr.hakchi_gui.MainForm StaticRef",
+    "field com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm+<>c::System.Func`2[System.Windows.Forms.ListViewItem,com.clusterrr.hakchi_gui.ModHub.Repository.RepositoryInfo] <>9__",
+    "field com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm+<>c::com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm+<>c <>9",
+    "field com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::System.Windows.Forms.Button addRepoButton",
+    "field com.clusterrr.hakchi_gui.ModHub.Repository.RepoManagementForm::System.Windows.Forms.ListView repoList"
+   ],
+   "strings": []
+  },
+  "MainForm::repoMenuItem_Click": {
+   "callees": [
+    "System.IDisposable::Void Dispose()",
+    "System.NotImplementedException::Void .ctor()",
+    "System.String::Boolean op_Equality(System.String, System.String)",
+    "System.Windows.Forms.Control::Void set_Text(System.String)",
+    "System.Windows.Forms.Form::System.Windows.Forms.DialogResult ShowDialog(System.Windows.Forms.IWin32Window)",
+    "System.Windows.Forms.ToolStripItem::System.Object get_Tag()",
+    "System.Windows.Forms.ToolStripItem::System.String get_Text()",
+    "com.clusterrr.hakchi_gui.ModHub.ModHubForm::Void .ctor()",
+    "com.clusterrr.hakchi_gui.ModHub.ModHubForm::Void LoadData(com.clusterrr.hakchi_gui.ModHub.Repository.Repository)",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.Repository::Item[] LoadTasker(System.Windows.Forms.Form)",
+    "com.clusterrr.hakchi_gui.ModHub.Repository.Repository::Void .ctor(System.String)"
+   ],
+   "strings": [
+    "modstore://"
    ]
   }
  }

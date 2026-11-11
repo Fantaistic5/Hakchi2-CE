@@ -495,6 +495,9 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         private const int CDRF_NEWFONT = 0x2, CDRF_SKIPDEFAULT = 0x4, CDRF_NOTIFYPOSTPAINT = 0x10, CDRF_NOTIFYITEMDRAW = 0x20;
         private const int LVCDI_GROUP = 1, LVM_GETGROUPRECT = 0x1062, LVGGR_HEADER = 1;
         [DllImport("user32.dll")] private static extern IntPtr SendMessage(IntPtr hwnd, int msg, IntPtr wParam, ref ControlNative.RECT rect);
+        [DllImport("gdi32.dll")] private static extern uint GetLayout(IntPtr hdc);
+        [DllImport("gdi32.dll")] private static extern uint SetLayout(IntPtr hdc, uint layout);
+        private const uint LAYOUT_RTL = 1;
         private const int CDIS_SELECTED = 0x1, CDIS_FOCUS = 0x10, CDIS_HOT = 0x40, CDIS_MARKED = 0x80;
 
         [StructLayout(LayoutKind.Sequential)]
@@ -599,11 +602,21 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
                     var rc = cd.nmcd.rc.ToRectangle();
                     var item = ItemAt((int)cd.nmcd.dwItemSpec);
                     bool selected = item != null ? item.Selected : (cd.nmcd.uItemState & CDIS_SELECTED) != 0;
-                    using (var g = Graphics.FromHdc(cd.nmcd.hdc))
+                    // Fenetre en miroir (RightToLeftLayout) : le DC est en LAYOUT_RTL et les rectangles sont logiques (origine a droite).
+                    // GDI+ ne suit pas ce miroir : on passe le DC en disposition normale le temps du dessin et on reflete les x a la main.
+                    uint layout = GetLayout(cd.nmcd.hdc);
+                    bool mirrored = layout != 0xFFFFFFFF && (layout & LAYOUT_RTL) != 0;
+                    if (mirrored) SetLayout(cd.nmcd.hdc, layout & ~LAYOUT_RTL);
+                    try
                     {
-                        if (NativeChecks && item != null) PaintCheck(g, item, rc, selected, s);
-                        if (selected) B1Draw.Fill(g, B1Palette.Accent, rc.Left, rc.Top, B1Draw.Px(2, s), rc.Height);
+                        using (var g = Graphics.FromHdc(cd.nmcd.hdc))
+                        {
+                            int width = list.ClientSize.Width;
+                            if (NativeChecks && item != null) PaintCheck(g, item, rc, selected, s, mirrored ? width : -1);
+                            if (selected) B1Draw.Fill(g, B1Palette.Accent, Mirror(rc.Left, B1Draw.Px(2, s), mirrored ? width : -1), rc.Top, B1Draw.Px(2, s), rc.Height);
+                        }
                     }
+                    finally { if (mirrored) SetLayout(cd.nmcd.hdc, layout); }
                 }
             }
             catch (Exception) { /* cosmetique */ }
@@ -616,15 +629,18 @@ namespace com.clusterrr.hakchi_gui.Theme.Controls
         /// Case B1 (B1Draw.CheckGlyph) a la place de la case native : la zone de l'image d'etat (du bord de l'element a l'icone)
         /// est repeinte du fond de la ligne, puis la case est centree dedans. Le clic reste celui de la liste (meme zone).
         /// </summary>
-        private void PaintCheck(Graphics g, ListViewItem item, Rectangle rc, bool selected, float s)
+        /// <summary>x d'un trait de largeur w : tel quel, ou reflete dans une fenetre en miroir de largeur mirrorWidth (sinon -1).</summary>
+        internal static int Mirror(int x, int w, int mirrorWidth) { return mirrorWidth < 0 ? x : mirrorWidth - x - w; }
+
+        private void PaintCheck(Graphics g, ListViewItem item, Rectangle rc, bool selected, float s, int mirrorWidth)
         {
             var bounds = item.Bounds;
             var icon = item.GetBounds(ItemBoundsPortion.Icon);
             int left = bounds.Left, right = icon.Left > bounds.Left + 4 ? icon.Left : bounds.Left + B1Draw.Px(20, s);
             Color back = selected ? B1Palette.RowActive : (B1Draw.IsPalette(list.BackColor) ? list.BackColor : B1Palette.Slate);
-            B1Draw.Fill(g, back, left, rc.Top, right - left, rc.Height);
+            B1Draw.Fill(g, back, Mirror(left, right - left, mirrorWidth), rc.Top, right - left, rc.Height);
             int size = B1Draw.GlyphSize(s);
-            var box = new Rectangle(left + (right - left - size) / 2, rc.Top + (rc.Height - size) / 2, size, size);
+            var box = new Rectangle(Mirror(left + (right - left - size) / 2, size, mirrorWidth), rc.Top + (rc.Height - size) / 2, size, size);
             var st = item.Checked ? B1VisualState.Checked : B1VisualState.Normal;
             if (!list.Enabled) st |= B1VisualState.Disabled;
             B1Draw.CheckGlyph(g, box, st, s, false);

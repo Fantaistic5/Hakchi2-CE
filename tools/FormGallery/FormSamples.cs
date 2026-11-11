@@ -86,6 +86,35 @@ namespace FormGallery
             }
         }
 
+        /// <summary>Exemples poses une fois la fenetre affichee hors ecran (handles crees) : avant, la page d'un WebBrowser serait perdue.</summary>
+        public static void AfterShow(Control c)
+        {
+            switch (c.GetType().Name)
+            {
+                case "Motd": FillMotd(c); break;
+            }
+        }
+
+        // Motd : la page (gabarit + DarkCss + message d'exemple, deja construite par le constructeur) est donnee au navigateur
+        // comme le fait Motd_Shown, que la galerie retire.
+        private static void FillMotd(Control c)
+        {
+            var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+            var wb = c.GetType().GetField("webBrowser", flags).GetValue(c) as WebBrowser;
+            var html = c.GetType().GetField("html", flags).GetValue(c) as string;
+            if (wb == null || html == null) return;
+            // la navigation about:blank du constructeur doit etre terminee, sinon elle remplace la page posee ici
+            var ctx = System.Threading.SynchronizationContext.Current;
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+            while (sw.ElapsedMilliseconds < 4000 && (wb.IsBusy || wb.ReadyState != WebBrowserReadyState.Complete || wb.Document == null))
+            {
+                Application.DoEvents();
+                System.Threading.Thread.Sleep(15);
+            }
+            if (ctx != null) System.Threading.SynchronizationContext.SetSynchronizationContext(ctx);
+            wb.DocumentText = html;
+        }
+
         private static T Find<T>(Control root, string name) where T : Control
         {
             return root.Controls.Find(name, true).OfType<T>().FirstOrDefault();

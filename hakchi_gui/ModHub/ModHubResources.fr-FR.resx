@@ -142,7 +142,7 @@
     <value>Version installée:</value>
   </data>
   <data name="LatestVersion" xml:space="preserve">
-    <value>Dernier version:</value>
+    <value>Dernière version:</value>
   </data>
   <data name="ModuleName" xml:space="preserve">
     <value>Nom du module:</value>

@@ -161,6 +161,15 @@ namespace FormGallery
                 ctorDescription = "CoverBatchSample (jeux, sources et images factices)";
                 return CoverBatchSample.Build();
             }
+            if (t.Name == "Motd")
+            {
+                // vrai constructeur, message d'exemple local (Markdown sans image ni lien distant charge) : la page est posee comme
+                // dans Motd_Shown (retire par la galerie), voir FormSamples ; aucun acces reseau
+                ctorDescription = "Motd(message d'exemple)";
+                var motd = (Control)t.GetConstructor(new[] { typeof(string) }).Invoke(new object[] { MotdSample });
+                StopTimers(motd);
+                return motd;
+            }
             if (t.Name == "MessageForm")
             {
                 // vrai chemin d'affichage (MessageForm.Get) : textes et boutons Oui / Non / Annuler poses, sans ShowDialog
@@ -251,6 +260,15 @@ namespace FormGallery
             var i = s.IndexOfAny(new[] { '\r', '\n' });
             return i < 0 ? s : s.Substring(0, i);
         }
+
+        internal const string MotdSample =
+            "## Bienvenue dans hakchi\n\n" +
+            "Nouveautes de cette version :\n\n" +
+            "- interface **B1** pour toutes les fenetres ;\n" +
+            "- gestion des depots de mods ;\n" +
+            "- jaquettes en lot.\n\n" +
+            "> Pensez a sauvegarder votre NAND avant tout flash.\n\n" +
+            "Plus d'informations sur [le wiki](https://example.invalid/wiki).\n";
 
         private static bool TryDummy(Type t, out object value)
         {

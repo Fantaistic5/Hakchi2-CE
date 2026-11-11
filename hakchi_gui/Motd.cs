@@ -9,9 +9,10 @@ namespace com.clusterrr.hakchi_gui
     public partial class Motd : com.clusterrr.hakchi_gui.Theme.B1Form
     {
         // Surcharge B1 du gabarit HTML : fond ardoise, filets de 1 px, texte et liens de la palette (aucune autre couleur).
+        // Le gabarit redeclare .markdown-body APRES {0} (fond blanc, bord argent, coins de 10 px) : ces trois proprietes sont en !important.
         private const string DarkCss =
             "html, body { background-color: #1C1B22; scrollbar-base-color: #2C2A34; scrollbar-face-color: #2C2A34; scrollbar-track-color: #26252E; scrollbar-arrow-color: #B6B2C4; scrollbar-shadow-color: #2C2A34; scrollbar-highlight-color: #2C2A34; scrollbar-3dlight-color: #2C2A34; scrollbar-darkshadow-color: #2C2A34; }\n" +
-            ".markdown-body { color: #E4E2EA; font-family: \"Segoe UI\", sans-serif; font-size: 14px; background-color: #1C1B22; border: 1px solid #2C2A34; border-radius: 0; }\n" +
+            ".markdown-body { color: #E4E2EA; font-family: \"Segoe UI\", sans-serif; font-size: 14px; background-color: #1C1B22 !important; border: 1px solid #2C2A34 !important; border-radius: 0 !important; }\n" +
             ".markdown-body a { color: #A79FD6; }\n" +
             ".markdown-body h1, .markdown-body h2 { border-bottom: 1px solid #2C2A34; }\n" +
             ".markdown-body h6, .markdown-body blockquote { color: #B6B2C4; border-left-color: #5C5870; }\n" +

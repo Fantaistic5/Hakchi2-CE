@@ -305,6 +305,73 @@ namespace hakchi_gui.Tests.Forms
             }
         }
 
+        // Etiquette de la carte en francais : accord corrige (l'ancienne ressource disait « Dernier version »).
+        [Fact]
+        public void FrenchLatestVersionLabelIsFeminine()
+        {
+            // lu dans la resx (les assemblages satellites ne sont pas a cote de l'exe de test), comme GameSheetPlaceholderTests
+            Func<string, Dictionary<string, string>> load = file =>
+                System.Xml.Linq.XDocument.Load(Path.Combine(Repo.Root, "hakchi_gui", "ModHub", file)).Root.Elements("data")
+                    .ToDictionary(d => (string)d.Attribute("name"), d => (string)d.Element("value"));
+            var fr = load("ModHubResources.fr-FR.resx");
+            Assert.Equal("Dernière version:", fr["LatestVersion"]);
+            Assert.Equal("Version installée:", fr["InstalledVersion"]);                    // meme ponctuation que les rubriques voisines
+            Assert.Equal("Latest Version:", load("ModHubResources.resx")["LatestVersion"]);
+        }
+
+        // --- cases a cocher natives des listes (SelectForm, MainForm) ------------------------------------------------------
+
+        // Case B1 du cote du debut de ligne : a gauche, ou a droite dans une liste en miroir (RightToLeftLayout, langues RTL).
+        [StaTheory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void NativeCheckBoxesFollowMirroring(bool rtl)
+        {
+            MainFormEnv.Init();
+            using (var f = new Form { FormBorderStyle = FormBorderStyle.None, ShowInTaskbar = false, StartPosition = FormStartPosition.Manual, Location = new Point(-30000, -30000), ClientSize = new Size(300, 120) })
+            {
+                var list = new ListView { View = View.Details, CheckBoxes = true, FullRowSelect = true, HeaderStyle = ColumnHeaderStyle.None, Dock = DockStyle.Fill };
+                if (rtl) { f.RightToLeft = RightToLeft.Yes; f.RightToLeftLayout = true; list.RightToLeft = RightToLeft.Yes; list.RightToLeftLayout = true; }
+                list.Columns.Add("Mod", 260);
+                list.Items.Add(new ListViewItem("NTFS-3G") { Checked = true });
+                list.Items.Add(new ListViewItem("Custom Backgrounds") { Checked = true });
+                f.Controls.Add(list);
+                CreateHandles(f);
+                B1Skin.Apply(f);
+                // Le processus de test n'active pas les styles visuels (comctl32 v5) : la liste n'y envoie pas le postpaint des elements,
+                // le dessin personnalise n'est observable qu'en galerie (SelectForm.png). On peint donc la case comme le postpaint :
+                // rectangles logiques de la liste (en miroir : origine a droite) et largeur de miroir quand le DC est en LAYOUT_RTL.
+                var painter = new ListViewWindow(list);
+                var paint = typeof(ListViewWindow).GetMethod("PaintCheck", BindingFlags.Instance | BindingFlags.NonPublic);
+                int width = list.ClientSize.Width;
+                using (var bmp = new Bitmap(width, list.ClientSize.Height))
+                {
+                    using (var g = Graphics.FromImage(bmp))
+                    {
+                        g.Clear(B1Palette.Slate);
+                        foreach (ListViewItem item in list.Items)
+                            paint.Invoke(painter, new object[] { g, item, item.Bounds, false, 1f, rtl ? width : -1 });
+                    }
+                    int left = 0, right = 0;
+                    for (int y = 0; y < bmp.Height; y++)
+                        for (int x = 0; x < bmp.Width; x++)
+                            if (bmp.GetPixel(x, y).ToArgb() == B1Palette.Lavender.ToArgb()) { if (x < bmp.Width / 2) left++; else right++; }
+                    Assert.True(left + right > 0, "aucune case B1 cochee peinte");
+                    if (rtl) Assert.True(right > 0 && left == 0, "miroir : cases a gauche " + left + ", a droite " + right);
+                    else Assert.True(left > 0 && right == 0, "cases a gauche " + left + ", a droite " + right);
+                }
+            }
+        }
+
+        [Theory]
+        [InlineData(10, 20, -1, 10)]          // fenetre normale : inchange
+        [InlineData(10, 20, 300, 270)]        // miroir : 300 - 10 - 20
+        [InlineData(0, 2, 300, 298)]          // barre d'accent de 2 px : collee au bord droit
+        public void MirrorReflectsX(int x, int w, int mirrorWidth, int expected)
+        {
+            Assert.Equal(expected, ListViewWindow.Mirror(x, w, mirrorWidth));
+        }
+
         // --- readme : feuille B1 injectee une fois, contenu inchange -------------------------------------------------------
 
         private static int Count(string s, string what)
@@ -379,6 +446,19 @@ namespace hakchi_gui.Tests.Forms
             Assert.DoesNotContain("@import", css);
         }
 
+        // Motd : le gabarit redeclare .markdown-body apres la feuille injectee (fond blanc) ; la surcharge sombre doit l'emporter.
+        // Defaut de la Task 6 devenu visible quand la galerie a rendu les pages HTML (fix round 1 de la Task 9).
+        [Fact]
+        public void MotdDarkCssBeatsTemplateCardRule()
+        {
+            var css = (string)TypeOf("Motd").GetField("DarkCss", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+            var card = Regex.Match(css, @"\.markdown-body \{[^}]*\}").Value;
+            Assert.Contains("background-color: #1C1B22 !important", card);
+            Assert.Contains("border: 1px solid #2C2A34 !important", card);
+            Assert.Contains("border-radius: 0 !important", card);
+            Assert.Contains("background-color: white", Resources.motdTemplateHTML);      // la regle du gabarit qu'il faut battre
+        }
+
         [StaFact]
         public void TextReadmeUsesStandardSkin()
         {
@@ -394,6 +474,9 @@ namespace hakchi_gui.Tests.Forms
 
         // --- le chemin d'installation / desinstallation des mods ne change pas ----------------------------------------------
 
+        /// <summary>snes-usa/theme-b1 au moment de la generation de Data/mod_install_before.json.</summary>
+        private const string ThemeB1Sha = "1b2a1a61f3b443806df8a71094bcf0b55bb04442";
+
         // Empreinte IL (methodes appelees, chaines, lambdas comprises) des gestionnaires Installer / Desinstaller / Telecharger,
         // comparee a celle d'un hakchi.exe compile depuis snes-usa/theme-b1 (Data/mod_install_before.json, tools/ModInstallPath).
         [Fact]
@@ -401,6 +484,8 @@ namespace hakchi_gui.Tests.Forms
         {
             var before = JObject.Parse(File.ReadAllText(Path.Combine(Repo.DataDir, "mod_install_before.json")));
             Assert.Equal("snes-usa/theme-b1", (string)before["_base"]);
+            // commit exact de la reference (le generateur refuse un exe qui ne vient pas d'un worktree sur ce commit)
+            Assert.Equal(ThemeB1Sha, (string)before["_base_sha"]);
             RuntimeHelpers.RunModuleConstructor(Asm.ManifestModule.ModuleHandle);
             var roots = (JObject)before["roots"];
             Assert.Equal(IlCallees.Roots.Length, roots.Count);
@@ -438,14 +523,20 @@ namespace hakchi_gui.Tests.Forms
 
         private static readonly object EventClick = typeof(Control).GetField("EventClick", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
 
-        private static IEnumerable<string> ClickHandlers(Control c)
+        private static readonly object ItemEventClick = typeof(ToolStripItem).GetField("EventClick", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+        private static readonly object EventDragDrop = typeof(Control).GetField("EventDragDrop", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+        private static readonly object FormEventClosing = typeof(Form).GetField("EVENT_FORMCLOSING", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+
+        private static IEnumerable<string> ClickHandlers(Control c) { return Handlers(c, EventClick); }
+
+        private static IEnumerable<string> Handlers(Component c, object key)
         {
             var events = (EventHandlerList)typeof(Component).GetProperty("Events", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(c, null);
-            var d = events[EventClick];
+            var d = events[key];
             return d == null ? Enumerable.Empty<string>() : d.GetInvocationList().Select(x => x.Method.Name);
         }
 
-        // Les boutons Installer / Telecharger / OK sont toujours branches sur les memes gestionnaires (et sur eux seuls).
+        // Boutons Installer / Telecharger / OK, suppression de mod, glisser-deposer et boutons des depots : memes gestionnaires (et eux seuls).
         [StaFact]
         public void InstallButtonsStillWired()
         {
@@ -456,7 +547,20 @@ namespace hakchi_gui.Tests.Forms
                 Assert.Equal(new[] { "modDownloadInstallButton_Click" }, ClickHandlers(Field<Button>(tab, "modDownloadInstallButton")).ToArray());
             }
             using (var f = Create("Hmod.SelectForm"))
+            {
                 Assert.Equal(new[] { "buttonOk_Click" }, ClickHandlers(Field<Button>(f, "buttonOk")).ToArray());
+                Assert.Equal(new[] { "deleteModFromDiskToolStripMenuItem_Click" },
+                    Handlers(Field<ToolStripMenuItem>(f, "deleteModFromDiskToolStripMenuItem"), ItemEventClick).ToArray());
+                Assert.Equal(new[] { "SelectModsForm_DragDrop" }, Handlers(f, EventDragDrop).ToArray());
+            }
+            using (var f = Create("ModHub.Repository.RepoManagementForm"))
+            {
+                foreach (var p in new[] { new[] { "moveUpButton", "moveUpButton_Click" }, new[] { "moveDownButton", "moveDownButton_Click" },
+                                          new[] { "editButton", "editButton_Click" }, new[] { "deleteButton", "deleteButton_Click" },
+                                          new[] { "addRepoButton", "btnAddRepository_Click" } })
+                    Assert.Equal(new[] { p[1] }, ClickHandlers(Field<Button>(f, p[0])).ToArray());
+                Assert.Contains("RepoManagementForm_FormClosing", Handlers(f, FormEventClosing));
+            }
         }
 
         // Liste du ModHub : groupes du depot, un element selectionne, la carte remplie (le readme est verifie par ReadmeCssInjectedOnce).
