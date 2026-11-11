@@ -132,7 +132,7 @@ namespace com.clusterrr.hakchi_gui
             sheet.MouseMove += (s, e) => { if (SheetCoverHit(e.Location)) sheet.Cursor = Cursors.Hand; else if (sheet.Cursor == Cursors.Hand && !sheet.ChangeLinkBounds.Contains(e.Location)) sheet.Cursor = Cursors.Default; };
             sheet.DragEnter += (s, e) => SheetCoverDrag(e);
             sheet.DragOver += (s, e) => SheetCoverDrag(e);
-            sheet.DragDrop += (s, e) => { if (SheetCoverHit(sheet.PointToClient(new Point(e.X, e.Y)))) pictureBoxArt_DragDrop(pictureBoxArt, e); };
+            sheet.DragDrop += (s, e) => SheetDrop(e);
             panel3.Layout += (s, e) => LayoutSegaArtPanel();
             foreach (Control c in tableLayoutPanelGameInfo.Controls)
                 if (c is ComboBox) c.SizeChanged += (s, e) => FitGameInfoCombos();
@@ -392,11 +392,30 @@ namespace com.clusterrr.hakchi_gui
             return shellBuilt && sheet.Game != null && !sheet.CoverBounds.IsEmpty && sheet.CoverBounds.Contains(p);
         }
 
-        /// <summary>Glisser au-dessus de la fiche : accepte (comme l'ancienne image) seulement sur la jaquette.</summary>
-        private void SheetCoverDrag(DragEventArgs e)
+        /// <summary>Vrai si le depot vise la jaquette de la fiche et porte une image qu'elle accepte (comme l'ancienne image).</summary>
+        private bool SheetCoverAccepts(DragEventArgs e)
         {
-            if (SheetCoverHit(sheet.PointToClient(new Point(e.X, e.Y)))) pictureBoxArt_DragEnter(pictureBoxArt, e);
-            else e.Effect = DragDropEffects.None;
+            if (!SheetCoverHit(sheet.PointToClient(new Point(e.X, e.Y)))) return false;
+            var probe = new DragEventArgs(e.Data, e.KeyState, e.X, e.Y, e.AllowedEffect, DragDropEffects.None);
+            pictureBoxArt_DragEnter(pictureBoxArt, probe);
+            return probe.Effect != DragDropEffects.None;
+        }
+
+        /// <summary>
+        /// Glisser au-dessus de la fiche : une image sur la jaquette va a la jaquette ; partout ailleurs (ou pour des ROM),
+        /// la fiche relaie a la fenetre (dragEnter / dragDrop), comme avant : deposer des jeux n'importe ou les ajoute.
+        /// </summary>
+        internal void SheetCoverDrag(DragEventArgs e)
+        {
+            if (SheetCoverAccepts(e)) { pictureBoxArt_DragEnter(pictureBoxArt, e); return; }
+            e.Effect = DragDropEffects.None;
+            dragEnter(this, e);
+        }
+
+        internal void SheetDrop(DragEventArgs e)
+        {
+            if (SheetCoverAccepts(e)) pictureBoxArt_DragDrop(pictureBoxArt, e);
+            else dragDrop(this, e);
         }
 
         /// <summary>Illustrations Mega Drive : tranche puis face, cote a cote sans chevauchement, a la hauteur du panneau.</summary>

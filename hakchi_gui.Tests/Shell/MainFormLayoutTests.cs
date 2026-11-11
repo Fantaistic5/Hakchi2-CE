@@ -365,6 +365,43 @@ namespace hakchi_gui.Tests.Shell
             finally { MainFormEnv.Close(f); }
         }
 
+        /// <summary>
+        /// Glisser-deposer sur la fiche : une image sur la jaquette va a la jaquette ; des ROM (n'importe ou sur la fiche, meme
+        /// sur la jaquette) sont relayees a la fenetre (dragEnter : Copy), qui les ajoute comme avant la refonte.
+        /// </summary>
+        [StaFact]
+        public void SheetForwardsRomDropsToForm()
+        {
+            var f = MainFormEnv.Create(MainFormEnv.Games(2), 96, new Size(1440, 900));
+            try
+            {
+                f.listViewGames.Items[0].Selected = true;
+                f.ShowSelected();
+                Application.DoEvents();
+                Assert.NotNull(f.sheet.Game);
+                Assert.False(f.sheet.CoverBounds.IsEmpty);
+                Func<string, Point, DragDropEffects> drag = (file, client) =>
+                {
+                    var screen = f.sheet.PointToScreen(client);
+                    var e = new DragEventArgs(new DataObject(DataFormats.FileDrop, new[] { file }), 0, screen.X, screen.Y, DragDropEffects.All, DragDropEffects.None);
+                    f.SheetCoverDrag(e);
+                    return e.Effect;
+                };
+                var cover = f.sheet.CoverBounds;
+                var onCover = new Point(cover.X + cover.Width / 2, cover.Y + cover.Height / 2);
+                var offCover = new Point(f.sheet.ClientSize.Width / 2, f.sheet.ClientSize.Height - 10);
+                Assert.False(cover.Contains(offCover));
+                Assert.Equal(DragDropEffects.Copy, drag(@"C:\roms\Super Metroid.sfc", offCover));
+                Assert.Equal(DragDropEffects.Copy, drag(@"C:\roms\Super Metroid.sfc", onCover));
+                Assert.Equal(DragDropEffects.All, drag(@"C:\images\cover.png", onCover));     // la jaquette garde les images
+
+                var text = new DragEventArgs(new DataObject(DataFormats.Text, "x"), 0, 0, 0, DragDropEffects.All, DragDropEffects.None);
+                f.SheetCoverDrag(text);
+                Assert.Equal(DragDropEffects.None, text.Effect);
+            }
+            finally { MainFormEnv.Close(f); }
+        }
+
         [StaFact]
         public void NoOriginalButtonHandlerLost()
         {
@@ -676,7 +713,8 @@ namespace hakchi_gui.Tests.Shell
                 var raise = typeof(Control).GetMethod("OnDragEnter", BindingFlags.Instance | BindingFlags.NonPublic);
                 var over = new DragEventArgs(data, 0, outside.X, outside.Y, DragDropEffects.All, DragDropEffects.All);
                 raise.Invoke(f.sheet, new object[] { over });
-                Assert.Equal(DragDropEffects.None, over.Effect);
+                // hors de la jaquette : relaye a la fenetre (dragEnter : Copy), qui traite images et ROM comme avant la refonte
+                Assert.Equal(DragDropEffects.Copy, over.Effect);
                 var enter = new DragEventArgs(data, 0, inside.X, inside.Y, DragDropEffects.All, DragDropEffects.All);
                 raise.Invoke(f.sheet, new object[] { enter });
                 Assert.Equal(DragDropEffects.All, enter.Effect);
